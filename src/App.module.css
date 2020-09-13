@@ -1,0 +1,65 @@
+.main {
+    width: 960px;
+    margin: 0 auto;
+    background-color: #fafafa;
+    padding: 0 1em 50px 1em ;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+}
+.stripedTable {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.stripedTable thead tr {
+    background-color: #fcefc0;
+}
+
+.stripedTable tr:nth-child(even){
+    background-color: #eaeaea;
+}
+
+.selectableRow {
+    background-color: white;
+    cursor: pointer;
+}
+
+.selectableRow.selected {
+    background-color: #d9cda5 !important;
+}
+
+.placing {
+    font-weight: bold;
+}
+
+.finalist {
+
+}
+
+.noCert {
+    text-decoration: line-through;;
+}
+
+.button {
+    border: none;
+    border-radius: 2px;
+    display: inline-block;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 16px;
+    text-transform: uppercase;
+    vertical-align: middle;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+    color: #fff;
+    background-color: #26a69a;
+    text-align: center;
+    letter-spacing: .5px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #2bbbad;
+    -webkit-box-shadow: 0 3px 3px 0 rgba(0,0,0,0.14), 0 1px 7px 0 rgba(0,0,0,0.12), 0 3px 1px -1px rgba(0,0,0,0.2);
+    box-shadow: 0 3px 3px 0 rgba(0,0,0,0.14), 0 1px 7px 0 rgba(0,0,0,0.12), 0 3px 1px -1px rgba(0,0,0,0.2);
+}
