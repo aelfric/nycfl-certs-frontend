@@ -53,7 +53,12 @@ function App() {
 
     function createTournament(evt) {
         evt.preventDefault();
-        postData("/certs/tournaments", {name: evt.target.name.value})
+        postData("/certs/tournaments",
+            {
+                name: evt.target.name.value,
+                host: evt.target.host.value,
+                date: evt.target.date.value
+            })
             .then((newTournament) => setTournaments(tournaments => [...tournaments, newTournament]));
     }
 
@@ -124,6 +129,8 @@ function App() {
             <h2>Tournaments</h2>
             <form onSubmit={createTournament}>
                 <label>Tournament Name: <input type={"text"} name={"name"}/></label>
+                <label>Host: <input type={"text"} name={"host"}/></label>
+                <label>Date: <input type={"date"} name={"date"}/></label>
                 <button className={styles.button} type={"submit"}>Create Tournament</button>
             </form>
             <ul>
@@ -173,6 +180,10 @@ function App() {
             </section>
             }
             {activeTournament && <div style={{margin: "50px"}}><a className={styles.button} href={`http://localhost:8080/certs/tournaments/${activeTournament}/certificates`}>Generate Certificates</a></div>}
+            <section>
+                <h2>Medals</h2>
+                <SchoolList tournamentId={activeTournament}/>
+            </section>
             <footer>
                 <p>Medal by Gregor Cresnar from the Noun Project</p>
                 <p>Trophy by Ken Messenger from the Noun Project</p>
@@ -183,16 +194,26 @@ function App() {
 }
 
 function SchoolList({tournamentId}) {
-    const [schools, setSchools] = React.useState([]);
+    const [medals, setMedals] = React.useState([]);
     React.useEffect(() => {
         if (tournamentId) {
-            getData(`/certs/tournaments/${tournamentId}/schools`)
-                .then(setSchools);
+            getData(`/certs/tournaments/${tournamentId}/medals`)
+                .then(setMedals);
         }
     }, [tournamentId])
 
-    return <table>{schools.map(school => <tr key={school.id}>
-        <td>{school.name}</td>
+    if(!tournamentId) return null;
+
+    return <table className={styles.stripedTable}>
+        <thead>
+        <tr>
+            <th>School</th>
+            <th>Medal Count</th>
+        </tr>
+        </thead>
+        {medals.map(result => <tr key={result.school}>
+        <td>{result.school}</td>
+        <td style={{textAlign: "center"}}>{result.count}</td>
     </tr>)}</table>
 }
 
