@@ -13,3 +13,16 @@ label {
     display: block;
     margin: 1em 0;
 }
+
+button svg {
+    fill: currentColor;
+}
+
+footer {
+    font-size: 0.75em;
+    text-align: center;
+}
+
+footer p {
+    margin: 0;
+}

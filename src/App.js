@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import styles from './App.module.css';
+import {Certificate, Medal, Trophy} from "./icons";
 
 async function postData(url = '', data = {}) {
     // Default options are marked with *
@@ -81,6 +82,14 @@ function App() {
             }));
     }
 
+    function setMedalCutoff(value) {
+        postData(`/certs/tournaments/${activeTournament}/events/${activeEvent}/medal`, {cutoff: value})
+            .then((newTournament) => setTournaments(tournaments => {
+                const index = tournaments.findIndex(t => t.id === activeTournament);
+                return Object.assign([], tournaments, {[index]: newTournament});
+            }));
+    }
+
     function handleCSVUpload(event) {
         const files = event.target.files
         const formData = new FormData()
@@ -135,6 +144,7 @@ function App() {
                         <th>Event</th>
                         <th>Results Loaded</th>
                         <th>Placement Set</th>
+                        <th>Medals Set</th>
                         <th>Cutoff Set</th>
                     </tr>
                     </thead>
@@ -143,6 +153,7 @@ function App() {
                         <td>{e.name}</td>
                         <td>{e.results.length > 0 ? "Yes" : ""}</td>
                         <td>{e.placementCutoff > 0 ? "Yes" : ""}</td>
+                        <td>{e.medalCutoff > 0 ? "Yes" : ""}</td>
                         <td>{e.certificateCutoff > 0 ? "Yes" : ""}</td>
                     </tr>)}
                 </table>
@@ -156,10 +167,17 @@ function App() {
                     placementCutoff={tournaments[activeTournamentIndex].events[activeEventIndex].placementCutoff}
                     setCertificateCutoff={setCertificateCutoff}
                     certificateCutoff={tournaments[activeTournamentIndex].events[activeEventIndex].certificateCutoff}
+                    setMedalCutoff={setMedalCutoff}
+                    medalCutoff={tournaments[activeTournamentIndex].events[activeEventIndex].medalCutoff}
                 />
             </section>
             }
             {activeTournament && <div style={{margin: "50px"}}><a className={styles.button} href={`http://localhost:8080/certs/tournaments/${activeTournament}/certificates`}>Generate Certificates</a></div>}
+            <footer>
+                <p>Medal by Gregor Cresnar from the Noun Project</p>
+                <p>Trophy by Ken Messenger from the Noun Project</p>
+                <p>Certificate by Iconstock from the Noun Project</p>
+            </footer>
         </div>
     );
 }
@@ -178,15 +196,15 @@ function SchoolList({tournamentId}) {
     </tr>)}</table>
 }
 
-function ResultDisplay({results, setCertificateCutoff, setPlacementCutoff, placementCutoff, certificateCutoff}) {
+function ResultDisplay({results, setCertificateCutoff, setPlacementCutoff, setMedalCutoff, placementCutoff, certificateCutoff, medalCutoff}) {
     return <table className={styles.stripedTable}>
         <thead>
         <tr>
             <th>Place (#)</th>
-            <th>Certificate</th>
+            <th colSpan={2}>Certificate</th>
             <th>Name</th>
             <th>School</th>
-            <th colSpan={2}>&nbsp;</th>
+            <th colSpan={3}>&nbsp;</th>
         </tr>
         </thead>
         {results.map(result => <tr key={results.id} className={
@@ -196,15 +214,36 @@ function ResultDisplay({results, setCertificateCutoff, setPlacementCutoff, place
                     styles.finalist :
                     styles.noCert }>
         <td>{result.place}</td>
-        <td>{result.placeString}</td>
+            <td>{result.place < medalCutoff ?
+                "M" :
+                ""}</td>
+            <td>{result.placeString}</td>
         <td>{result.name}</td>
         <td>{result.school.name}</td>
         <td>
-            <button type={"button"} className={styles.button} onClick={() => setPlacementCutoff(result.place + 1)}>Set Placement Cutoff</button>
+            <button type={"button"} className={styles.button} onClick={() => setMedalCutoff(result.place + 1)}
+                    title={"Set Medal Cutoff"}
+            ><Medal style={{
+                width: "1.5em",
+                top: "0.5em",
+                position: "relative"}}/></button>
         </td>
         <td>
-            <button type={"button"} className={styles.button} onClick={() => setCertificateCutoff(result.place + 1)}>Set Certificate Cutoff
-            </button>
+            <button type={"button"} className={styles.button} onClick={() => setPlacementCutoff(result.place + 1)}
+            title={"Set Placement Cutoff"}><Trophy style={{
+                width: "1.5em",
+                top: "0.5em",
+                position: "relative"}}/></button>
+        </td>
+        <td>
+            <button type={"button"} className={styles.button} onClick={() => setCertificateCutoff(result.place + 1)}
+                    title={"Set Certificate Cutoff"}
+            ><Certificate style={{
+                width: "1.5em",
+                top: "0.5em",
+                position: "relative"
+            }}
+            /></button>
         </td>
     </tr>)}</table>
 }
