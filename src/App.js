@@ -95,13 +95,13 @@ function App() {
             }));
     }
 
-    function handleCSVUpload(event) {
+    function handleCsvUpload(event, url) {
         const files = event.target.files
         const formData = new FormData()
         formData.append('file', files[0])
         formData.append('fileName', "resultsCSV")
 
-        fetch(`/certs/results?tournamentId=${activeTournament}&eventId=${activeEvent}`, {
+        fetch(url, {
             method: 'POST',
             body: formData
         })
@@ -113,6 +113,14 @@ function App() {
             .catch(error => {
                 console.error(error)
             })
+    }
+
+    function handleEventResultsUpload(event) {
+        handleCsvUpload(event, `/certs/results?tournamentId=${activeTournament}&eventId=${activeEvent}`);
+    }
+
+    function handleSweepsUpload(event) {
+        handleCsvUpload(event, `/certs/tournaments/${activeTournament}/sweeps`);
     }
 
     return (
@@ -167,7 +175,7 @@ function App() {
             </section>}
             {activeTournament && activeEvent && <section>
                 <h2>Results</h2>
-                <input type="file" id="fileUpload" onChange={handleCSVUpload} disabled={false}/>
+                <input type="file" id="fileUpload" onChange={handleEventResultsUpload} disabled={false}/>
                 <ResultDisplay
                     results={tournaments[activeTournamentIndex].events[activeEventIndex].results}
                     setPlacementCutoff={setPlacementCutoff}
@@ -179,6 +187,10 @@ function App() {
                 />
             </section>
             }
+            {activeTournament && <section>
+                <h2>Sweepstakes</h2>
+                <input type="file" id="fileUpload" onChange={handleSweepsUpload} disabled={false}/>
+            </section>}
             {activeTournament && <div style={{margin: "50px"}}><a className={styles.button} href={`http://localhost:8080/certs/tournaments/${activeTournament}/certificates`}>Generate Certificates</a></div>}
             <section>
                 <h2>Medals</h2>
@@ -209,11 +221,13 @@ function SchoolList({tournamentId}) {
         <tr>
             <th>School</th>
             <th>Medal Count</th>
+            <th>Sweeps</th>
         </tr>
         </thead>
         {medals.map(result => <tr key={result.school}>
         <td>{result.school}</td>
         <td style={{textAlign: "center"}}>{result.count}</td>
+        <td style={{textAlign: "center"}}>{result.sweeps}</td>
     </tr>)}</table>
 }
 
