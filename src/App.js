@@ -95,7 +95,7 @@ function App() {
             }));
     }
 
-    function handleCsvUpload(event, url) {
+    function handleCsvUpload(event, url, onfulfilled) {
         const files = event.target.files
         const formData = new FormData()
         formData.append('file', files[0])
@@ -106,21 +106,27 @@ function App() {
             body: formData
         })
             .then(response => response.json())
-            .then(data => {
-                const index = tournaments.findIndex(t => t.id === activeTournament);
-                return setTournaments(tournaments => Object.assign([], tournaments, {[index]: data}));
-            })
+            .then(onfulfilled)
             .catch(error => {
                 console.error(error)
             })
     }
 
     function handleEventResultsUpload(event) {
-        handleCsvUpload(event, `/certs/results?tournamentId=${activeTournament}&eventId=${activeEvent}`);
+        handleCsvUpload(event, `/certs/tournaments/${activeTournament}/events/${activeEvent}/results`, data => {
+            const index = tournaments.findIndex(t => t.id === activeTournament);
+            return setTournaments(tournaments => Object.assign([], tournaments, {[index]: data}));
+        });
     }
 
     function handleSweepsUpload(event) {
-        handleCsvUpload(event, `/certs/tournaments/${activeTournament}/sweeps`);
+        handleCsvUpload(event, `/certs/tournaments/${activeTournament}/sweeps`, data => {
+            const index = tournaments.findIndex(t => t.id === activeTournament);
+            return setTournaments(tournaments => Object.assign([], tournaments, {[index]: data}));
+        });
+    }
+    function handleSchoolsUpload(event) {
+        handleCsvUpload(event, `/certs/tournaments/${activeTournament}/schools`, data => {alert("Schools Loaded");});
     }
 
     return (
@@ -147,6 +153,11 @@ function App() {
                         onClick={() => setActiveTournament(t.id)}>{t.name} {activeTournament === t.id ? "*" : ""}</li>
                 )}
             </ul>
+            {activeTournament && <section>
+                <h2>Schools</h2>
+                <input type="file" id="fileUpload" onChange={handleSchoolsUpload} disabled={false}/>
+            </section>}
+
             {activeTournament && <section>
                 <h2>Events</h2>
                 <form onSubmit={createEvents}>
