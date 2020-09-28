@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import styles from './App.module.css';
 import {Certificate, Medal, Trophy} from "./icons";
+import * as PropTypes from "prop-types";
 
 async function postData(url = '', data = {}) {
     // Default options are marked with *
@@ -37,6 +38,22 @@ async function getData(url = '') {
     });
     return response.json(); // parses JSON response into native JavaScript objects
 }
+
+function FormTextInput({name, label, type="text"}) {
+    return <label><span>{label}</span><input type={type} name={name}/></label>;
+}
+
+function SubmitButton({children}) {
+    return <div className={styles.submitButtonRow} ><button className={styles.button} type={"submit"}>{children}</button></div>;
+}
+
+function FileInput({name, onChange}) {
+    return <div className={styles.fileUploadRow}><input type="file" id={name} name={name} onChange={onChange} disabled={false} className={styles.fileInput}/>
+    <label htmlFor={name}>Choose a file</label>
+    </div>;
+}
+
+FileInput.propTypes = {onChange: PropTypes.func};
 
 function App() {
     const [tournaments, setTournaments] = React.useState([]);
@@ -95,7 +112,7 @@ function App() {
             }));
     }
 
-    function handleCsvUpload(event, url, onfulfilled) {
+    function handleCsvUpload(event, url, onFulfilled) {
         const files = event.target.files
         const formData = new FormData()
         formData.append('file', files[0])
@@ -106,7 +123,7 @@ function App() {
             body: formData
         })
             .then(response => response.json())
-            .then(onfulfilled)
+            .then(onFulfilled)
             .catch(error => {
                 console.error(error)
             })
@@ -141,11 +158,11 @@ function App() {
                 <li>Download Certificates</li>
             </ol>
             <h2>Tournaments</h2>
-            <form onSubmit={createTournament}>
-                <label>Tournament Name: <input type={"text"} name={"name"}/></label>
-                <label>Host: <input type={"text"} name={"host"}/></label>
-                <label>Date: <input type={"date"} name={"date"}/></label>
-                <button className={styles.button} type={"submit"}>Create Tournament</button>
+            <form onSubmit={createTournament} className={styles.standardForm}>
+                <FormTextInput name={"name"} label={"Tournament Name"}/>
+                <FormTextInput label={"Host"} name={"host"}/>
+                <FormTextInput label="Date" type={"date"} name={"date"}/>
+                <SubmitButton>Create Tournament</SubmitButton>
             </form>
             <ul>
                 {tournaments.map(t =>
@@ -155,14 +172,14 @@ function App() {
             </ul>
             {activeTournament && <section>
                 <h2>Schools</h2>
-                <input type="file" id="fileUpload" onChange={handleSchoolsUpload} disabled={false}/>
+                <FileInput  name="schoolsUpload" onChange={handleSchoolsUpload} />
             </section>}
 
             {activeTournament && <section>
                 <h2>Events</h2>
-                <form onSubmit={createEvents}>
+                <form onSubmit={createEvents} className={styles.standardForm}>
                     <textarea name={"events"}/>
-                    <button className={styles.button} type={"submit"}>Save Events</button>
+                    <SubmitButton>Save Events</SubmitButton>
                 </form>
                 <table className={styles.stripedTable}>
                     <thead>
@@ -175,7 +192,8 @@ function App() {
                     </tr>
                     </thead>
                     {tournaments[activeTournamentIndex].events.map(e => <tr onClick={() => setActiveEvent(e.id)}
-                                                                            key={e.id} className={`${styles.selectableRow} ${activeEvent === e.id ? styles.selected : ""}`}>
+                                                                            key={e.id}
+                                                                            className={`${styles.selectableRow} ${activeEvent === e.id ? styles.selected : ""}`}>
                         <td>{e.name}</td>
                         <td>{e.results.length > 0 ? "Yes" : ""}</td>
                         <td>{e.placementCutoff > 0 ? "Yes" : ""}</td>
@@ -186,7 +204,7 @@ function App() {
             </section>}
             {activeTournament && activeEvent && <section>
                 <h2>Results</h2>
-                <input type="file" id="fileUpload" onChange={handleEventResultsUpload} disabled={false}/>
+                <FileInput name="eventResults" onChange={handleEventResultsUpload}/>
                 <ResultDisplay
                     results={tournaments[activeTournamentIndex].events[activeEventIndex].results}
                     setPlacementCutoff={setPlacementCutoff}
@@ -200,9 +218,11 @@ function App() {
             }
             {activeTournament && <section>
                 <h2>Sweepstakes</h2>
-                <input type="file" id="fileUpload" onChange={handleSweepsUpload} disabled={false}/>
+                <FileInput name={"sweepsResults"} onChange={handleSweepsUpload} />
             </section>}
-            {activeTournament && <div style={{margin: "50px"}}><a className={styles.button} href={`http://localhost:8080/certs/tournaments/${activeTournament}/certificates`}>Generate Certificates</a></div>}
+            {activeTournament && <div style={{margin: "50px"}}><a className={styles.button}
+                                                                  href={`http://localhost:8080/certs/tournaments/${activeTournament}/certificates`}>Generate
+                Certificates</a></div>}
             <section>
                 <h2>Medals</h2>
                 <SchoolList tournamentId={activeTournament}/>

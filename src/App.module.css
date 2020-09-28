@@ -4,6 +4,7 @@
     background-color: #fafafa;
     padding: 0 1em 50px 1em ;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    font-size: 100%;
 }
 .stripedTable {
     width: 90%;
@@ -40,6 +41,7 @@
 }
 
 .button {
+    font-weight: bold;
     border: none;
     border-radius: 2px;
     display: inline-block;
@@ -50,16 +52,87 @@
     vertical-align: middle;
     -webkit-tap-highlight-color: transparent;
     text-decoration: none;
-    color: #fff;
-    background-color: #26a69a;
+    color: #fefefe;
+    background-color: #016F94;
     text-align: center;
-    letter-spacing: .5px;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
     cursor: pointer;
 }
 
 .button:hover {
-    background-color: #2bbbad;
+    background-color: #FEFEFE;
+    color: #016F94;
     -webkit-box-shadow: 0 3px 3px 0 rgba(0,0,0,0.14), 0 1px 7px 0 rgba(0,0,0,0.12), 0 3px 1px -1px rgba(0,0,0,0.2);
     box-shadow: 0 3px 3px 0 rgba(0,0,0,0.14), 0 1px 7px 0 rgba(0,0,0,0.12), 0 3px 1px -1px rgba(0,0,0,0.2);
+}
+
+.standardForm label {
+    display: flex;
+    margin: 0;
+    padding: 0.75rem;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+.standardForm label:nth-child(even) {
+    background-color: #efefef;
+}
+
+.standardForm label input {
+    border-width: 1px;
+    border-color: #ccc;
+    border-style: solid;
+    border-radius: 10px;
+    font-size: 1em;
+    flex-grow: 1;
+}
+.standardForm label span {
+    width: 32%;
+}
+
+.submitButtonRow {
+    background-color: #daebf1;
+    text-align: right;
+    padding: 0.75rem;
+}
+
+.fileInput {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.fileInput + label {
+    font-weight: bold;
+    border: none;
+    border-radius: 2px;
+    display: inline-block;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 16px;
+    text-transform: uppercase;
+    vertical-align: middle;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+    color: #fefefe;
+    background-color: #016F94;
+    text-align: center;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+
+.fileInput + label:hover {
+    background-color: #FEFEFE;
+    color: #016F94;
+}
+.fileInput:focus + label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+.fileUploadRow {
+    background-color: #daebf1;
+    text-align: center;
+    padding: 0.75rem;
 }
