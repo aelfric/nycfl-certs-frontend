@@ -345,14 +345,12 @@ function SchoolList({ tournamentId }) {
         <tr>
           <th>School</th>
           <th>Medal Count</th>
-          <th>Sweeps</th>
         </tr>
       </thead>
       {medals.map((result) => (
         <tr key={result.school}>
           <td>{result.school}</td>
           <td style={{ textAlign: "center" }}>{result.count}</td>
-          <td style={{ textAlign: "center" }}>{result.sweeps}</td>
         </tr>
       ))}
     </table>
