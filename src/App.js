@@ -301,12 +301,6 @@ function App() {
         </section>
       )}
       {activeTournament && (
-        <section>
-          <h2>Sweepstakes</h2>
-          <FileInput name={"sweepsResults"} onChange={handleSweepsUpload} />
-        </section>
-      )}
-      {activeTournament && (
         <div style={{ margin: "50px" }}>
           <a
             className={styles.button}
@@ -320,6 +314,13 @@ function App() {
         <h2>Medals</h2>
         <SchoolList tournamentId={activeTournament} />
       </section>
+      {activeTournament && (
+        <section>
+          <h2>Sweepstakes</h2>
+          <FileInput name={"sweepsResults"} onChange={handleSweepsUpload} />
+          <Sweepstakes tournamentId={activeTournament} />
+        </section>
+      )}
       <footer>
         <p>Medal by Gregor Cresnar from the Noun Project</p>
         <p>Trophy by Ken Messenger from the Noun Project</p>
@@ -351,6 +352,115 @@ function SchoolList({ tournamentId }) {
         <tr key={result.school}>
           <td>{result.school}</td>
           <td style={{ textAlign: "center" }}>{result.count}</td>
+        </tr>
+      ))}
+    </table>
+  );
+}
+
+function Sweepstakes({ tournamentId }) {
+  const [showCume, setShowCume] = React.useState(false);
+  const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  React.useEffect(() => {
+    if (tournamentId && !showCume) {
+      getData(`/certs/tournaments/${tournamentId}/sweeps`).then(setData);
+    } else {
+      getData(`/certs/tournaments/sweeps`).then(setData);
+    }
+  }, [tournamentId, showCume]);
+
+  if (!tournamentId) return null;
+
+  return (
+    <>
+      <label>
+        Show YTD
+        <input
+          type={"checkbox"}
+          checked={showCume}
+          onChange={() => setShowCume((c) => !c)}
+        />
+      </label>
+      {showCume ? (
+        <CumulativeSweeps />
+      ) : (
+        <IndividualSweeps tournamentId={tournamentId} />
+      )}
+    </>
+  );
+}
+
+function IndividualSweeps({ tournamentId }) {
+  const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    if (tournamentId) {
+      setLoading(true);
+      getData(`/certs/tournaments/${tournamentId}/sweeps`).then((resp) => {
+        setData(resp);
+        setLoading(false);
+      });
+    }
+  }, [tournamentId]);
+
+  if (loading) return <p>Loading...</p>;
+
+  return (
+    <table className={styles.stripedTable}>
+      <thead>
+        <tr>
+          <th>School</th>
+          <th>Points (current tournament)</th>
+        </tr>
+      </thead>
+      {data.map((result) => (
+        <tr key={result.school}>
+          <td>{result.school}</td>
+          <td style={{ textAlign: "center" }}>{result.points}</td>
+        </tr>
+      ))}
+    </table>
+  );
+}
+
+function CumulativeSweeps() {
+  const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    setLoading(true);
+    getData(`/certs/tournaments/sweeps`).then((resp) => {
+      setData(resp);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
+  return (
+    <table className={styles.stripedTable}>
+      <thead>
+        <tr>
+          <th>School</th>
+          <th>Points (current tournament)</th>
+        </tr>
+      </thead>
+      {Object.entries(data.totals).map(([key, value]) => (
+        <tr key={key}>
+          <td>
+            {key}
+            <table>
+              <tbody>
+                {Object.values(data.resultsMap[key]).map((result) => (
+                  <tr>
+                    <td>{result.tournament}</td>
+                    <td>{result.points}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </td>
+          <td style={{ textAlign: "center" }}>{value}</td>
         </tr>
       ))}
     </table>
