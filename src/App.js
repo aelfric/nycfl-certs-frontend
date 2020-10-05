@@ -207,16 +207,18 @@ function App() {
   }
 
   return (
-    <div className={styles.main}>
+      <div  className={styles.main}>
+        <aside>
+          <ul className={styles.tournaments}>
+            {tournaments.map((t) => (
+                <li key={t.id} className={activeTournament === t.id ? styles.selected : null} onClick={() => setActiveTournament(t.id)}>
+                  {t.name} {}
+                </li>
+            ))}
+          </ul>
+        </aside>
+    <main >
       <h1>NYCFL Certificates</h1>
-      <h2>Instructions</h2>
-      <ol>
-        <li>Create a Tournament</li>
-        <li>Upload Events</li>
-        <li>Upload Results</li>
-        <li>Set Thresholds</li>
-        <li>Download Certificates</li>
-      </ol>
       <h2>Tournaments</h2>
       <form onSubmit={createTournament} className={styles.standardForm}>
         <FormTextInput name={"name"} label={"Tournament Name"} />
@@ -224,17 +226,10 @@ function App() {
         <FormTextInput label="Date" type={"date"} name={"date"} />
         <SubmitButton>Create Tournament</SubmitButton>
       </form>
-      <ul>
-        {tournaments.map((t) => (
-          <li key={t.id} onClick={() => setActiveTournament(t.id)}>
-            {t.name} {activeTournament === t.id ? "*" : ""}
-          </li>
-        ))}
-      </ul>
       {activeTournament && (
         <section>
           <h2>Schools</h2>
-          <FileInput name="schoolsUpload" onChange={handleSchoolsUpload} />
+          <FileInput name="schoolsUpload" onChange={handleSchoolsUpload} key={activeTournament} />
         </section>
       )}
 
@@ -276,7 +271,7 @@ function App() {
       {activeTournament && activeEvent && (
         <section>
           <h2>Results</h2>
-          <FileInput name="eventResults" onChange={handleEventResultsUpload} />
+          <FileInput name="eventResults" onChange={handleEventResultsUpload} key={activeEventIndex} />
           <ResultDisplay
             results={
               tournaments[activeTournamentIndex].events[activeEventIndex]
@@ -326,7 +321,8 @@ function App() {
         <p>Trophy by Ken Messenger from the Noun Project</p>
         <p>Certificate by Iconstock from the Noun Project</p>
       </footer>
-    </div>
+    </main>
+        </div>
   );
 }
 

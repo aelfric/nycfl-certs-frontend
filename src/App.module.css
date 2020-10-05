@@ -2,11 +2,51 @@
   width: 960px;
   margin: 0 auto;
   background-color: #fafafa;
-  padding: 0 1em 50px 1em;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
     0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
   font-size: 100%;
+  display: flex;
 }
+
+.main aside {
+  width: 300px;
+  padding: 0.5rem;
+  background-color: #e5ebed;
+}
+
+.main main {
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+.tournaments {
+  list-style: none;
+  margin: 0;
+  padding: 1rem;
+  background-color: #fff;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #dcdcdc;
+  border-radius: 8px;
+}
+
+.tournaments li {
+  width: 98%;
+  display: block !important;
+  padding-left: 4px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 3px;
+  margin-top: 2px;
+  background-color: #daebf1;
+  cursor: pointer;
+}
+
+.tournaments li:hover, li.selected {
+  background-color: #016F94;
+  color: #fdfdfd;
+}
+
 .stripedTable {
   width: 90%;
   margin: 0 auto;
