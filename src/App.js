@@ -1,80 +1,11 @@
 import React from "react";
 import "./App.css";
 import styles from "./App.module.css";
-import { Certificate, Medal, Trophy } from "./icons";
-import * as PropTypes from "prop-types";
+import {Certificate, Medal, Trophy} from "./icons";
+import {getData, handleFileUpload, postData} from "./fetch";
+import {FileInput, FormTextInput, SubmitButton} from "./Inputs";
+import PropTypes from 'prop-types';
 
-async function postData(url = "", data = {}) {
-  // Default options are marked with *
-  const response = await fetch(url, {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    mode: "cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "same-origin", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
-}
-
-async function getData(url = "") {
-  // Default options are marked with *
-  const response = await fetch(url, {
-    method: "GET", //POST, PUT, DELETE, etc.
-    mode: "cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: "same-origin", // include, *same-origin, omit
-    headers: {
-      "Content-Type": "application/json",
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-  });
-  return response.json(); // parses JSON response into native JavaScript objects
-}
-
-function FormTextInput({ name, label, type = "text", value, placeholder, defaultValue }) {
-  return (
-    <label>
-      <span>{label}</span>
-      <input type={type} name={name} value={value} defaultValue={defaultValue} placeholder={placeholder} />
-    </label>
-  );
-}
-
-function SubmitButton({ children }) {
-  return (
-    <div className={styles.submitButtonRow}>
-      <button className={styles.button} type={"submit"}>
-        {children}
-      </button>
-    </div>
-  );
-}
-
-function FileInput({ name, onChange }) {
-  return (
-    <div className={styles.fileUploadRow}>
-      <input
-        type="file"
-        id={name}
-        name={name}
-        onChange={onChange}
-        disabled={false}
-        className={styles.fileInput}
-      />
-      <label htmlFor={name}>Choose a file</label>
-    </div>
-  );
-}
-
-FileInput.propTypes = { onChange: PropTypes.func };
 
 function App() {
   const [tournaments, setTournaments] = React.useState([]);
@@ -114,7 +45,11 @@ function App() {
       certificateHeadline: evt.target.certificateHeadline.value,
       signature: evt.target.signature.value,
     }).then((newTournament) =>
-      setTournaments((tournaments) => Object.assign([], tournaments, {[activeTournamentIndex]: newTournament}))
+      setTournaments((tournaments) =>
+        Object.assign([], tournaments, {
+          [activeTournamentIndex]: newTournament,
+        })
+      )
     );
   }
 
@@ -167,24 +102,6 @@ function App() {
     );
   }
 
-  function handleFileUpload(event, url, onFulfilled) {
-    const files = event.target.files;
-    const formData = new FormData();
-    formData.append("file", files[0]);
-    formData.append("fileName", files[0].name);
-    formData.append("mimeType", files[0].type);
-
-    fetch(url, {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => response.json())
-      .then(onFulfilled)
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
   function handleEventResultsUpload(event) {
     handleFileUpload(
       event,
@@ -220,148 +137,198 @@ function App() {
     );
   }
   function handleMediaUpload(event) {
-    handleFileUpload(
-      event,
-      `/s3/upload`,
-      () => {
-        alert("Media Saved");
-      }
-    );
+    handleFileUpload(event, `/s3/upload`, () => {
+      alert("Media Saved");
+    });
   }
 
   return (
-      <div  className={styles.main}>
-        <aside>
-          <ul className={[styles.tournaments, styles.box].join(" ")}>
-            {tournaments.map((t) => (
-                <li key={t.id} className={activeTournament === t.id ? styles.selected : null} onClick={() => setActiveTournament(t.id)}>
-                  {t.name} {}
-                </li>
-            ))}
-          </ul>
-          <section className={styles.box}>
-            <h2>Media</h2>
-            <FileInput name="mediaUpload" onChange={handleMediaUpload} key={activeTournament} />
-          </section>
-          <section className={styles.box}>
+    <div className={styles.main}>
+      <aside>
+        <ul className={[styles.tournaments, styles.box].join(" ")}>
+          {tournaments.map((t) => (
+            <li
+              key={t.id}
+              className={activeTournament === t.id ? styles.selected : null}
+              onClick={() => setActiveTournament(t.id)}
+            >
+              {t.name} {}
+            </li>
+          ))}
+        </ul>
+        <section className={styles.box}>
+          <h2>Media</h2>
+          <FileInput
+            name="mediaUpload"
+            onChange={handleMediaUpload}
+            key={activeTournament}
+          />
+        </section>
+        <section className={styles.box}>
           <form onSubmit={createTournament} className={styles.standardForm}>
             <FormTextInput name={"name"} label={"Tournament Name"} />
             <FormTextInput label={"Host"} name={"host"} />
             <FormTextInput label="Date" type={"date"} name={"date"} />
             <SubmitButton>Create Tournament</SubmitButton>
           </form>
-          </section>
-        </aside>
-    <main >
-      {activeTournament && (
-          <>
-          <section>
-            <h1>{tournaments[activeTournamentIndex].name} </h1>
-            <form onSubmit={updateTournament} className={styles.standardForm} key={activeTournament}>
-              <FormTextInput name={"name"} label={"Tournament Name"} defaultValue={tournaments[activeTournamentIndex].name} />
-              <FormTextInput label={"Host"} name={"host"}  defaultValue={tournaments[activeTournamentIndex].host} />
-              <FormTextInput label="Date" type={"date"} name={"date"} defaultValue={tournaments[activeTournamentIndex].date} />
-              <FormTextInput label="Headline"  name={"certificateHeadline"} defaultValue={tournaments[activeTournamentIndex].certificateHeadline} placeholder={"New York Catholic Forensics League"}/>
-              <FormTextInput label="Logo" name={"logoUrl"} defaultValue={tournaments[activeTournamentIndex].logoUrl} placeholder={"/nycfl-logo.svg"} />
-              {tournaments[activeTournamentIndex].logoUrl && <p style={{textAlign: "center"}}><img src={tournaments[activeTournamentIndex].logoUrl}/></p>}
-              <FormTextInput label="Signature" name={"signature"} defaultValue={tournaments[activeTournamentIndex].signature} placeholder={"Tom Beck"} />
-              <SubmitButton>Update Tournament</SubmitButton>
-            </form>
-          </section>
-        <section>
-          <h2>Schools</h2>
-          <FileInput name="schoolsUpload" onChange={handleSchoolsUpload} key={activeTournament} />
         </section>
-        <section>
-          <h2>Events</h2>
-          <form onSubmit={createEvents} className={styles.standardForm}>
-            <textarea name={"events"} />
-            <SubmitButton>Save Events</SubmitButton>
-          </form>
-          <table className={styles.stripedTable}>
-            <thead>
-              <tr>
-                <th>Event</th>
-                <th>Results Loaded</th>
-                <th>Placement Set</th>
-                <th>Medals Set</th>
-                <th>Cutoff Set</th>
-              </tr>
-            </thead>
-            {tournaments[activeTournamentIndex].events.map((e) => (
-              <tr
-                onClick={() => setActiveEvent(e.id)}
-                key={e.id}
-                className={`${styles.selectableRow} ${
-                  activeEvent === e.id ? styles.selected : ""
-                }`}
+      </aside>
+      <main>
+        {activeTournament && (
+          <>
+            <section>
+              <h1>{tournaments[activeTournamentIndex].name} </h1>
+              <form
+                onSubmit={updateTournament}
+                className={styles.standardForm}
+                key={activeTournament}
               >
-                <td>{e.name}</td>
-                <td>{e.results.length > 0 ? "Yes" : ""}</td>
-                <td>{e.placementCutoff > 0 ? "Yes" : ""}</td>
-                <td>{e.medalCutoff > 0 ? "Yes" : ""}</td>
-                <td>{e.certificateCutoff > 0 ? "Yes" : ""}</td>
-              </tr>
-            ))}
-          </table>
-        </section>
+                <FormTextInput
+                  name={"name"}
+                  label={"Tournament Name"}
+                  defaultValue={tournaments[activeTournamentIndex].name}
+                />
+                <FormTextInput
+                  label={"Host"}
+                  name={"host"}
+                  defaultValue={tournaments[activeTournamentIndex].host}
+                />
+                <FormTextInput
+                  label="Date"
+                  type={"date"}
+                  name={"date"}
+                  defaultValue={tournaments[activeTournamentIndex].date}
+                />
+                <FormTextInput
+                  label="Headline"
+                  name={"certificateHeadline"}
+                  defaultValue={
+                    tournaments[activeTournamentIndex].certificateHeadline
+                  }
+                  placeholder={"New York Catholic Forensics League"}
+                />
+                <FormTextInput
+                  label="Logo"
+                  name={"logoUrl"}
+                  defaultValue={tournaments[activeTournamentIndex].logoUrl}
+                  placeholder={"/nycfl-logo.svg"}
+                />
+                {tournaments[activeTournamentIndex].logoUrl && (
+                  <p style={{ textAlign: "center" }}>
+                    <img src={tournaments[activeTournamentIndex].logoUrl} alt={"Tournament Logo"} />
+                  </p>
+                )}
+                <FormTextInput
+                  label="Signature"
+                  name={"signature"}
+                  defaultValue={tournaments[activeTournamentIndex].signature}
+                  placeholder={"Tom Beck"}
+                />
+                <SubmitButton>Update Tournament</SubmitButton>
+              </form>
+            </section>
+            <section>
+              <h2>Schools</h2>
+              <FileInput
+                name="schoolsUpload"
+                onChange={handleSchoolsUpload}
+                key={activeTournament}
+              />
+            </section>
+            <section>
+              <h2>Events</h2>
+              <form onSubmit={createEvents} className={styles.standardForm}>
+                <textarea name={"events"} />
+                <SubmitButton>Save Events</SubmitButton>
+              </form>
+              <table className={styles.stripedTable}>
+                <thead>
+                  <tr>
+                    <th>Event</th>
+                    <th>Results Loaded</th>
+                    <th>Placement Set</th>
+                    <th>Medals Set</th>
+                    <th>Cutoff Set</th>
+                  </tr>
+                </thead>
+                {tournaments[activeTournamentIndex].events.map((e) => (
+                  <tr
+                    onClick={() => setActiveEvent(e.id)}
+                    key={e.id}
+                    className={`${styles.selectableRow} ${
+                      activeEvent === e.id ? styles.selected : ""
+                    }`}
+                  >
+                    <td>{e.name}</td>
+                    <td>{e.results.length > 0 ? "Yes" : ""}</td>
+                    <td>{e.placementCutoff > 0 ? "Yes" : ""}</td>
+                    <td>{e.medalCutoff > 0 ? "Yes" : ""}</td>
+                    <td>{e.certificateCutoff > 0 ? "Yes" : ""}</td>
+                  </tr>
+                ))}
+              </table>
+            </section>
           </>
-      )}
-      {activeTournament && activeEvent && (
-        <section>
-          <h2>Results</h2>
-          <FileInput name="eventResults" onChange={handleEventResultsUpload} key={activeEventIndex} />
-          <ResultDisplay
-            results={
-              tournaments[activeTournamentIndex].events[activeEventIndex]
-                .results
-            }
-            setPlacementCutoff={setPlacementCutoff}
-            placementCutoff={
-              tournaments[activeTournamentIndex].events[activeEventIndex]
-                .placementCutoff
-            }
-            setCertificateCutoff={setCertificateCutoff}
-            certificateCutoff={
-              tournaments[activeTournamentIndex].events[activeEventIndex]
-                .certificateCutoff
-            }
-            setMedalCutoff={setMedalCutoff}
-            medalCutoff={
-              tournaments[activeTournamentIndex].events[activeEventIndex]
-                .medalCutoff
-            }
-          />
-        </section>
-      )}
-      {activeTournament && (
+        )}
+        {activeTournament && activeEvent && (
+          <section>
+            <h2>Results</h2>
+            <FileInput
+              name="eventResults"
+              onChange={handleEventResultsUpload}
+              key={activeEventIndex}
+            />
+            <ResultDisplay
+              results={
+                tournaments[activeTournamentIndex].events[activeEventIndex]
+                  .results
+              }
+              setPlacementCutoff={setPlacementCutoff}
+              placementCutoff={
+                tournaments[activeTournamentIndex].events[activeEventIndex]
+                  .placementCutoff
+              }
+              setCertificateCutoff={setCertificateCutoff}
+              certificateCutoff={
+                tournaments[activeTournamentIndex].events[activeEventIndex]
+                  .certificateCutoff
+              }
+              setMedalCutoff={setMedalCutoff}
+              medalCutoff={
+                tournaments[activeTournamentIndex].events[activeEventIndex]
+                  .medalCutoff
+              }
+            />
+          </section>
+        )}
+        {activeTournament && (
           <>
-        <div style={{ margin: "50px" }}>
-          <a
-            className={styles.button}
-            href={`http://localhost:8080/certs/tournaments/${activeTournament}/certificates`}
-          >
-            Generate Certificates
-          </a>
-        </div>
-      <section>
-        <h2>Medals</h2>
-        <SchoolList tournamentId={activeTournament} />
-      </section>
-        <section>
-          <h2>Sweepstakes</h2>
-          <FileInput name={"sweepsResults"} onChange={handleSweepsUpload} />
-          <Sweepstakes tournamentId={activeTournament} />
-        </section>
-        </>
-      )}
-      <footer>
-        <p>Medal by Gregor Cresnar from the Noun Project</p>
-        <p>Trophy by Ken Messenger from the Noun Project</p>
-        <p>Certificate by Iconstock from the Noun Project</p>
-      </footer>
-    </main>
-        </div>
+            <div style={{ margin: "50px" }}>
+              <a
+                className={styles.button}
+                href={`http://localhost:8080/certs/tournaments/${activeTournament}/certificates`}
+              >
+                Generate Certificates
+              </a>
+            </div>
+            <section>
+              <h2>Medals</h2>
+              <SchoolList tournamentId={activeTournament} />
+            </section>
+            <section>
+              <h2>Sweepstakes</h2>
+              <FileInput name={"sweepsResults"} onChange={handleSweepsUpload} />
+              <Sweepstakes tournamentId={activeTournament} />
+            </section>
+          </>
+        )}
+        <footer>
+          <p>Medal by Gregor Cresnar from the Noun Project</p>
+          <p>Trophy by Ken Messenger from the Noun Project</p>
+          <p>Certificate by Iconstock from the Noun Project</p>
+        </footer>
+      </main>
+    </div>
   );
 }
 
@@ -478,7 +445,7 @@ function CumulativeSweeps() {
             <table>
               <tbody>
                 {Object.values(data.resultsMap[key]).map((result) => (
-                  <tr>
+                  <tr key={result.tournament}>
                     <td>{result.tournament}</td>
                     <td>{result.points}</td>
                   </tr>
@@ -584,3 +551,25 @@ function ResultDisplay({
 }
 
 export default App;
+
+ResultDisplay.propTypes = {
+  certificateCutoff: PropTypes.number,
+  medalCutoff: PropTypes.number,
+  placementCutoff: PropTypes.number,
+  results: PropTypes.array,
+  setCertificateCutoff: PropTypes.func,
+  setMedalCutoff: PropTypes.func,
+  setPlacementCutoff: PropTypes.func
+};
+
+Sweepstakes.propTypes = {
+  tournamentId: PropTypes.number
+};
+
+IndividualSweeps.propTypes = {
+  tournamentId: PropTypes.number
+};
+
+SchoolList.propTypes = {
+  tournamentId: PropTypes.number
+};
