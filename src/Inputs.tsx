@@ -1,6 +1,5 @@
 import styles from "./App.module.css";
-import React from "react";
-import * as PropTypes from "prop-types";
+import * as React from "react";
 
 export function FormTextInput({
                                   name,
@@ -9,7 +8,7 @@ export function FormTextInput({
                                   value,
                                   placeholder,
                                   defaultValue,
-                              }) {
+                              }:FormTextInputProps) {
     return (
         <label>
             <span>{label}</span>
@@ -24,7 +23,16 @@ export function FormTextInput({
     );
 }
 
-export function SubmitButton({children}) {
+interface FormTextInputProps {
+    name: string
+    label: string,
+    type? :string,
+    value? :string,
+    placeholder? :string,
+    defaultValue? :string,
+}
+
+export function SubmitButton({children} : SubmitButtonProps) {
     return (
         <div className={styles.submitButtonRow}>
             <button className={styles.button} type={"submit"}>
@@ -34,7 +42,11 @@ export function SubmitButton({children}) {
     );
 }
 
-export function FileInput({name, onChange}) {
+interface SubmitButtonProps {
+    children: React.ReactNode | React.ReactNodeArray
+}
+
+export function FileInput({name, onChange} : FileInputProps) {
     return (
         <div className={styles.fileUploadRow}>
             <input
@@ -50,4 +62,10 @@ export function FileInput({name, onChange}) {
     );
 }
 
-FileInput.propTypes = { onChange: PropTypes.func };
+interface FileChangeHandler {
+    (event: React.ChangeEvent<HTMLInputElement>): void;
+}
+interface FileInputProps {
+    name: string,
+    onChange: FileChangeHandler
+}

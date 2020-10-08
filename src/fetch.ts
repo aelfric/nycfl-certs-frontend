@@ -1,4 +1,5 @@
-export async function postData(url = "", data = {}) {
+import * as React from "react";
+export async function postData(url: string = "", data: object = {}) {
     // Default options are marked with *
     const response = await fetch(url, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -16,7 +17,7 @@ export async function postData(url = "", data = {}) {
     return response.json(); // parses JSON response into native JavaScript objects
 }
 
-export async function getData(url = "") {
+export async function getData(url: string = "") {
     // Default options are marked with *
     const response = await fetch(url, {
         method: "GET", //POST, PUT, DELETE, etc.
@@ -33,20 +34,26 @@ export async function getData(url = "") {
     return response.json(); // parses JSON response into native JavaScript objects
 }
 
-export function handleFileUpload(event, url, onFulfilled) {
+export function handleFileUpload(
+    event: React.ChangeEvent<HTMLInputElement>,
+    url: string,
+    onFulfilled: ((value: any) => any) | null | undefined
+) {
     const files = event.target.files;
     const formData = new FormData();
-    formData.append("file", files[0]);
-    formData.append("fileName", files[0].name);
-    formData.append("mimeType", files[0].type);
+    if (files) {
+        formData.append("file", files[0]);
+        formData.append("fileName", files[0].name);
+        formData.append("mimeType", files[0].type);
 
-    fetch(url, {
-        method: "POST",
-        body: formData,
-    })
-        .then((response) => response.json())
-        .then(onFulfilled)
-        .catch((error) => {
-            console.error(error);
-        });
+        fetch(url, {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => response.json())
+            .then(onFulfilled)
+            .catch((error) => {
+                console.error(error);
+            });
+    }
 }

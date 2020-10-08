@@ -1,44 +1,67 @@
-import React from "react";
+import * as React from "react";
 import "./App.css";
 import styles from "./App.module.css";
-import {Certificate, Medal, Trophy} from "./icons";
-import {getData, handleFileUpload, postData} from "./fetch";
-import {FileInput, FormTextInput, SubmitButton} from "./Inputs";
-import PropTypes from 'prop-types';
+import { Certificate, Medal, Trophy } from "./icons";
+import { getData, handleFileUpload, postData } from "./fetch";
+import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 
+interface Tournament {
+  id: number;
+  name: string;
+  host: string;
+  date: string;
+  logoUrl?: string;
+  certificateHeadline?: string;
+  signature?: string;
+  events: Event[];
+}
+
+interface Event {
+  id: number;
+  name: string;
+  results: Result[];
+  placementCutoff: number;
+  medalCutoff: number;
+  certificateCutoff: number;
+}
 
 function App() {
-  const [tournaments, setTournaments] = React.useState([]);
-  const [activeTournament, setActiveTournament] = React.useState(undefined);
-  const [activeEvent, setActiveEvent] = React.useState(undefined);
+  const [tournaments, setTournaments] = React.useState<Tournament[]>([]);
+  const [activeTournament, setActiveTournament] = React.useState<
+    number | undefined
+  >(undefined);
+  const [activeEvent, setActiveEvent] = React.useState<number | undefined>(
+    undefined
+  );
 
   const activeTournamentIndex = activeTournament
     ? tournaments.findIndex((t) => t.id === activeTournament)
-    : undefined;
-  const activeEventIndex = activeEvent
-    ? tournaments[activeTournamentIndex].events.findIndex(
-        (e) => e.id === activeEvent
-      )
-    : undefined;
+    : -1;
+  const activeEventIndex =
+    activeTournamentIndex && activeEvent
+      ? tournaments[activeTournamentIndex].events.findIndex(
+          (e: Event) => e.id === activeEvent
+        )
+      : -1;
 
   React.useEffect(() => {
     getData("/certs/tournaments").then(setTournaments);
   }, []);
 
-  function createTournament(evt) {
+  function createTournament(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
     postData("/certs/tournaments", {
-      name: evt.target.name.value,
+      name: evt.target.tournamentName.value,
       host: evt.target.host.value,
       date: evt.target.date.value,
     }).then((newTournament) =>
       setTournaments((tournaments) => [...tournaments, newTournament])
     );
   }
-  function updateTournament(evt) {
+  function updateTournament(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
     postData(`/certs/tournaments/${activeTournament}`, {
-      name: evt.target.name.value,
+      name: evt.target.tournamentName.value,
       host: evt.target.host.value,
       date: evt.target.date.value,
       logoUrl: evt.target.logoUrl.value,
@@ -53,7 +76,7 @@ function App() {
     );
   }
 
-  function createEvents(evt) {
+  function createEvents(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
     postData("/certs/events", {
       events: evt.target.events.value,
@@ -66,7 +89,7 @@ function App() {
     );
   }
 
-  function setPlacementCutoff(value) {
+  function setPlacementCutoff(value: number) {
     postData(
       `/certs/tournaments/${activeTournament}/events/${activeEvent}/placement`,
       { cutoff: value }
@@ -78,7 +101,7 @@ function App() {
     );
   }
 
-  function setCertificateCutoff(value) {
+  function setCertificateCutoff(value: number) {
     postData(
       `/certs/tournaments/${activeTournament}/events/${activeEvent}/cutoff`,
       { cutoff: value }
@@ -90,7 +113,7 @@ function App() {
     );
   }
 
-  function setMedalCutoff(value) {
+  function setMedalCutoff(value: number) {
     postData(
       `/certs/tournaments/${activeTournament}/events/${activeEvent}/medal`,
       { cutoff: value }
@@ -102,11 +125,13 @@ function App() {
     );
   }
 
-  function handleEventResultsUpload(event) {
+  function handleEventResultsUpload(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
     handleFileUpload(
       event,
       `/certs/tournaments/${activeTournament}/events/${activeEvent}/results`,
-      (data) => {
+      (data: Tournament) => {
         const index = tournaments.findIndex((t) => t.id === activeTournament);
         return setTournaments((tournaments) =>
           Object.assign([], tournaments, { [index]: data })
@@ -115,11 +140,11 @@ function App() {
     );
   }
 
-  function handleSweepsUpload(event) {
+  function handleSweepsUpload(event: React.ChangeEvent<HTMLInputElement>) {
     handleFileUpload(
       event,
       `/certs/tournaments/${activeTournament}/sweeps`,
-      (data) => {
+      (data: Tournament) => {
         const index = tournaments.findIndex((t) => t.id === activeTournament);
         return setTournaments((tournaments) =>
           Object.assign([], tournaments, { [index]: data })
@@ -127,7 +152,7 @@ function App() {
       }
     );
   }
-  function handleSchoolsUpload(event) {
+  function handleSchoolsUpload(event: React.ChangeEvent<HTMLInputElement>) {
     handleFileUpload(
       event,
       `/certs/tournaments/${activeTournament}/schools`,
@@ -136,7 +161,7 @@ function App() {
       }
     );
   }
-  function handleMediaUpload(event) {
+  function handleMediaUpload(event: React.ChangeEvent<HTMLInputElement>) {
     handleFileUpload(event, `/s3/upload`, () => {
       alert("Media Saved");
     });
@@ -149,7 +174,9 @@ function App() {
           {tournaments.map((t) => (
             <li
               key={t.id}
-              className={activeTournament === t.id ? styles.selected : null}
+              className={
+                activeTournament === t.id ? styles.selected : undefined
+              }
               onClick={() => setActiveTournament(t.id)}
             >
               {t.name} {}
@@ -166,7 +193,7 @@ function App() {
         </section>
         <section className={styles.box}>
           <form onSubmit={createTournament} className={styles.standardForm}>
-            <FormTextInput name={"name"} label={"Tournament Name"} />
+            <FormTextInput name={"tournamentName"} label={"Tournament Name"} />
             <FormTextInput label={"Host"} name={"host"} />
             <FormTextInput label="Date" type={"date"} name={"date"} />
             <SubmitButton>Create Tournament</SubmitButton>
@@ -184,7 +211,7 @@ function App() {
                 key={activeTournament}
               >
                 <FormTextInput
-                  name={"name"}
+                  name={"tournamentName"}
                   label={"Tournament Name"}
                   defaultValue={tournaments[activeTournamentIndex].name}
                 />
@@ -215,7 +242,10 @@ function App() {
                 />
                 {tournaments[activeTournamentIndex].logoUrl && (
                   <p style={{ textAlign: "center" }}>
-                    <img src={tournaments[activeTournamentIndex].logoUrl} alt={"Tournament Logo"} />
+                    <img
+                      src={tournaments[activeTournamentIndex].logoUrl}
+                      alt={"Tournament Logo"}
+                    />
                   </p>
                 )}
                 <FormTextInput
@@ -251,7 +281,7 @@ function App() {
                     <th>Cutoff Set</th>
                   </tr>
                 </thead>
-                {tournaments[activeTournamentIndex].events.map((e) => (
+                {tournaments[activeTournamentIndex].events.map((e: Event) => (
                   <tr
                     onClick={() => setActiveEvent(e.id)}
                     key={e.id}
@@ -332,7 +362,16 @@ function App() {
   );
 }
 
-function SchoolList({ tournamentId }) {
+interface TournamentIdProps {
+  tournamentId: number;
+}
+
+interface MedalCount {
+  school: string;
+  count: number;
+}
+
+function SchoolList({ tournamentId }: TournamentIdProps) {
   const [medals, setMedals] = React.useState([]);
   React.useEffect(() => {
     if (tournamentId) {
@@ -350,7 +389,7 @@ function SchoolList({ tournamentId }) {
           <th>Medal Count</th>
         </tr>
       </thead>
-      {medals.map((result) => (
+      {medals.map((result: MedalCount) => (
         <tr key={result.school}>
           <td>{result.school}</td>
           <td style={{ textAlign: "center" }}>{result.count}</td>
@@ -360,7 +399,7 @@ function SchoolList({ tournamentId }) {
   );
 }
 
-function Sweepstakes({ tournamentId }) {
+function Sweepstakes({ tournamentId }: TournamentIdProps) {
   const [showCume, setShowCume] = React.useState(false);
 
   if (!tournamentId) return null;
@@ -384,8 +423,30 @@ function Sweepstakes({ tournamentId }) {
   );
 }
 
-function IndividualSweeps({ tournamentId }) {
-  const [data, setData] = React.useState([]);
+interface School {
+  id: number;
+  name: string;
+}
+
+interface Result {
+  school: School;
+  points: number;
+  id: number;
+  place: number;
+  placeString: string;
+  name: string;
+}
+
+interface SweepsResult {
+  school: string;
+  points: number;
+  id: number;
+  place: number;
+  placeString: string;
+  name: string;
+}
+function IndividualSweeps({ tournamentId }: TournamentIdProps) {
+  const [data, setData] = React.useState<SweepsResult[]>([]);
   const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
     if (tournamentId) {
@@ -417,8 +478,20 @@ function IndividualSweeps({ tournamentId }) {
   );
 }
 
+interface CumulativeSweepsData {
+  totals: object;
+  resultsMap: Record<string, SweepsResult>;
+}
+
+interface SweepsResult {
+  tournament: string;
+  points: number;
+}
+
 function CumulativeSweeps() {
-  const [data, setData] = React.useState([]);
+  const [data, setData] = React.useState<CumulativeSweepsData | undefined>(
+    undefined
+  );
   const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
     setLoading(true);
@@ -428,7 +501,7 @@ function CumulativeSweeps() {
     });
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading || !data) return <p>Loading...</p>;
 
   return (
     <table className={styles.stripedTable}>
@@ -444,12 +517,14 @@ function CumulativeSweeps() {
             {key}
             <table>
               <tbody>
-                {Object.values(data.resultsMap[key]).map((result) => (
-                  <tr key={result.tournament}>
-                    <td>{result.tournament}</td>
-                    <td>{result.points}</td>
-                  </tr>
-                ))}
+                {Object.values(data.resultsMap[key]).map(
+                  (result: SweepsResult) => (
+                    <tr key={result.tournament}>
+                      <td>{result.tournament}</td>
+                      <td>{result.points}</td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </td>
@@ -468,7 +543,7 @@ function ResultDisplay({
   placementCutoff,
   certificateCutoff,
   medalCutoff,
-}) {
+}: ResultDisplayProps) {
   return (
     <table className={styles.stripedTable}>
       <thead>
@@ -482,7 +557,7 @@ function ResultDisplay({
       </thead>
       {results.map((result) => (
         <tr
-          key={results.id}
+          key={result.id}
           className={
             result.place < placementCutoff
               ? styles.placing
@@ -552,24 +627,16 @@ function ResultDisplay({
 
 export default App;
 
-ResultDisplay.propTypes = {
-  certificateCutoff: PropTypes.number,
-  medalCutoff: PropTypes.number,
-  placementCutoff: PropTypes.number,
-  results: PropTypes.array,
-  setCertificateCutoff: PropTypes.func,
-  setMedalCutoff: PropTypes.func,
-  setPlacementCutoff: PropTypes.func
-};
+interface SetCutoffFunction {
+  (cutoff: number): void;
+}
 
-Sweepstakes.propTypes = {
-  tournamentId: PropTypes.number
-};
-
-IndividualSweeps.propTypes = {
-  tournamentId: PropTypes.number
-};
-
-SchoolList.propTypes = {
-  tournamentId: PropTypes.number
-};
+interface ResultDisplayProps {
+  certificateCutoff: number;
+  medalCutoff: number;
+  placementCutoff: number;
+  results: Result[];
+  setCertificateCutoff: SetCutoffFunction;
+  setMedalCutoff: SetCutoffFunction;
+  setPlacementCutoff: SetCutoffFunction;
+}
