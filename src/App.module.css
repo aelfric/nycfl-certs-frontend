@@ -19,7 +19,7 @@
   padding: 1rem;
 }
 
-.box{
+.box {
   padding: 1rem;
   background-color: #fff;
   border-width: 1px;
@@ -49,8 +49,9 @@
   cursor: pointer;
 }
 
-.tournaments li:hover, li.selected {
-  background-color: #016F94;
+.tournaments li:hover,
+li.selected {
+  background-color: #016f94;
   color: #fdfdfd;
 }
 
