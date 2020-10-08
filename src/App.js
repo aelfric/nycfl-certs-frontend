@@ -39,11 +39,11 @@ async function getData(url = "") {
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
-function FormTextInput({ name, label, type = "text" }) {
+function FormTextInput({ name, label, type = "text", value, placeholder, defaultValue }) {
   return (
     <label>
       <span>{label}</span>
-      <input type={type} name={name} />
+      <input type={type} name={name} value={value} defaultValue={defaultValue} placeholder={placeholder} />
     </label>
   );
 }
@@ -104,6 +104,19 @@ function App() {
       setTournaments((tournaments) => [...tournaments, newTournament])
     );
   }
+  function updateTournament(evt) {
+    evt.preventDefault();
+    postData(`/certs/tournaments/${activeTournament}`, {
+      name: evt.target.name.value,
+      host: evt.target.host.value,
+      date: evt.target.date.value,
+      logoUrl: evt.target.logoUrl.value,
+      certificateHeadline: evt.target.certificateHeadline.value,
+      signature: evt.target.signature.value,
+    }).then((newTournament) =>
+      setTournaments((tournaments) => Object.assign([], tournaments, {[activeTournamentIndex]: newTournament}))
+    );
+  }
 
   function createEvents(evt) {
     evt.preventDefault();
@@ -154,11 +167,12 @@ function App() {
     );
   }
 
-  function handleCsvUpload(event, url, onFulfilled) {
+  function handleFileUpload(event, url, onFulfilled) {
     const files = event.target.files;
     const formData = new FormData();
     formData.append("file", files[0]);
-    formData.append("fileName", "resultsCSV");
+    formData.append("fileName", files[0].name);
+    formData.append("mimeType", files[0].type);
 
     fetch(url, {
       method: "POST",
@@ -172,7 +186,7 @@ function App() {
   }
 
   function handleEventResultsUpload(event) {
-    handleCsvUpload(
+    handleFileUpload(
       event,
       `/certs/tournaments/${activeTournament}/events/${activeEvent}/results`,
       (data) => {
@@ -185,7 +199,7 @@ function App() {
   }
 
   function handleSweepsUpload(event) {
-    handleCsvUpload(
+    handleFileUpload(
       event,
       `/certs/tournaments/${activeTournament}/sweeps`,
       (data) => {
@@ -197,11 +211,20 @@ function App() {
     );
   }
   function handleSchoolsUpload(event) {
-    handleCsvUpload(
+    handleFileUpload(
       event,
       `/certs/tournaments/${activeTournament}/schools`,
-      (data) => {
+      () => {
         alert("Schools Loaded");
+      }
+    );
+  }
+  function handleMediaUpload(event) {
+    handleFileUpload(
+      event,
+      `/s3/upload`,
+      () => {
+        alert("Media Saved");
       }
     );
   }
@@ -209,31 +232,46 @@ function App() {
   return (
       <div  className={styles.main}>
         <aside>
-          <ul className={styles.tournaments}>
+          <ul className={[styles.tournaments, styles.box].join(" ")}>
             {tournaments.map((t) => (
                 <li key={t.id} className={activeTournament === t.id ? styles.selected : null} onClick={() => setActiveTournament(t.id)}>
                   {t.name} {}
                 </li>
             ))}
           </ul>
+          <section className={styles.box}>
+            <h2>Media</h2>
+            <FileInput name="mediaUpload" onChange={handleMediaUpload} key={activeTournament} />
+          </section>
+          <section className={styles.box}>
+          <form onSubmit={createTournament} className={styles.standardForm}>
+            <FormTextInput name={"name"} label={"Tournament Name"} />
+            <FormTextInput label={"Host"} name={"host"} />
+            <FormTextInput label="Date" type={"date"} name={"date"} />
+            <SubmitButton>Create Tournament</SubmitButton>
+          </form>
+          </section>
         </aside>
     <main >
-      <h1>NYCFL Certificates</h1>
-      <h2>Tournaments</h2>
-      <form onSubmit={createTournament} className={styles.standardForm}>
-        <FormTextInput name={"name"} label={"Tournament Name"} />
-        <FormTextInput label={"Host"} name={"host"} />
-        <FormTextInput label="Date" type={"date"} name={"date"} />
-        <SubmitButton>Create Tournament</SubmitButton>
-      </form>
       {activeTournament && (
+          <>
+          <section>
+            <h1>{tournaments[activeTournamentIndex].name} </h1>
+            <form onSubmit={updateTournament} className={styles.standardForm}>
+              <FormTextInput name={"name"} label={"Tournament Name"} defaultValue={tournaments[activeTournamentIndex].name} />
+              <FormTextInput label={"Host"} name={"host"}  defaultValue={tournaments[activeTournamentIndex].host} />
+              <FormTextInput label="Date" type={"date"} name={"date"} defaultValue={tournaments[activeTournamentIndex].date} />
+              <FormTextInput label="Headline"  name={"certificateHeadline"} defaultValue={tournaments[activeTournamentIndex].certificateHeadline} placeholder={"New York Catholic Forensics League"}/>
+              <FormTextInput label="Logo" name={"logoUrl"} defaultValue={tournaments[activeTournamentIndex].logoUrl} placeholder={"/nycfl-logo.svg"} />
+              {tournaments[activeTournamentIndex].logoUrl && <p style={{textAlign: "center"}}><img src={tournaments[activeTournamentIndex].logoUrl}/></p>}
+              <FormTextInput label="Signature" name={"signature"} defaultValue={tournaments[activeTournamentIndex].signature} placeholder={"Tom Beck"} />
+              <SubmitButton>Update Tournament</SubmitButton>
+            </form>
+          </section>
         <section>
           <h2>Schools</h2>
           <FileInput name="schoolsUpload" onChange={handleSchoolsUpload} key={activeTournament} />
         </section>
-      )}
-
-      {activeTournament && (
         <section>
           <h2>Events</h2>
           <form onSubmit={createEvents} className={styles.standardForm}>
@@ -267,6 +305,7 @@ function App() {
             ))}
           </table>
         </section>
+          </>
       )}
       {activeTournament && activeEvent && (
         <section>
@@ -296,6 +335,7 @@ function App() {
         </section>
       )}
       {activeTournament && (
+          <>
         <div style={{ margin: "50px" }}>
           <a
             className={styles.button}
@@ -304,17 +344,16 @@ function App() {
             Generate Certificates
           </a>
         </div>
-      )}
       <section>
         <h2>Medals</h2>
         <SchoolList tournamentId={activeTournament} />
       </section>
-      {activeTournament && (
         <section>
           <h2>Sweepstakes</h2>
           <FileInput name={"sweepsResults"} onChange={handleSweepsUpload} />
           <Sweepstakes tournamentId={activeTournament} />
         </section>
+        </>
       )}
       <footer>
         <p>Medal by Gregor Cresnar from the Noun Project</p>
@@ -356,15 +395,6 @@ function SchoolList({ tournamentId }) {
 
 function Sweepstakes({ tournamentId }) {
   const [showCume, setShowCume] = React.useState(false);
-  const [data, setData] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  React.useEffect(() => {
-    if (tournamentId && !showCume) {
-      getData(`/certs/tournaments/${tournamentId}/sweeps`).then(setData);
-    } else {
-      getData(`/certs/tournaments/sweeps`).then(setData);
-    }
-  }, [tournamentId, showCume]);
 
   if (!tournamentId) return null;
 
