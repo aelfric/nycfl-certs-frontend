@@ -257,7 +257,7 @@ function App() {
           <>
           <section>
             <h1>{tournaments[activeTournamentIndex].name} </h1>
-            <form onSubmit={updateTournament} className={styles.standardForm}>
+            <form onSubmit={updateTournament} className={styles.standardForm} key={activeTournament}>
               <FormTextInput name={"name"} label={"Tournament Name"} defaultValue={tournaments[activeTournamentIndex].name} />
               <FormTextInput label={"Host"} name={"host"}  defaultValue={tournaments[activeTournamentIndex].host} />
               <FormTextInput label="Date" type={"date"} name={"date"} defaultValue={tournaments[activeTournamentIndex].date} />
