@@ -199,6 +199,11 @@ function App() {
             <SubmitButton>Create Tournament</SubmitButton>
           </form>
         </section>
+        <footer>
+          <p>Medal by Gregor Cresnar from the Noun Project</p>
+          <p>Trophy by Ken Messenger from the Noun Project</p>
+          <p>Certificate by Iconstock from the Noun Project</p>
+        </footer>
       </aside>
       <main>
         {activeTournament && (
@@ -298,9 +303,7 @@ function App() {
                 ))}
               </table>
             </section>
-          </>
-        )}
-        {activeTournament && activeEvent && (
+        {activeEvent && (
           <section>
             <h2>Results</h2>
             <FileInput
@@ -331,8 +334,7 @@ function App() {
             />
           </section>
         )}
-        {activeTournament && (
-          <>
+
             <div style={{ margin: "50px" }}>
               <a
                 className={styles.button}
@@ -352,11 +354,6 @@ function App() {
             </section>
           </>
         )}
-        <footer>
-          <p>Medal by Gregor Cresnar from the Noun Project</p>
-          <p>Trophy by Ken Messenger from the Noun Project</p>
-          <p>Certificate by Iconstock from the Noun Project</p>
-        </footer>
       </main>
     </div>
   );
@@ -400,7 +397,7 @@ function SchoolList({ tournamentId }: TournamentIdProps) {
 }
 
 function Sweepstakes({ tournamentId }: TournamentIdProps) {
-  const [showCume, setShowCume] = React.useState(false);
+  const [showYTD, setShowYTD] = React.useState(false);
 
   if (!tournamentId) return null;
 
@@ -410,11 +407,11 @@ function Sweepstakes({ tournamentId }: TournamentIdProps) {
         Show YTD
         <input
           type={"checkbox"}
-          checked={showCume}
-          onChange={() => setShowCume((c) => !c)}
+          checked={showYTD}
+          onChange={() => setShowYTD((c) => !c)}
         />
       </label>
-      {showCume ? (
+      {showYTD ? (
         <CumulativeSweeps />
       ) : (
         <IndividualSweeps tournamentId={tournamentId} />

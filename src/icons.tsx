@@ -1,6 +1,11 @@
 import React from "react";
 
-export function Medal({ style }) {
+interface IconProps {
+  style: React.CSSProperties
+}
+
+
+export function Medal({ style } : IconProps) {
   return (
     <svg
       style={style}
@@ -14,7 +19,7 @@ export function Medal({ style }) {
   );
 }
 
-export function Trophy({ style }) {
+export function Trophy({ style } : IconProps) {
   return (
     <svg
       style={style}
@@ -31,7 +36,7 @@ export function Trophy({ style }) {
   );
 }
 
-export function Certificate({ style }) {
+export function Certificate({ style } : IconProps) {
   return (
     <svg
       style={style}
