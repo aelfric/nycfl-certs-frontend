@@ -4,6 +4,7 @@ import styles from "./App.module.css";
 import { getData, handleFileUpload, postData } from "./fetch";
 import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { Tournament, TournamentScreen } from "./TournamentScreen";
+const cx = require("classnames");
 
 function App() {
   const [tournaments, setTournaments] = React.useState<Tournament[]>([]);
@@ -126,13 +127,13 @@ function App() {
   return (
     <div className={styles.main}>
       <aside>
-        <ul className={[styles.tournaments, styles.box].join(" ")}>
+        <ul className={cx(styles.tournaments, styles.box)}>
           {tournaments.map((t) => (
             <li
               key={t.id}
-              className={
-                activeTournamentId === t.id ? styles.selected : undefined
-              }
+              className={cx({
+                [styles.selected]: activeTournamentId === t.id,
+              })}
               onClick={() => setActiveTournament(t.id)}
             >
               {t.name} {}

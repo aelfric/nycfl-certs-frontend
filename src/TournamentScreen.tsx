@@ -5,6 +5,7 @@ import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
 import { Sweepstakes } from "./Sweepstakes";
 import { MedalCount, Result, TournamentIdProps } from "./App";
+const cx = require("classnames");
 
 export interface Tournament {
   id: number;
@@ -150,9 +151,9 @@ export function TournamentScreen({
               <tr
                 onClick={() => setActiveEventId(e.id)}
                 key={e.id}
-                className={`${styles.selectableRow} ${
-                  activeEventId === e.id ? styles.selected : ""
-                }`}
+                className={cx(styles.selectableRow, {
+                  [styles.selected]: activeEventId === e.id,
+                })}
               >
                 <td>{e.name}</td>
                 <td>{e.results.length > 0 ? "Yes" : ""}</td>
