@@ -4,6 +4,7 @@ import styles from "./App.module.css";
 import { getData, handleFileUpload, postData } from "./fetch";
 import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { Tournament, TournamentScreen } from "./TournamentScreen";
+
 const cx = require("classnames");
 
 function App() {
@@ -39,13 +40,7 @@ function App() {
       certificateHeadline: evt.target.certificateHeadline.value,
       signature: evt.target.signature.value,
       signatureTitle: evt.target.signatureTitle.value,
-    }).then((newTournament) =>
-      setTournaments((tournaments) =>
-        Object.assign([], tournaments, {
-          [activeTournamentIndex]: newTournament,
-        })
-      )
-    );
+    }).then(replaceActiveTournament);
   }
 
   function createEvents(evt: React.ChangeEvent<HTMLFormElement>) {
@@ -53,12 +48,7 @@ function App() {
     postData("/certs/events", {
       events: evt.target.events.value,
       tournamentId: activeTournamentId,
-    }).then((newTournament) =>
-      setTournaments((tournaments) => {
-        const index = tournaments.findIndex((t) => t.id === activeTournamentId);
-        return Object.assign([], tournaments, { [index]: newTournament });
-      })
-    );
+    }).then(replaceActiveTournament);
   }
 
   function setCutoff(
@@ -69,12 +59,7 @@ function App() {
     postData(
       `/certs/tournaments/${activeTournamentId}/events/${activeEvent}/${type}`,
       { cutoff: value }
-    ).then((newTournament) =>
-      setTournaments((tournaments) => {
-        const index = tournaments.findIndex((t) => t.id === activeTournamentId);
-        return Object.assign([], tournaments, { [index]: newTournament });
-      })
-    );
+    ).then(replaceActiveTournament);
   }
 
   function handleEventResultsUpload(
@@ -85,28 +70,22 @@ function App() {
       handleFileUpload(
         event,
         `/certs/tournaments/${activeTournamentId}/events/${eventId}/results`,
-        (data: Tournament) => {
-          const index = tournaments.findIndex(
-            (t) => t.id === activeTournamentId
-          );
-          return setTournaments((tournaments) =>
-            Object.assign([], tournaments, { [index]: data })
-          );
-        }
+        replaceActiveTournament
       );
     }
+  }
+
+  function replaceActiveTournament(data: Tournament) {
+    return setTournaments((tournaments) =>
+      Object.assign([], tournaments, { [activeTournamentIndex]: data })
+    );
   }
 
   function handleSweepsUpload(event: React.ChangeEvent<HTMLInputElement>) {
     handleFileUpload(
       event,
       `/certs/tournaments/${activeTournamentId}/sweeps`,
-      (data: Tournament) => {
-        const index = tournaments.findIndex((t) => t.id === activeTournamentId);
-        return setTournaments((tournaments) =>
-          Object.assign([], tournaments, { [index]: data })
-        );
-      }
+      replaceActiveTournament
     );
   }
   function handleSchoolsUpload(event: React.ChangeEvent<HTMLInputElement>) {
@@ -172,7 +151,6 @@ function App() {
             createEvents={createEvents}
             uploadResults={handleEventResultsUpload}
             setCutoff={setCutoff}
-            activeTournament={activeTournamentId}
             uploadSweeps={handleSweepsUpload}
           />
         )}

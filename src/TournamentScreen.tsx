@@ -45,14 +45,12 @@ type TournamentScreenParams = {
     inputEvent: React.ChangeEvent<HTMLInputElement>,
     eventId: number
   ) => void;
-  activeTournament: number;
   uploadSweeps: InputEventHandler;
   setCutoff: ISetCutoff;
   tournament: Tournament;
 };
 
 export function TournamentScreen({
-  activeTournament,
   onSubmit,
   setCutoff,
   uploadResults,
@@ -177,19 +175,19 @@ export function TournamentScreen({
       <div style={{ margin: "50px" }}>
         <a
           className={styles.button}
-          href={`http://localhost:8080/certs/tournaments/${activeTournament}/certificates`}
+          href={`http://localhost:8080/certs/tournaments/${tournament.id}/certificates`}
         >
           Generate Certificates
         </a>
       </div>
       <section>
         <h2>Medals</h2>
-        <SchoolList tournamentId={activeTournament} />
+        <SchoolList tournamentId={tournament.id} />
       </section>
       <section>
         <h2>Sweepstakes</h2>
         <FileInput name={"sweepsResults"} onChange={uploadSweeps} />
-        <Sweepstakes tournamentId={activeTournament} />
+        <Sweepstakes tournamentId={tournament.id} />
       </section>
     </>
   );
