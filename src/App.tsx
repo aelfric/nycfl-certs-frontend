@@ -64,12 +64,13 @@ function App() {
 
   function handleEventResultsUpload(
     event: React.ChangeEvent<HTMLInputElement>,
-    eventId: number | undefined
+    eventId: number | undefined,
+    roundType: string = "QUARTER_FINALIST"
   ) {
     if (eventId !== undefined) {
       handleFileUpload(
         event,
-        `/certs/tournaments/${activeTournamentId}/events/${eventId}/results`,
+        `/certs/tournaments/${activeTournamentId}/events/${eventId}/results\?type=${roundType}`,
         replaceActiveTournament
       );
     }
@@ -101,6 +102,13 @@ function App() {
     handleFileUpload(event, `/s3/upload`, () => {
       alert("Media Saved");
     });
+  }
+
+  function setEventType(activeEvent: number, eventType: string) {
+    postData(
+      `/certs/tournaments/${activeTournamentId}/events/${activeEvent}/type\?type=${eventType}`,
+      {}
+    ).then(replaceActiveTournament);
   }
 
   return (
@@ -152,6 +160,7 @@ function App() {
             uploadResults={handleEventResultsUpload}
             setCutoff={setCutoff}
             uploadSweeps={handleSweepsUpload}
+            setEventType={setEventType}
           />
         )}
       </main>

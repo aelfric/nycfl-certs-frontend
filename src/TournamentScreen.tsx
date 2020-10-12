@@ -20,6 +20,7 @@ export interface Tournament {
 }
 
 export interface CompetitionEvent {
+  eventType: string;
   id: number;
   name: string;
   results: Result[];
@@ -40,10 +41,12 @@ type SubmitHandler = (evt: React.ChangeEvent<HTMLFormElement>) => void;
 type TournamentScreenParams = {
   onSubmit: SubmitHandler;
   uploadSchools: InputEventHandler;
+  setEventType: (eventId: number, type: string) => void;
   createEvents: SubmitHandler;
   uploadResults: (
     inputEvent: React.ChangeEvent<HTMLInputElement>,
-    eventId: number
+    eventId: number,
+    roundType: string
   ) => void;
   uploadSweeps: InputEventHandler;
   setCutoff: ISetCutoff;
@@ -53,6 +56,7 @@ type TournamentScreenParams = {
 export function TournamentScreen({
   onSubmit,
   setCutoff,
+  setEventType,
   uploadResults,
   uploadSchools,
   uploadSweeps,
@@ -169,6 +173,7 @@ export function TournamentScreen({
           tournament={tournament}
           event={events[activeEventIndex]}
           setCutoff={setCutoff}
+          setEventType={setEventType}
         />
       )}
 
