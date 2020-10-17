@@ -1,7 +1,7 @@
 import * as React from "react";
 import "./App.css";
 import styles from "./App.module.css";
-import {deleteData, getData, handleFileUpload, postData} from "./fetch";
+import { deleteData, getData, handleFileUpload, postData } from "./fetch";
 import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { Tournament, TournamentScreen } from "./TournamentScreen";
 
@@ -111,11 +111,11 @@ function App() {
     ).then(replaceActiveTournament);
   }
 
-  function resetResults(eventId: number): void{
-    deleteData(`/certs/tournaments/${activeTournamentId}/events/${eventId}/results`)
-        .then(replaceActiveTournament);
+  function resetResults(eventId: number): void {
+    deleteData(
+      `/certs/tournaments/${activeTournamentId}/events/${eventId}/results`
+    ).then(replaceActiveTournament);
   }
-
 
   return (
     <div className={styles.main}>

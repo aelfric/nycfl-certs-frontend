@@ -2,7 +2,7 @@ import * as React from "react";
 import { FileInput } from "./Inputs";
 import { ResultDisplay } from "./ResultDisplay";
 import { CompetitionEvent, Tournament } from "./TournamentScreen";
-import {deleteData, getData} from "./fetch";
+import { deleteData, getData } from "./fetch";
 import { useState } from "react";
 import styles from "./App.module.css";
 
@@ -28,7 +28,7 @@ export function EventDisplay({
   uploadResults,
   setCutoff,
   setEventType,
-  resetResults
+  resetResults,
 }: EventDisplayParams) {
   const [roundType, setRoundType] = React.useState("FINALIST");
 
@@ -63,10 +63,10 @@ export function EventDisplay({
       </p>
       <p>
         <button
-            type={"button"}
-            className={styles.button}
-            onClick={() => resetResults(event.id)}
-            title={"Reset Results"}
+          type={"button"}
+          className={styles.button}
+          onClick={() => resetResults(event.id)}
+          title={"Reset Results"}
         >
           Reset Results
         </button>

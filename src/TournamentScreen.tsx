@@ -1,5 +1,5 @@
 import * as React from "react";
-import {deleteData, getData} from "./fetch";
+import { deleteData, getData } from "./fetch";
 import styles from "./App.module.css";
 import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
@@ -51,7 +51,7 @@ type TournamentScreenParams = {
   uploadSweeps: InputEventHandler;
   setCutoff: ISetCutoff;
   tournament: Tournament;
-  resetResults: (eventId: number) => void
+  resetResults: (eventId: number) => void;
 };
 
 export function TournamentScreen({
@@ -63,7 +63,7 @@ export function TournamentScreen({
   uploadSweeps,
   createEvents,
   tournament,
-  resetResults
+  resetResults,
 }: TournamentScreenParams) {
   const [activeEventId, setActiveEventId] = React.useState<number | undefined>(
     undefined

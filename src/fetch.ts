@@ -1,5 +1,5 @@
 import * as React from "react";
-const DEFAULT_FETCH_OPTIONS : RequestInit = {
+const DEFAULT_FETCH_OPTIONS: RequestInit = {
   mode: "cors", // no-cors, *cors, same-origin
   cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
   credentials: "same-origin", // include, *same-origin, omit
@@ -9,7 +9,7 @@ const DEFAULT_FETCH_OPTIONS : RequestInit = {
   },
   redirect: "follow", // manual, *follow, error
   referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-} ;
+};
 
 export async function postData(url: string = "", data: object = {}) {
   // Default options are marked with *

@@ -1,8 +1,8 @@
 import * as React from "react";
-import {deleteData, getData} from "./fetch";
+import { deleteData, getData } from "./fetch";
 import styles from "./App.module.css";
 import { TournamentIdProps } from "./App";
-import {Certificate, Delete} from "./icons";
+import { Certificate, Delete } from "./icons";
 
 export function Sweepstakes({ tournamentId }: TournamentIdProps) {
   const [showYTD, setShowYTD] = React.useState(false);
@@ -44,14 +44,19 @@ function IndividualSweeps({ tournamentId }: TournamentIdProps) {
   React.useEffect(() => {
     if (tournamentId) {
       setLoading(true);
-      getData(`/certs/tournaments/${tournamentId}/sweeps?key=${key}`).then((resp) => {
-        setData(resp);
-        setLoading(false);
-      });
+      getData(`/certs/tournaments/${tournamentId}/sweeps?key=${key}`).then(
+        (resp) => {
+          setData(resp);
+          setLoading(false);
+        }
+      );
     }
   }, [tournamentId]);
 
-  const deleteSchool = (id: number) => deleteData(`/certs/tournaments/${tournamentId}/schools/${id}`).then(() => setKey(k => k + 1));
+  const deleteSchool = (id: number) =>
+    deleteData(`/certs/tournaments/${tournamentId}/schools/${id}`).then(() =>
+      setKey((k) => k + 1)
+    );
 
   if (loading) return <p>Loading...</p>;
 
@@ -67,13 +72,21 @@ function IndividualSweeps({ tournamentId }: TournamentIdProps) {
       <tbody>
         {data.map((result) => (
           <tr key={result.school}>
-            <td><button type={"button"} className={styles.button} onClick={()=>deleteSchool(result.schoolId)}>
-              <Delete
+            <td>
+              <button
+                type={"button"}
+                className={styles.button}
+                onClick={() => deleteSchool(result.schoolId)}
+              >
+                <Delete
                   style={{
                     width: "1.5em",
                     top: "0.5em",
                     position: "relative",
-                  }}/></button></td>
+                  }}
+                />
+              </button>
+            </td>
             <td>{result.school}</td>
             <td style={{ textAlign: "center" }}>{result.points}</td>
           </tr>
