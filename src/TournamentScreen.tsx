@@ -1,5 +1,5 @@
 import * as React from "react";
-import { getData } from "./fetch";
+import {deleteData, getData} from "./fetch";
 import styles from "./App.module.css";
 import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
@@ -51,6 +51,7 @@ type TournamentScreenParams = {
   uploadSweeps: InputEventHandler;
   setCutoff: ISetCutoff;
   tournament: Tournament;
+  resetResults: (eventId: number) => void
 };
 
 export function TournamentScreen({
@@ -62,6 +63,7 @@ export function TournamentScreen({
   uploadSweeps,
   createEvents,
   tournament,
+  resetResults
 }: TournamentScreenParams) {
   const [activeEventId, setActiveEventId] = React.useState<number | undefined>(
     undefined
@@ -79,6 +81,7 @@ export function TournamentScreen({
   const activeEventIndex = activeEventId
     ? events.findIndex((e: CompetitionEvent) => e.id === activeEventId)
     : -1;
+
   return (
     <>
       <section>
@@ -174,6 +177,7 @@ export function TournamentScreen({
           event={events[activeEventIndex]}
           setCutoff={setCutoff}
           setEventType={setEventType}
+          resetResults={resetResults}
         />
       )}
 

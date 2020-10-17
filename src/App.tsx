@@ -1,7 +1,7 @@
 import * as React from "react";
 import "./App.css";
 import styles from "./App.module.css";
-import { getData, handleFileUpload, postData } from "./fetch";
+import {deleteData, getData, handleFileUpload, postData} from "./fetch";
 import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { Tournament, TournamentScreen } from "./TournamentScreen";
 
@@ -111,6 +111,12 @@ function App() {
     ).then(replaceActiveTournament);
   }
 
+  function resetResults(eventId: number): void{
+    deleteData(`/certs/tournaments/${activeTournamentId}/events/${eventId}/results`)
+        .then(replaceActiveTournament);
+  }
+
+
   return (
     <div className={styles.main}>
       <aside>
@@ -145,6 +151,7 @@ function App() {
         </section>
         <footer>
           <p>Medal by Gregor Cresnar from the Noun Project</p>
+          <p>Delete by Gregor Cresnar from the Noun Project</p>
           <p>Trophy by Ken Messenger from the Noun Project</p>
           <p>Certificate by Iconstock from the Noun Project</p>
         </footer>
@@ -161,6 +168,7 @@ function App() {
             setCutoff={setCutoff}
             uploadSweeps={handleSweepsUpload}
             setEventType={setEventType}
+            resetResults={resetResults}
           />
         )}
       </main>

@@ -2,8 +2,9 @@ import * as React from "react";
 import { FileInput } from "./Inputs";
 import { ResultDisplay } from "./ResultDisplay";
 import { CompetitionEvent, Tournament } from "./TournamentScreen";
-import { getData } from "./fetch";
+import {deleteData, getData} from "./fetch";
 import { useState } from "react";
+import styles from "./App.module.css";
 
 type EventDisplayParams = {
   uploadResults: (
@@ -19,6 +20,7 @@ type EventDisplayParams = {
     activeEvent: number
   ) => void;
   setEventType: (eventId: number, type: string) => void;
+  resetResults: (eventId: number) => void;
 };
 
 export function EventDisplay({
@@ -26,6 +28,7 @@ export function EventDisplay({
   uploadResults,
   setCutoff,
   setEventType,
+  resetResults
 }: EventDisplayParams) {
   const [roundType, setRoundType] = React.useState("FINALIST");
 
@@ -57,6 +60,16 @@ export function EventDisplay({
           value={roundType}
           key={event.id}
         />
+      </p>
+      <p>
+        <button
+            type={"button"}
+            className={styles.button}
+            onClick={() => resetResults(event.id)}
+            title={"Reset Results"}
+        >
+          Reset Results
+        </button>
       </p>
       <FileInput name="eventResults" onChange={handleUpload} />
       <ResultDisplay

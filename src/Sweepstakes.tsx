@@ -1,7 +1,8 @@
 import * as React from "react";
-import { getData } from "./fetch";
+import {deleteData, getData} from "./fetch";
 import styles from "./App.module.css";
 import { TournamentIdProps } from "./App";
+import {Certificate, Delete} from "./icons";
 
 export function Sweepstakes({ tournamentId }: TournamentIdProps) {
   const [showYTD, setShowYTD] = React.useState(false);
@@ -38,16 +39,19 @@ export interface SweepsResult {
 
 function IndividualSweeps({ tournamentId }: TournamentIdProps) {
   const [data, setData] = React.useState<SweepsResult[]>([]);
+  const [key, setKey] = React.useState<number>(0);
   const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
     if (tournamentId) {
       setLoading(true);
-      getData(`/certs/tournaments/${tournamentId}/sweeps`).then((resp) => {
+      getData(`/certs/tournaments/${tournamentId}/sweeps?key=${key}`).then((resp) => {
         setData(resp);
         setLoading(false);
       });
     }
   }, [tournamentId]);
+
+  const deleteSchool = (id: number) => deleteData(`/certs/tournaments/${tournamentId}/schools/${id}`).then(() => setKey(k => k + 1));
 
   if (loading) return <p>Loading...</p>;
 
@@ -55,6 +59,7 @@ function IndividualSweeps({ tournamentId }: TournamentIdProps) {
     <table className={styles.stripedTable}>
       <thead>
         <tr>
+          <th></th>
           <th>School</th>
           <th>Points (current tournament)</th>
         </tr>
@@ -62,6 +67,13 @@ function IndividualSweeps({ tournamentId }: TournamentIdProps) {
       <tbody>
         {data.map((result) => (
           <tr key={result.school}>
+            <td><button type={"button"} className={styles.button} onClick={()=>deleteSchool(result.schoolId)}>
+              <Delete
+                  style={{
+                    width: "1.5em",
+                    top: "0.5em",
+                    position: "relative",
+                  }}/></button></td>
             <td>{result.school}</td>
             <td style={{ textAlign: "center" }}>{result.points}</td>
           </tr>
@@ -77,6 +89,7 @@ export interface CumulativeSweepsData {
 }
 
 export interface SweepsResult {
+  schoolId: number;
   tournament: string;
   points: number;
 }
