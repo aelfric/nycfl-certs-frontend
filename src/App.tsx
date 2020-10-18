@@ -37,6 +37,7 @@ function App() {
       host: evt.target.host.value,
       date: evt.target.date.value,
       logoUrl: evt.target.logoUrl.value,
+      slideBackgroundUrl: evt.target.backgroundUrl.value,
       certificateHeadline: evt.target.certificateHeadline.value,
       signature: evt.target.signature.value,
       signatureTitle: evt.target.signatureTitle.value,

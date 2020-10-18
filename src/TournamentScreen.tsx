@@ -1,5 +1,5 @@
 import * as React from "react";
-import { deleteData, getData } from "./fetch";
+import { getData } from "./fetch";
 import styles from "./App.module.css";
 import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
@@ -13,6 +13,7 @@ export interface Tournament {
   host: string;
   date: string;
   logoUrl?: string;
+  slideBackgroundUrl?: string;
   certificateHeadline?: string;
   signature?: string;
   signatureTitle?: string;
@@ -75,6 +76,7 @@ export function TournamentScreen({
     certificateHeadline,
     name,
     logoUrl,
+    slideBackgroundUrl,
     host,
     date,
   } = tournament;
@@ -110,6 +112,12 @@ export function TournamentScreen({
             name={"logoUrl"}
             defaultValue={logoUrl}
             placeholder={"/nycfl-logo.svg"}
+          />
+          <FormTextInput
+            label="Logo"
+            name={"backgroundUrl"}
+            defaultValue={slideBackgroundUrl}
+            placeholder={""}
           />
           {logoUrl && (
             <p style={{ textAlign: "center" }}>
