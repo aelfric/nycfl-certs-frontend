@@ -110,6 +110,57 @@ export function ResultDisplay({
             </td>
           </tr>
         ))}
+        <tr>
+          <td colSpan={5}>Reset</td>
+          <td>
+            <button
+              type={"button"}
+              className={styles.button}
+              onClick={() => setMedalCutoff(1)}
+              title={"Set Medal Cutoff"}
+            >
+              <Medal
+                style={{
+                  width: "1.5em",
+                  top: "0.5em",
+                  position: "relative",
+                }}
+              />
+            </button>
+          </td>
+          <td>
+            <button
+              type={"button"}
+              className={styles.button}
+              onClick={() => setPlacementCutoff(1)}
+              title={"Set Placement Cutoff"}
+            >
+              <Trophy
+                style={{
+                  width: "1.5em",
+                  top: "0.5em",
+                  position: "relative",
+                }}
+              />
+            </button>
+          </td>
+          <td>
+            <button
+              type={"button"}
+              className={styles.button}
+              onClick={() => setCertificateCutoff(1)}
+              title={"Set Certificate Cutoff"}
+            >
+              <Certificate
+                style={{
+                  width: "1.5em",
+                  top: "0.5em",
+                  position: "relative",
+                }}
+              />
+            </button>
+          </td>
+        </tr>
       </tbody>
     </table>
   );

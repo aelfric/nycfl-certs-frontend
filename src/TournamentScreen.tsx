@@ -5,6 +5,7 @@ import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
 import { Sweepstakes } from "./Sweepstakes";
 import { MedalCount, Result, TournamentIdProps } from "./App";
+import { Debate, Speaker, Trophy } from "./icons";
 const cx = require("classnames");
 
 export interface Tournament {
@@ -22,12 +23,14 @@ export interface Tournament {
 
 export interface CompetitionEvent {
   eventType: string;
+  certificateType: string;
   id: number;
   name: string;
   results: Result[];
   placementCutoff: number;
   medalCutoff: number;
   certificateCutoff: number;
+  numRounds: number | null;
 }
 
 export type ISetCutoff = (
@@ -43,6 +46,8 @@ type TournamentScreenParams = {
   onSubmit: SubmitHandler;
   uploadSchools: InputEventHandler;
   setEventType: (eventId: number, type: string) => void;
+  setCertType: (eventId: number, type: string) => void;
+  setNumRounds: (eventId: number, type: number) => void;
   createEvents: SubmitHandler;
   uploadResults: (
     inputEvent: React.ChangeEvent<HTMLInputElement>,
@@ -55,10 +60,37 @@ type TournamentScreenParams = {
   resetResults: (eventId: number) => void;
 };
 
+function CertificateTypeIcon({certificateType}: { certificateType: string }) {
+  const defaultStyle : React.CSSProperties = {
+    width: "1em",
+    top: "0.125em",
+    position: "relative",
+  };
+
+  switch (certificateType){
+    case "PLACEMENT":
+      return <Trophy
+          style={defaultStyle}
+      />;
+    case "DEBATE_RECORD":
+      return <Debate
+          style={defaultStyle}
+      />
+    case "DEBATE_SPEAKER":
+      return <Speaker
+          style={defaultStyle}
+      />
+    default:
+      return null;
+  }
+}
+
 export function TournamentScreen({
   onSubmit,
   setCutoff,
   setEventType,
+  setCertType,
+  setNumRounds,
   uploadResults,
   uploadSchools,
   uploadSweeps,
@@ -156,7 +188,7 @@ export function TournamentScreen({
         <table className={styles.stripedTable}>
           <thead>
             <tr>
-              <th>Event</th>
+              <th colSpan={2}>Event</th>
               <th>Results Loaded</th>
               <th>Placement Set</th>
               <th>Medals Set</th>
@@ -166,12 +198,15 @@ export function TournamentScreen({
           <tbody>
             {events.map((e: CompetitionEvent) => (
               <tr
-                onClick={() => setActiveEventId(e.id)}
-                key={e.id}
-                className={cx(styles.selectableRow, {
-                  [styles.selected]: activeEventId === e.id,
-                })}
+                  onClick={() => setActiveEventId(e.id)}
+                  key={e.id}
+                  className={cx(styles.selectableRow, {
+                    [styles.selected]: activeEventId === e.id,
+                  })}
               >
+                <td>
+                  <CertificateTypeIcon certificateType={e.certificateType}/>
+                </td>
                 <td>{e.name}</td>
                 <td>{e.results.length > 0 ? "Yes" : ""}</td>
                 <td>{e.placementCutoff > 0 ? "Yes" : ""}</td>
@@ -189,6 +224,8 @@ export function TournamentScreen({
           event={events[activeEventIndex]}
           setCutoff={setCutoff}
           setEventType={setEventType}
+          setCertType={setCertType}
+          setNumRounds={setNumRounds}
           resetResults={resetResults}
         />
       )}

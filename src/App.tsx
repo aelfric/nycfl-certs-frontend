@@ -118,6 +118,18 @@ function App() {
       {}
     ).then(replaceActiveTournament);
   }
+  function setCertType(activeEvent: number, certType: string) {
+    postData(
+      `/certs/tournaments/${activeTournamentId}/events/${activeEvent}/cert_type\?type=${certType}`,
+      {}
+    ).then(replaceActiveTournament);
+  }
+  function setNumRounds(activeEvent: number, numRounds: number) {
+    postData(
+      `/certs/tournaments/${activeTournamentId}/events/${activeEvent}/rounds\?count=${numRounds}`,
+      {}
+    ).then(replaceActiveTournament);
+  }
 
   function resetResults(eventId: number): void {
     deleteData(
@@ -162,6 +174,8 @@ function App() {
           <p>Delete by Gregor Cresnar from the Noun Project</p>
           <p>Trophy by Ken Messenger from the Noun Project</p>
           <p>Certificate by Iconstock from the Noun Project</p>
+          <p>Speaking by Ayub Irawan from the Noun Project</p>
+          <p>Debate by Mello from the Noun Project</p>
         </footer>
       </aside>
       <main>
@@ -176,6 +190,8 @@ function App() {
             setCutoff={setCutoff}
             uploadSweeps={handleSweepsUpload}
             setEventType={setEventType}
+            setCertType={setCertType}
+            setNumRounds={setNumRounds}
             resetResults={resetResults}
           />
         )}

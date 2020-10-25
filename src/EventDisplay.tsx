@@ -2,7 +2,7 @@ import * as React from "react";
 import { FileInput } from "./Inputs";
 import { ResultDisplay } from "./ResultDisplay";
 import { CompetitionEvent, Tournament } from "./TournamentScreen";
-import { deleteData, getData } from "./fetch";
+import { getData } from "./fetch";
 import { useState } from "react";
 import styles from "./App.module.css";
 
@@ -20,6 +20,8 @@ type EventDisplayParams = {
     activeEvent: number
   ) => void;
   setEventType: (eventId: number, type: string) => void;
+  setCertType: (eventId: number, type: string) => void;
+  setNumRounds: (eventId: number, num: number) => void;
   resetResults: (eventId: number) => void;
 };
 
@@ -28,6 +30,8 @@ export function EventDisplay({
   uploadResults,
   setCutoff,
   setEventType,
+  setCertType,
+    setNumRounds,
   resetResults,
 }: EventDisplayParams) {
   const [roundType, setRoundType] = React.useState("FINALIST");
@@ -38,6 +42,12 @@ export function EventDisplay({
 
   function onTypeSelect(evt: React.ChangeEvent<HTMLSelectElement>) {
     setEventType(event.id, evt.target.value);
+  }
+  function onCertTypeSelect(evt: React.ChangeEvent<HTMLSelectElement>) {
+    setCertType(event.id, evt.target.value);
+  }
+  function onSetNumRounds(evt: React.ChangeEvent<HTMLInputElement>) {
+    setNumRounds(event.id, Number(evt.target.value));
   }
 
   return (
@@ -51,6 +61,20 @@ export function EventDisplay({
           value={event.eventType}
           key={event.id}
         />
+      </p>
+      <p>
+        <EnumSelect
+          url={"/enums/certificate_types"}
+          label={"Certificate Type"}
+          onSelect={onCertTypeSelect}
+          value={event.eventType}
+          key={event.id}
+        />
+      </p>
+        <p>
+            <label>Number of Rounds:
+        <input type={"number"} value={String(event.numRounds)} onChange={onSetNumRounds}/>
+            </label>
       </p>
       <p>
         <EnumSelect
