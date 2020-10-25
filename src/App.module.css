@@ -109,6 +109,10 @@ li.selected {
   cursor: pointer;
 }
 
+.button + .button {
+  margin-left: 0.25em;
+}
+
 .button:hover {
   background-color: #fefefe;
   color: #016f94;

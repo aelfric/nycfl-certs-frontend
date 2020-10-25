@@ -32,15 +32,22 @@ function App() {
   }
   function updateTournament(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
+    function emptyToNull(str: string) {
+      if (str === "") {
+        return null;
+      } else {
+        return str;
+      }
+    }
     postData(`/certs/tournaments/${activeTournamentId}`, {
       name: evt.target.tournamentName.value,
       host: evt.target.host.value,
       date: evt.target.date.value,
-      logoUrl: evt.target.logoUrl.value,
-      slideBackgroundUrl: evt.target.backgroundUrl.value,
-      certificateHeadline: evt.target.certificateHeadline.value,
-      signature: evt.target.signature.value,
-      signatureTitle: evt.target.signatureTitle.value,
+      logoUrl: emptyToNull(evt.target.logoUrl.value),
+      slideBackgroundUrl: emptyToNull(evt.target.backgroundUrl.value),
+      certificateHeadline: emptyToNull(evt.target.certificateHeadline.value),
+      signature: emptyToNull(evt.target.signature.value),
+      signatureTitle: emptyToNull(evt.target.signatureTitle.value),
     }).then(replaceActiveTournament);
   }
 

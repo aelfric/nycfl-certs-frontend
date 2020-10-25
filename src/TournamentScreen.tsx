@@ -121,7 +121,11 @@ export function TournamentScreen({
           />
           {logoUrl && (
             <p style={{ textAlign: "center" }}>
-              <img src={logoUrl} alt={"Tournament Logo"} />
+              <img
+                src={logoUrl}
+                alt={"Tournament Logo"}
+                style={{ height: "100px", margin: "0 auto" }}
+              />
             </p>
           )}
           <FormTextInput
@@ -192,9 +196,17 @@ export function TournamentScreen({
       <div style={{ margin: "50px" }}>
         <a
           className={styles.button}
+          target={"_blank"}
           href={`http://localhost:8080/certs/tournaments/${tournament.id}/certificates`}
         >
           Generate Certificates
+        </a>
+        <a
+          className={styles.button}
+          target={"_blank"}
+          href={`http://localhost:8080/certs/tournaments/${tournament.id}/slides?dl=0`}
+        >
+          Generate Slides
         </a>
       </div>
       <section>
