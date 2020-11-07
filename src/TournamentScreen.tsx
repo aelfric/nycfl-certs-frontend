@@ -30,12 +30,13 @@ export interface CompetitionEvent {
   placementCutoff: number;
   medalCutoff: number;
   certificateCutoff: number;
+  halfQuals: number;
   numRounds: number | null;
 }
 
 export type ISetCutoff = (
   value: number,
-  type: "placement" | "cutoff" | "medal",
+  type: "placement" | "cutoff" | "medal" | "quals",
   activeEvent: number
 ) => void;
 
@@ -148,7 +149,7 @@ export function TournamentScreen({
             placeholder={"/nycfl-logo.svg"}
           />
           <FormTextInput
-            label="Logo"
+            label="Slide Background"
             name={"backgroundUrl"}
             defaultValue={slideBackgroundUrl}
             placeholder={""}
@@ -195,6 +196,7 @@ export function TournamentScreen({
               <th>Placement Set</th>
               <th>Medals Set</th>
               <th>Cutoff Set</th>
+              <th>Half Q. Set</th>
             </tr>
           </thead>
           <tbody>
@@ -214,6 +216,7 @@ export function TournamentScreen({
                 <td>{e.placementCutoff > 0 ? "Yes" : ""}</td>
                 <td>{e.medalCutoff > 0 ? "Yes" : ""}</td>
                 <td>{e.certificateCutoff > 0 ? "Yes" : ""}</td>
+                <td>{e.halfQuals > 0 ? "Yes" : ""}</td>
               </tr>
             ))}
           </tbody>

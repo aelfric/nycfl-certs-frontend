@@ -7,6 +7,7 @@ interface ResultDisplayProps {
   certificateCutoff: number;
   medalCutoff: number;
   placementCutoff: number;
+  halfQuals: number;
   results: Result[];
   setCutoff: ISetCutoff;
   eventId: number;
@@ -19,6 +20,7 @@ export function ResultDisplay({
   medalCutoff,
   setCutoff,
   eventId,
+  halfQuals,
 }: ResultDisplayProps) {
   function setPlacementCutoff(value: number) {
     setCutoff(value, "placement", eventId);
@@ -32,6 +34,10 @@ export function ResultDisplay({
     setCutoff(value, "medal", eventId);
   }
 
+  function setHalfQuals(value: number){
+    setCutoff(value, "quals", eventId);
+  }
+
   return (
     <table className={styles.stripedTable}>
       <thead>
@@ -40,7 +46,8 @@ export function ResultDisplay({
           <th colSpan={2}>Certificate</th>
           <th>Name</th>
           <th>School</th>
-          <th colSpan={3}>&nbsp;</th>
+          <th>Half?</th>
+          <th colSpan={4}>&nbsp;</th>
         </tr>
       </thead>
       <tbody>
@@ -60,6 +67,7 @@ export function ResultDisplay({
             <td>{result.placeString}</td>
             <td>{result.name}</td>
             <td>{result.school.name}</td>
+            <td>{result.place < halfQuals ? "Half" : ""}</td>
             <td>
               <button
                 type={"button"}
@@ -108,10 +116,21 @@ export function ResultDisplay({
                 />
               </button>
             </td>
+            <td>
+              <button
+                  type={"button"}
+                  className={styles.button}
+                  onClick={() => setHalfQuals(result.place + 1)}
+                  title={"Set Half Quals"}
+                  style={{fontSize: "1.5em"}}
+              >
+                ½
+              </button>
+            </td>
           </tr>
         ))}
         <tr>
-          <td colSpan={5}>Reset</td>
+          <td colSpan={6}>Reset</td>
           <td>
             <button
               type={"button"}
@@ -158,6 +177,17 @@ export function ResultDisplay({
                   position: "relative",
                 }}
               />
+            </button>
+          </td>
+          <td>
+            <button
+              type={"button"}
+              className={styles.button}
+              onClick={() => setHalfQuals(1)}
+              title={"Set Half Quals"}
+              style={{fontSize: "1.5em"}}
+            >
+              ½
             </button>
           </td>
         </tr>

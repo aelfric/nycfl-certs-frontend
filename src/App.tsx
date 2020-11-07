@@ -63,7 +63,7 @@ function App() {
 
   function setCutoff(
     value: number,
-    type: "placement" | "cutoff" | "medal",
+    type: "placement" | "cutoff" | "medal" | "quals",
     activeEvent: number
   ) {
     postData(

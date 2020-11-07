@@ -2,7 +2,7 @@ import * as React from "react";
 import {useState} from "react";
 import {FileInput} from "./Inputs";
 import {ResultDisplay} from "./ResultDisplay";
-import {CompetitionEvent, Tournament} from "./TournamentScreen";
+import {CompetitionEvent, ISetCutoff, Tournament} from "./TournamentScreen";
 import {getData} from "./fetch";
 import styles from "./App.module.css";
 
@@ -14,11 +14,7 @@ type EventDisplayParams = {
   ) => void;
   tournament: Tournament;
   event: CompetitionEvent;
-  setCutoff: (
-    value: number,
-    type: "placement" | "cutoff" | "medal",
-    activeEvent: number
-  ) => void;
+  setCutoff: ISetCutoff;
   setEventType: (eventId: number, type: string) => void;
   setCertType: (eventId: number, type: string) => void;
   setNumRounds: (eventId: number, num: number) => void;
@@ -122,6 +118,7 @@ export function EventDisplay({
         placementCutoff={event.placementCutoff}
         certificateCutoff={event.certificateCutoff}
         medalCutoff={event.medalCutoff}
+        halfQuals={event.halfQuals}
         setCutoff={setCutoff}
         eventId={event.id}
         key={event.id}
