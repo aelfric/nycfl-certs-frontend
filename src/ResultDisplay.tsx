@@ -38,12 +38,14 @@ export function ResultDisplay({
     setCutoff(value, "quals", eventId);
   }
 
+  const btnStyle = [styles.button, styles.btnSmall].join(" ");
+
   return (
     <table className={styles.stripedTable}>
       <thead>
         <tr>
           <th>Place (#)</th>
-          <th colSpan={2}>Certificate</th>
+          <th>Certificate</th>
           <th>Name</th>
           <th>School</th>
           <th>Half?</th>
@@ -63,63 +65,44 @@ export function ResultDisplay({
             }
           >
             <td>{result.place}</td>
-            <td>{result.place < medalCutoff ? "M" : ""}</td>
-            <td>{result.placeString}</td>
+            <td>{result.placeString} {result.place < medalCutoff ? " (M)" : ""}</td>
             <td>{result.name}</td>
             <td>{result.school.name}</td>
             <td>{result.place < halfQuals ? "Half" : ""}</td>
             <td>
               <button
                 type={"button"}
-                className={styles.button}
+                className={btnStyle}
                 onClick={() => setMedalCutoff(result.place + 1)}
                 title={"Set Medal Cutoff"}
               >
-                <Medal
-                  style={{
-                    width: "1.5em",
-                    top: "0.5em",
-                    position: "relative",
-                  }}
-                />
+                <Medal/>
               </button>
             </td>
             <td>
               <button
                 type={"button"}
-                className={styles.button}
+                className={btnStyle}
                 onClick={() => setPlacementCutoff(result.place + 1)}
                 title={"Set Placement Cutoff"}
               >
-                <Trophy
-                  style={{
-                    width: "1.5em",
-                    top: "0.5em",
-                    position: "relative",
-                  }}
-                />
+                <Trophy />
               </button>
             </td>
             <td>
               <button
                 type={"button"}
-                className={styles.button}
+                className={btnStyle}
                 onClick={() => setCertificateCutoff(result.place + 1)}
                 title={"Set Certificate Cutoff"}
               >
-                <Certificate
-                  style={{
-                    width: "1.5em",
-                    top: "0.5em",
-                    position: "relative",
-                  }}
-                />
+                <Certificate />
               </button>
             </td>
             <td>
               <button
                   type={"button"}
-                  className={styles.button}
+                  className={btnStyle}
                   onClick={() => setHalfQuals(result.place + 1)}
                   title={"Set Half Quals"}
                   style={{fontSize: "1.5em"}}
@@ -130,59 +113,41 @@ export function ResultDisplay({
           </tr>
         ))}
         <tr>
-          <td colSpan={6}>Reset</td>
+          <td colSpan={5} style={{userSelect: "none"}}>Reset</td>
           <td>
             <button
               type={"button"}
-              className={styles.button}
+              className={btnStyle}
               onClick={() => setMedalCutoff(1)}
               title={"Set Medal Cutoff"}
             >
-              <Medal
-                style={{
-                  width: "1.5em",
-                  top: "0.5em",
-                  position: "relative",
-                }}
-              />
+              <Medal />
             </button>
           </td>
           <td>
             <button
               type={"button"}
-              className={styles.button}
+              className={btnStyle}
               onClick={() => setPlacementCutoff(1)}
               title={"Set Placement Cutoff"}
             >
-              <Trophy
-                style={{
-                  width: "1.5em",
-                  top: "0.5em",
-                  position: "relative",
-                }}
-              />
+              <Trophy />
             </button>
           </td>
           <td>
             <button
               type={"button"}
-              className={styles.button}
+              className={btnStyle}
               onClick={() => setCertificateCutoff(1)}
               title={"Set Certificate Cutoff"}
             >
-              <Certificate
-                style={{
-                  width: "1.5em",
-                  top: "0.5em",
-                  position: "relative",
-                }}
-              />
+              <Certificate />
             </button>
           </td>
           <td>
             <button
               type={"button"}
-              className={styles.button}
+              className={btnStyle}
               onClick={() => setHalfQuals(1)}
               title={"Set Half Quals"}
               style={{fontSize: "1.5em"}}

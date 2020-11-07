@@ -119,6 +119,14 @@ export function TournamentScreen({
     ? events.findIndex((e: CompetitionEvent) => e.id === activeEventId)
     : -1;
 
+  function checkOrBlank(value: number){
+    if (value > 0) {
+      return <>✓ ({value})</>
+    } else {
+      return ""
+    }
+  }
+
   return (
     <>
       <section>
@@ -212,11 +220,11 @@ export function TournamentScreen({
                   <CertificateTypeIcon certificateType={e.certificateType}/>
                 </td>
                 <td>{e.name}</td>
-                <td>{e.results.length > 0 ? "Yes" : ""}</td>
-                <td>{e.placementCutoff > 0 ? "Yes" : ""}</td>
-                <td>{e.medalCutoff > 0 ? "Yes" : ""}</td>
-                <td>{e.certificateCutoff > 0 ? "Yes" : ""}</td>
-                <td>{e.halfQuals > 0 ? "Yes" : ""}</td>
+                <td>{checkOrBlank(e.results.length)}</td>
+                <td>{checkOrBlank(e.placementCutoff)}</td>
+                <td>{checkOrBlank(e.medalCutoff)}</td>
+                <td>{checkOrBlank(e.certificateCutoff)}</td>
+                <td>{checkOrBlank(e.halfQuals)}</td>
               </tr>
             ))}
           </tbody>

@@ -1,7 +1,7 @@
 import React from "react";
 
 interface IconProps {
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
 }
 
 export function Medal({ style }: IconProps) {
