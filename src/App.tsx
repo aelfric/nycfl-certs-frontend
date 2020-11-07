@@ -4,6 +4,8 @@ import styles from "./App.module.css";
 import { deleteData, getData, handleFileUpload, postData } from "./fetch";
 import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { Tournament, TournamentScreen } from "./TournamentScreen";
+import {Expandable} from "./Expandable";
+import {FileListing} from "./FileListing";
 
 const cx = require("classnames");
 
@@ -160,6 +162,9 @@ function App() {
             onChange={handleMediaUpload}
             key={activeTournamentId}
           />
+          <Expandable heading={<h3>Uploaded Files</h3>}>
+            <FileListing />
+          </Expandable>
         </section>
         <section className={styles.box}>
           <form onSubmit={createTournament} className={styles.standardForm}>
