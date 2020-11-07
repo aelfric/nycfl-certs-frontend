@@ -1,9 +1,9 @@
 import * as React from "react";
-import { FileInput } from "./Inputs";
-import { ResultDisplay } from "./ResultDisplay";
-import { CompetitionEvent, Tournament } from "./TournamentScreen";
-import { getData } from "./fetch";
-import { useState } from "react";
+import {useState} from "react";
+import {FileInput} from "./Inputs";
+import {ResultDisplay} from "./ResultDisplay";
+import {CompetitionEvent, Tournament} from "./TournamentScreen";
+import {getData} from "./fetch";
 import styles from "./App.module.css";
 
 type EventDisplayParams = {
@@ -22,6 +22,7 @@ type EventDisplayParams = {
   setEventType: (eventId: number, type: string) => void;
   setCertType: (eventId: number, type: string) => void;
   setNumRounds: (eventId: number, num: number) => void;
+  setEventName: (eventId: number, newName: string) => void;
   resetResults: (eventId: number) => void;
 };
 
@@ -31,7 +32,8 @@ export function EventDisplay({
   setCutoff,
   setEventType,
   setCertType,
-    setNumRounds,
+  setNumRounds,
+  setEventName,
   resetResults,
 }: EventDisplayParams) {
   const [roundType, setRoundType] = React.useState("FINALIST");
@@ -50,9 +52,28 @@ export function EventDisplay({
     setNumRounds(event.id, Number(evt.target.value));
   }
 
+  function onRenameEvent(evt: React.ChangeEvent<HTMLFormElement>) {
+      evt.preventDefault();
+      setEventName(event.id, evt.target.newName.value);
+  }
+
   return (
     <section>
       <h2>Results</h2>
+        <p>
+            <form onSubmit={onRenameEvent}>
+                    <label>Event Name:
+                        <input name={"newName"} type="text" defaultValue={event.name} />
+                    </label>
+                <button
+                    type={"submit"}
+                    className={styles.button}
+                    title={"Reset Results"}
+                >
+                    Update Name
+                </button>
+            </form>
+        </p>
       <p>
         <EnumSelect
           url={"/enums/event_types"}

@@ -46,6 +46,7 @@ type TournamentScreenParams = {
   onSubmit: SubmitHandler;
   uploadSchools: InputEventHandler;
   setEventType: (eventId: number, type: string) => void;
+  setEventName: (eventId: number, name: string) => void;
   setCertType: (eventId: number, type: string) => void;
   setNumRounds: (eventId: number, type: number) => void;
   createEvents: SubmitHandler;
@@ -89,6 +90,7 @@ export function TournamentScreen({
   onSubmit,
   setCutoff,
   setEventType,
+  setEventName,
   setCertType,
   setNumRounds,
   uploadResults,
@@ -226,6 +228,7 @@ export function TournamentScreen({
           setEventType={setEventType}
           setCertType={setCertType}
           setNumRounds={setNumRounds}
+          setEventName={setEventName}
           resetResults={resetResults}
         />
       )}

@@ -120,6 +120,12 @@ function App() {
       {}
     ).then(replaceActiveTournament);
   }
+  function setEventName(activeEvent: number, newName: string) {
+    postData(
+      `/certs/tournaments/${activeTournamentId}/events/${activeEvent}/rename\?name=${newName}`,
+      {}
+    ).then(replaceActiveTournament);
+  }
   function setCertType(activeEvent: number, certType: string) {
     postData(
       `/certs/tournaments/${activeTournamentId}/events/${activeEvent}/cert_type\?type=${certType}`,
@@ -198,6 +204,7 @@ function App() {
             setCertType={setCertType}
             setNumRounds={setNumRounds}
             resetResults={resetResults}
+            setEventName={setEventName}
           />
         )}
       </main>
