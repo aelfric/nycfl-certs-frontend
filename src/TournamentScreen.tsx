@@ -18,6 +18,7 @@ export interface Tournament {
   certificateHeadline?: string;
   signature?: string;
   signatureTitle?: string;
+  styleOverrides?: string;
   events: CompetitionEvent[];
 }
 
@@ -114,6 +115,7 @@ export function TournamentScreen({
     slideBackgroundUrl,
     host,
     date,
+    styleOverrides
   } = tournament;
   const activeEventIndex = activeEventId
     ? events.findIndex((e: CompetitionEvent) => e.id === activeEventId)
@@ -183,6 +185,9 @@ export function TournamentScreen({
             defaultValue={signatureTitle}
             placeholder={"NYCFL President"}
           />
+          <label>Style Overrides:
+            <textarea name={"styleOverrides"} style={{fontFamily: "Courier"}} defaultValue={styleOverrides}/>
+          </label>
           <SubmitButton>Update Tournament</SubmitButton>
         </form>
       </section>

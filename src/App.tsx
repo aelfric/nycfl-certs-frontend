@@ -50,6 +50,7 @@ function App() {
       certificateHeadline: emptyToNull(evt.target.certificateHeadline.value),
       signature: emptyToNull(evt.target.signature.value),
       signatureTitle: emptyToNull(evt.target.signatureTitle.value),
+      styleOverrides: emptyToNull(evt.target.styleOverrides.value),
     }).then(replaceActiveTournament);
   }
 

@@ -59,7 +59,7 @@ export function EventDisplay({
         <p>
             <form onSubmit={onRenameEvent}>
                     <label>Event Name:
-                        <input name={"newName"} type="text" defaultValue={event.name} />
+                        <input name={"newName"} type="text" defaultValue={event.name} key={event.id}/>
                     </label>
                 <button
                     type={"submit"}
