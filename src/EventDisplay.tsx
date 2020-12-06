@@ -5,6 +5,7 @@ import {ResultDisplay} from "./ResultDisplay";
 import {CompetitionEvent, ISetCutoff, Tournament} from "./TournamentScreen";
 import {getData} from "./fetch";
 import styles from "./App.module.css";
+import {useTournament} from "./use-tournament";
 
 type EventDisplayParams = {
   uploadResults: (
@@ -24,7 +25,6 @@ type EventDisplayParams = {
 
 export function EventDisplay({
   event,
-  uploadResults,
   setCutoff,
   setEventType,
   setCertType,
@@ -33,6 +33,7 @@ export function EventDisplay({
   resetResults,
 }: EventDisplayParams) {
   const [roundType, setRoundType] = React.useState("FINALIST");
+    const {uploadResults} = useTournament();
 
   function handleUpload(formEvt: React.ChangeEvent<HTMLInputElement>) {
     return uploadResults(formEvt, event.id, roundType);

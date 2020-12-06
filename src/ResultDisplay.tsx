@@ -3,6 +3,9 @@ import { Certificate, Medal, Trophy } from "./icons";
 import * as React from "react";
 import { Result } from "./App";
 import { ISetCutoff } from "./TournamentScreen";
+import {useTournament} from "./use-tournament";
+import {FormEvent} from "react";
+
 interface ResultDisplayProps {
   certificateCutoff: number;
   medalCutoff: number;
@@ -66,7 +69,7 @@ export function ResultDisplay({
           >
             <td>{result.place}</td>
             <td>{result.placeString} {result.place < medalCutoff ? " (M)" : ""}</td>
-            <td>{result.name}</td>
+            <td><ResultName result={result} eventId={eventId}/></td>
             <td>{result.school.name}</td>
             <td>{result.place < halfQuals ? "Half" : ""}</td>
             <td>
@@ -159,4 +162,32 @@ export function ResultDisplay({
       </tbody>
     </table>
   );
+}
+
+function ResultName(
+    {result, eventId}: { result: Result, eventId: number }) {
+    const [editing, setEditing] = React.useState(false);
+    const {renameCompetitor} = useTournament();
+
+    function handleDoubleClick() {
+        setEditing(e => !e);
+    }
+
+    function handleSave(evt: React.ChangeEvent<HTMLFormElement>) {
+        evt.preventDefault();
+        renameCompetitor(
+            eventId,
+            result.id,
+            evt.target.newName.value
+        )
+        setEditing(false);
+    }
+
+    if (editing) {
+        return <form onSubmit={handleSave}>
+            <input type={"text"} name={"newName"} defaultValue={result.name}/><br/>
+            <button type={"submit"}>Save</button>
+        </form>;
+    }
+    return <span onDoubleClick={handleDoubleClick}>...{result.name}</span>;
 }

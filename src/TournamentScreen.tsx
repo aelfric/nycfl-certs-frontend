@@ -6,6 +6,7 @@ import { EventDisplay } from "./EventDisplay";
 import { Sweepstakes } from "./Sweepstakes";
 import { MedalCount, Result, TournamentIdProps } from "./App";
 import { Debate, Speaker, Trophy } from "./icons";
+import {useTournament} from "./use-tournament";
 const cx = require("classnames");
 
 export interface Tournament {
@@ -59,7 +60,6 @@ type TournamentScreenParams = {
   ) => void;
   uploadSweeps: InputEventHandler;
   setCutoff: ISetCutoff;
-  tournament: Tournament;
   resetResults: (eventId: number) => void;
 };
 
@@ -99,12 +99,14 @@ export function TournamentScreen({
   uploadSchools,
   uploadSweeps,
   createEvents,
-  tournament,
   resetResults,
 }: TournamentScreenParams) {
   const [activeEventId, setActiveEventId] = React.useState<number | undefined>(
     undefined
   );
+  const {tournament} = useTournament();
+  if(!tournament) return <p>Loading...</p>;
+
   const {
     signature,
     signatureTitle,
@@ -122,7 +124,7 @@ export function TournamentScreen({
     : -1;
 
   function checkOrBlank(value: number){
-    if (value > 0) {
+    if (value > 1) {
       return <>✓ ({value})</>
     } else {
       return ""

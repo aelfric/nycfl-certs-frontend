@@ -6,6 +6,7 @@ import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { Tournament, TournamentScreen } from "./TournamentScreen";
 import {Expandable} from "./Expandable";
 import {FileListing} from "./FileListing";
+import {TournamentProvider} from "./TournamentContextProvider";
 
 const cx = require("classnames");
 
@@ -192,9 +193,8 @@ function App() {
       </aside>
       <main>
         {activeTournamentId && (
+            <TournamentProvider key={activeTournamentId} id={activeTournamentId}>
           <TournamentScreen
-            key={activeTournamentId}
-            tournament={tournaments[activeTournamentIndex]}
             onSubmit={updateTournament}
             uploadSchools={handleSchoolsUpload}
             createEvents={createEvents}
@@ -207,6 +207,7 @@ function App() {
             resetResults={resetResults}
             setEventName={setEventName}
           />
+            </TournamentProvider>
         )}
       </main>
     </div>
