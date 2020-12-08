@@ -33,28 +33,6 @@ function App() {
       setTournaments((tournaments) => [...tournaments, newTournament])
     );
   }
-  function updateTournament(evt: React.ChangeEvent<HTMLFormElement>) {
-    evt.preventDefault();
-    function emptyToNull(str: string) {
-      if (str === "") {
-        return null;
-      } else {
-        return str;
-      }
-    }
-    postData(`/certs/tournaments/${activeTournamentId}`, {
-      name: evt.target.tournamentName.value,
-      host: evt.target.host.value,
-      date: evt.target.date.value,
-      logoUrl: emptyToNull(evt.target.logoUrl.value),
-      slideBackgroundUrl: emptyToNull(evt.target.backgroundUrl.value),
-      certificateHeadline: emptyToNull(evt.target.certificateHeadline.value),
-      signature: emptyToNull(evt.target.signature.value),
-      signatureTitle: emptyToNull(evt.target.signatureTitle.value),
-      styleOverrides: emptyToNull(evt.target.styleOverrides.value),
-    }).then(replaceActiveTournament);
-  }
-
   function createEvents(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
     postData("/certs/events", {
@@ -195,7 +173,6 @@ function App() {
         {activeTournamentId && (
             <TournamentProvider key={activeTournamentId} id={activeTournamentId}>
           <TournamentScreen
-            onSubmit={updateTournament}
             uploadSchools={handleSchoolsUpload}
             createEvents={createEvents}
             uploadResults={handleEventResultsUpload}

@@ -46,7 +46,6 @@ type InputEventHandler = (event: React.ChangeEvent<HTMLInputElement>) => void;
 type SubmitHandler = (evt: React.ChangeEvent<HTMLFormElement>) => void;
 
 type TournamentScreenParams = {
-  onSubmit: SubmitHandler;
   uploadSchools: InputEventHandler;
   setEventType: (eventId: number, type: string) => void;
   setEventName: (eventId: number, name: string) => void;
@@ -89,9 +88,6 @@ function CertificateTypeIcon({certificateType}: { certificateType: string }) {
 }
 
 export function TournamentScreen({
-  onSubmit,
-  setCutoff,
-  setEventType,
   setEventName,
   setCertType,
   setNumRounds,
@@ -99,12 +95,11 @@ export function TournamentScreen({
   uploadSchools,
   uploadSweeps,
   createEvents,
-  resetResults,
 }: TournamentScreenParams) {
   const [activeEventId, setActiveEventId] = React.useState<number | undefined>(
     undefined
   );
-  const {tournament} = useTournament();
+  const {tournament, setCutoff, updateTournament, resetResults, setEventType} = useTournament();
   if(!tournament) return <p>Loading...</p>;
 
   const {
@@ -135,7 +130,7 @@ export function TournamentScreen({
     <>
       <section>
         <h1>{name} </h1>
-        <form onSubmit={onSubmit} className={styles.standardForm}>
+        <form onSubmit={updateTournament} className={styles.standardForm}>
           <FormTextInput
             name={"tournamentName"}
             label={"Tournament Name"}

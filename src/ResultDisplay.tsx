@@ -4,7 +4,6 @@ import * as React from "react";
 import { Result } from "./App";
 import { ISetCutoff } from "./TournamentScreen";
 import {useTournament} from "./use-tournament";
-import {FormEvent} from "react";
 
 interface ResultDisplayProps {
   certificateCutoff: number;
@@ -189,5 +188,5 @@ function ResultName(
             <button type={"submit"}>Save</button>
         </form>;
     }
-    return <span onDoubleClick={handleDoubleClick}>...{result.name}</span>;
+    return <span onDoubleClick={handleDoubleClick}>{result.name}</span>;
 }
