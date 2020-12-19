@@ -112,7 +112,7 @@ li.selected {
 
 .button svg {
   width: 1.5em;
-  top: .5em;
+  top: 0.5em;
   position: relative;
 }
 
@@ -124,7 +124,7 @@ li.selected {
 
 .btnSmall svg {
   width: 1.25em;
-  top: .25em;
+  top: 0.25em;
   position: relative;
 }
 
@@ -215,7 +215,6 @@ li.selected {
 }
 
 .expandable {
-
 }
 
 .fileList {

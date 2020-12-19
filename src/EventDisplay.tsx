@@ -1,11 +1,11 @@
 import * as React from "react";
-import {useState} from "react";
-import {FileInput} from "./Inputs";
-import {ResultDisplay} from "./ResultDisplay";
-import {CompetitionEvent, ISetCutoff, Tournament} from "./TournamentScreen";
-import {getData} from "./fetch";
+import { useState } from "react";
+import { FileInput } from "./Inputs";
+import { ResultDisplay } from "./ResultDisplay";
+import { CompetitionEvent, ISetCutoff, Tournament } from "./TournamentScreen";
+import { getData } from "./fetch";
 import styles from "./App.module.css";
-import {useTournament} from "./use-tournament";
+import { useTournament } from "./use-tournament";
 
 type EventDisplayParams = {
   tournament: Tournament;
@@ -28,7 +28,7 @@ export function EventDisplay({
   resetResults,
 }: EventDisplayParams) {
   const [roundType, setRoundType] = React.useState("FINALIST");
-    const {uploadResults} = useTournament();
+  const { uploadResults } = useTournament();
 
   function handleUpload(formEvt: React.ChangeEvent<HTMLInputElement>) {
     return uploadResults(formEvt, event.id, roundType);
@@ -45,27 +45,33 @@ export function EventDisplay({
   }
 
   function onRenameEvent(evt: React.ChangeEvent<HTMLFormElement>) {
-      evt.preventDefault();
-      setEventName(event.id, evt.target.newName.value);
+    evt.preventDefault();
+    setEventName(event.id, evt.target.newName.value);
   }
 
   return (
     <section>
       <h2>Results</h2>
-        <p>
-            <form onSubmit={onRenameEvent}>
-                    <label>Event Name:
-                        <input name={"newName"} type="text" defaultValue={event.name} key={event.id}/>
-                    </label>
-                <button
-                    type={"submit"}
-                    className={styles.button}
-                    title={"Reset Results"}
-                >
-                    Update Name
-                </button>
-            </form>
-        </p>
+      <p>
+        <form onSubmit={onRenameEvent}>
+          <label>
+            Event Name:
+            <input
+              name={"newName"}
+              type="text"
+              defaultValue={event.name}
+              key={event.id}
+            />
+          </label>
+          <button
+            type={"submit"}
+            className={styles.button}
+            title={"Reset Results"}
+          >
+            Update Name
+          </button>
+        </form>
+      </p>
       <p>
         <EnumSelect
           url={"/enums/event_types"}
@@ -84,10 +90,15 @@ export function EventDisplay({
           key={event.id}
         />
       </p>
-        <p>
-            <label>Number of Rounds:
-        <input type={"number"} value={String(event.numRounds)} onChange={onSetNumRounds}/>
-            </label>
+      <p>
+        <label>
+          Number of Rounds:
+          <input
+            type={"number"}
+            value={String(event.numRounds)}
+            onChange={onSetNumRounds}
+          />
+        </label>
       </p>
       <p>
         <EnumSelect

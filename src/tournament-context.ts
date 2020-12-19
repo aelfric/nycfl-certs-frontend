@@ -1,11 +1,11 @@
 import React from "react";
-import {Tournament} from "./TournamentScreen";
+import { Tournament } from "./TournamentScreen";
 
 interface ITournamentContext {
-    tournament?: Tournament;
-    setTournament: (t: Tournament) => void
+  tournament?: Tournament;
+  setTournament: (t: Tournament) => void;
 }
 
 export const TournamentContext = React.createContext<ITournamentContext>({
-    setTournament: () => undefined
+  setTournament: () => undefined,
 });

@@ -3,7 +3,7 @@ import { Certificate, Medal, Trophy } from "./icons";
 import * as React from "react";
 import { Result } from "./App";
 import { ISetCutoff } from "./TournamentScreen";
-import {useTournament} from "./use-tournament";
+import { useTournament } from "./use-tournament";
 
 interface ResultDisplayProps {
   certificateCutoff: number;
@@ -36,7 +36,7 @@ export function ResultDisplay({
     setCutoff(value, "medal", eventId);
   }
 
-  function setHalfQuals(value: number){
+  function setHalfQuals(value: number) {
     setCutoff(value, "quals", eventId);
   }
 
@@ -67,8 +67,12 @@ export function ResultDisplay({
             }
           >
             <td>{result.place}</td>
-            <td>{result.placeString} {result.place < medalCutoff ? " (M)" : ""}</td>
-            <td><ResultName result={result} eventId={eventId}/></td>
+            <td>
+              {result.placeString} {result.place < medalCutoff ? " (M)" : ""}
+            </td>
+            <td>
+              <ResultName result={result} eventId={eventId} />
+            </td>
             <td>{result.school.name}</td>
             <td>{result.place < halfQuals ? "Half" : ""}</td>
             <td>
@@ -78,7 +82,7 @@ export function ResultDisplay({
                 onClick={() => setMedalCutoff(result.place + 1)}
                 title={"Set Medal Cutoff"}
               >
-                <Medal/>
+                <Medal />
               </button>
             </td>
             <td>
@@ -103,11 +107,11 @@ export function ResultDisplay({
             </td>
             <td>
               <button
-                  type={"button"}
-                  className={btnStyle}
-                  onClick={() => setHalfQuals(result.place + 1)}
-                  title={"Set Half Quals"}
-                  style={{fontSize: "1.5em"}}
+                type={"button"}
+                className={btnStyle}
+                onClick={() => setHalfQuals(result.place + 1)}
+                title={"Set Half Quals"}
+                style={{ fontSize: "1.5em" }}
               >
                 ½
               </button>
@@ -115,7 +119,9 @@ export function ResultDisplay({
           </tr>
         ))}
         <tr>
-          <td colSpan={5} style={{userSelect: "none"}}>Reset</td>
+          <td colSpan={5} style={{ userSelect: "none" }}>
+            Reset
+          </td>
           <td>
             <button
               type={"button"}
@@ -152,7 +158,7 @@ export function ResultDisplay({
               className={btnStyle}
               onClick={() => setHalfQuals(1)}
               title={"Set Half Quals"}
-              style={{fontSize: "1.5em"}}
+              style={{ fontSize: "1.5em" }}
             >
               ½
             </button>
@@ -163,30 +169,28 @@ export function ResultDisplay({
   );
 }
 
-function ResultName(
-    {result, eventId}: { result: Result, eventId: number }) {
-    const [editing, setEditing] = React.useState(false);
-    const {renameCompetitor} = useTournament();
+function ResultName({ result, eventId }: { result: Result; eventId: number }) {
+  const [editing, setEditing] = React.useState(false);
+  const { renameCompetitor } = useTournament();
 
-    function handleDoubleClick() {
-        setEditing(e => !e);
-    }
+  function handleDoubleClick() {
+    setEditing((e) => !e);
+  }
 
-    function handleSave(evt: React.ChangeEvent<HTMLFormElement>) {
-        evt.preventDefault();
-        renameCompetitor(
-            eventId,
-            result.id,
-            evt.target.newName.value
-        )
-        setEditing(false);
-    }
+  function handleSave(evt: React.ChangeEvent<HTMLFormElement>) {
+    evt.preventDefault();
+    renameCompetitor(eventId, result.id, evt.target.newName.value);
+    setEditing(false);
+  }
 
-    if (editing) {
-        return <form onSubmit={handleSave}>
-            <input type={"text"} name={"newName"} defaultValue={result.name}/><br/>
-            <button type={"submit"}>Save</button>
-        </form>;
-    }
-    return <span onDoubleClick={handleDoubleClick}>{result.name}</span>;
+  if (editing) {
+    return (
+      <form onSubmit={handleSave}>
+        <input type={"text"} name={"newName"} defaultValue={result.name} />
+        <br />
+        <button type={"submit"}>Save</button>
+      </form>
+    );
+  }
+  return <span onDoubleClick={handleDoubleClick}>{result.name}</span>;
 }
