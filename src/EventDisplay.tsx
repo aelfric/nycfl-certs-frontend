@@ -8,11 +8,6 @@ import styles from "./App.module.css";
 import {useTournament} from "./use-tournament";
 
 type EventDisplayParams = {
-  uploadResults: (
-    event: React.ChangeEvent<HTMLInputElement>,
-    eventId: number,
-    roundType: string
-  ) => void;
   tournament: Tournament;
   event: CompetitionEvent;
   setCutoff: ISetCutoff;

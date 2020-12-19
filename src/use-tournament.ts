@@ -27,6 +27,34 @@ export function useTournament() {
         }).then(setTournament);
     }
 
+    function createEvents(evt: React.ChangeEvent<HTMLFormElement>) {
+        evt.preventDefault();
+        postData("/certs/events", {
+            events: evt.target.events.value,
+            tournamentId: tournament?.id,
+        }).then(setTournament);
+    }
+
+    function setEventName(activeEvent: number, newName: string) {
+        postData(
+            `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rename\?name=${newName}`,
+            {}
+        ).then(setTournament);
+    }
+    function setCertType(activeEvent: number, certType: string) {
+        postData(
+            `/certs/tournaments/${tournament?.id}/events/${activeEvent}/cert_type\?type=${certType}`,
+            {}
+        ).then(setTournament);
+    }
+    function setNumRounds(activeEvent: number, numRounds: number) {
+        postData(
+            `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rounds\?count=${numRounds}`,
+            {}
+        ).then(setTournament);
+    }
+
+
     function setCutoff(
         value: number,
         type: "placement" | "cutoff" | "medal" | "quals",
@@ -77,6 +105,22 @@ export function useTournament() {
         ).then(setTournament);
     }
 
+    function handleSweepsUpload(event: React.ChangeEvent<HTMLInputElement>) {
+        handleFileUpload(
+            event,
+            `/certs/tournaments/${tournament?.id}/sweeps`,
+            setTournament
+        );
+    }
+    function handleSchoolsUpload(event: React.ChangeEvent<HTMLInputElement>) {
+        handleFileUpload(
+            event,
+            `/certs/tournaments/${tournament?.id}/schools`,
+            () => {
+                alert("Schools Loaded");
+            }
+        );
+    }
 
 
     return {
@@ -86,6 +130,12 @@ export function useTournament() {
         updateTournament,
         setCutoff,
         resetResults,
-        setEventType
+        setEventType,
+        createEvents,
+        setEventName,
+        setCertType,
+        setNumRounds,
+        handleSchoolsUpload,
+        handleSweepsUpload
     }
 }

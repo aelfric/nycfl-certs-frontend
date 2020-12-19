@@ -6,7 +6,7 @@ import { EventDisplay } from "./EventDisplay";
 import { Sweepstakes } from "./Sweepstakes";
 import { MedalCount, Result, TournamentIdProps } from "./App";
 import { Debate, Speaker, Trophy } from "./icons";
-import {useTournament} from "./use-tournament";
+import { useTournament } from "./use-tournament";
 const cx = require("classnames");
 
 export interface Tournament {
@@ -42,65 +42,43 @@ export type ISetCutoff = (
   activeEvent: number
 ) => void;
 
-type InputEventHandler = (event: React.ChangeEvent<HTMLInputElement>) => void;
-type SubmitHandler = (evt: React.ChangeEvent<HTMLFormElement>) => void;
-
-type TournamentScreenParams = {
-  uploadSchools: InputEventHandler;
-  setEventType: (eventId: number, type: string) => void;
-  setEventName: (eventId: number, name: string) => void;
-  setCertType: (eventId: number, type: string) => void;
-  setNumRounds: (eventId: number, type: number) => void;
-  createEvents: SubmitHandler;
-  uploadResults: (
-    inputEvent: React.ChangeEvent<HTMLInputElement>,
-    eventId: number,
-    roundType: string
-  ) => void;
-  uploadSweeps: InputEventHandler;
-  setCutoff: ISetCutoff;
-  resetResults: (eventId: number) => void;
-};
-
-function CertificateTypeIcon({certificateType}: { certificateType: string }) {
-  const defaultStyle : React.CSSProperties = {
+function CertificateTypeIcon({ certificateType }: { certificateType: string }) {
+  const defaultStyle: React.CSSProperties = {
     width: "1em",
     top: "0.125em",
     position: "relative",
   };
 
-  switch (certificateType){
+  switch (certificateType) {
     case "PLACEMENT":
-      return <Trophy
-          style={defaultStyle}
-      />;
+      return <Trophy style={defaultStyle} />;
     case "DEBATE_RECORD":
-      return <Debate
-          style={defaultStyle}
-      />
+      return <Debate style={defaultStyle} />;
     case "DEBATE_SPEAKER":
-      return <Speaker
-          style={defaultStyle}
-      />
+      return <Speaker style={defaultStyle} />;
     default:
       return null;
   }
 }
 
-export function TournamentScreen({
-  setEventName,
-  setCertType,
-  setNumRounds,
-  uploadResults,
-  uploadSchools,
-  uploadSweeps,
-  createEvents,
-}: TournamentScreenParams) {
+export function TournamentScreen() {
   const [activeEventId, setActiveEventId] = React.useState<number | undefined>(
     undefined
   );
-  const {tournament, setCutoff, updateTournament, resetResults, setEventType} = useTournament();
-  if(!tournament) return <p>Loading...</p>;
+  const {
+    tournament,
+    setCutoff,
+    updateTournament,
+    resetResults,
+    setEventType,
+    createEvents,
+    setEventName,
+    setNumRounds,
+    setCertType,
+    handleSchoolsUpload: uploadSchools,
+    handleSweepsUpload: uploadSweeps,
+  } = useTournament();
+  if (!tournament) return <p>Loading...</p>;
 
   const {
     signature,
@@ -112,17 +90,17 @@ export function TournamentScreen({
     slideBackgroundUrl,
     host,
     date,
-    styleOverrides
+    styleOverrides,
   } = tournament;
   const activeEventIndex = activeEventId
     ? events.findIndex((e: CompetitionEvent) => e.id === activeEventId)
     : -1;
 
-  function checkOrBlank(value: number){
+  function checkOrBlank(value: number) {
     if (value > 1) {
-      return <>✓ ({value})</>
+      return <>✓ ({value})</>;
     } else {
-      return ""
+      return "";
     }
   }
 
@@ -182,8 +160,13 @@ export function TournamentScreen({
             defaultValue={signatureTitle}
             placeholder={"NYCFL President"}
           />
-          <label>Style Overrides:
-            <textarea name={"styleOverrides"} style={{fontFamily: "Courier"}} defaultValue={styleOverrides}/>
+          <label>
+            Style Overrides:
+            <textarea
+              name={"styleOverrides"}
+              style={{ fontFamily: "Courier" }}
+              defaultValue={styleOverrides}
+            />
           </label>
           <SubmitButton>Update Tournament</SubmitButton>
         </form>
@@ -212,14 +195,14 @@ export function TournamentScreen({
           <tbody>
             {events.map((e: CompetitionEvent) => (
               <tr
-                  onClick={() => setActiveEventId(e.id)}
-                  key={e.id}
-                  className={cx(styles.selectableRow, {
-                    [styles.selected]: activeEventId === e.id,
-                  })}
+                onClick={() => setActiveEventId(e.id)}
+                key={e.id}
+                className={cx(styles.selectableRow, {
+                  [styles.selected]: activeEventId === e.id,
+                })}
               >
                 <td>
-                  <CertificateTypeIcon certificateType={e.certificateType}/>
+                  <CertificateTypeIcon certificateType={e.certificateType} />
                 </td>
                 <td>{e.name}</td>
                 <td>{checkOrBlank(e.results.length)}</td>
@@ -234,7 +217,6 @@ export function TournamentScreen({
       </section>
       {events[activeEventIndex] !== undefined && (
         <EventDisplay
-          uploadResults={uploadResults}
           tournament={tournament}
           event={events[activeEventIndex]}
           setCutoff={setCutoff}

@@ -1,12 +1,12 @@
 import * as React from "react";
 import "./App.css";
 import styles from "./App.module.css";
-import { deleteData, getData, handleFileUpload, postData } from "./fetch";
+import { getData, handleFileUpload, postData } from "./fetch";
 import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { Tournament, TournamentScreen } from "./TournamentScreen";
-import {Expandable} from "./Expandable";
-import {FileListing} from "./FileListing";
-import {TournamentProvider} from "./TournamentContextProvider";
+import { Expandable } from "./Expandable";
+import { FileListing } from "./FileListing";
+import { TournamentProvider } from "./TournamentContextProvider";
 
 const cx = require("classnames");
 
@@ -15,10 +15,6 @@ function App() {
   const [activeTournamentId, setActiveTournament] = React.useState<
     number | undefined
   >(undefined);
-  const activeTournamentIndex = activeTournamentId
-    ? tournaments.findIndex((t) => t.id === activeTournamentId)
-    : -1;
-
   React.useEffect(() => {
     getData("/certs/tournaments").then(setTournaments);
   }, []);
@@ -33,98 +29,11 @@ function App() {
       setTournaments((tournaments) => [...tournaments, newTournament])
     );
   }
-  function createEvents(evt: React.ChangeEvent<HTMLFormElement>) {
-    evt.preventDefault();
-    postData("/certs/events", {
-      events: evt.target.events.value,
-      tournamentId: activeTournamentId,
-    }).then(replaceActiveTournament);
-  }
-
-  function setCutoff(
-    value: number,
-    type: "placement" | "cutoff" | "medal" | "quals",
-    activeEvent: number
-  ) {
-    postData(
-      `/certs/tournaments/${activeTournamentId}/events/${activeEvent}/${type}`,
-      { cutoff: value }
-    ).then(replaceActiveTournament);
-  }
-
-  function handleEventResultsUpload(
-    event: React.ChangeEvent<HTMLInputElement>,
-    eventId: number | undefined,
-    roundType: string = "QUARTER_FINALIST"
-  ) {
-    if (eventId !== undefined) {
-      handleFileUpload(
-        event,
-        `/certs/tournaments/${activeTournamentId}/events/${eventId}/results\?type=${roundType}`,
-        replaceActiveTournament
-      );
-    }
-  }
-
-  function replaceActiveTournament(data: Tournament) {
-    return setTournaments((tournaments) =>
-      Object.assign([], tournaments, { [activeTournamentIndex]: data })
-    );
-  }
-
-  function handleSweepsUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    handleFileUpload(
-      event,
-      `/certs/tournaments/${activeTournamentId}/sweeps`,
-      replaceActiveTournament
-    );
-  }
-  function handleSchoolsUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    handleFileUpload(
-      event,
-      `/certs/tournaments/${activeTournamentId}/schools`,
-      () => {
-        alert("Schools Loaded");
-      }
-    );
-  }
   function handleMediaUpload(event: React.ChangeEvent<HTMLInputElement>) {
     handleFileUpload(event, `/s3/upload`, () => {
       alert("Media Saved");
     });
   }
-
-  function setEventType(activeEvent: number, eventType: string) {
-    postData(
-      `/certs/tournaments/${activeTournamentId}/events/${activeEvent}/type\?type=${eventType}`,
-      {}
-    ).then(replaceActiveTournament);
-  }
-  function setEventName(activeEvent: number, newName: string) {
-    postData(
-      `/certs/tournaments/${activeTournamentId}/events/${activeEvent}/rename\?name=${newName}`,
-      {}
-    ).then(replaceActiveTournament);
-  }
-  function setCertType(activeEvent: number, certType: string) {
-    postData(
-      `/certs/tournaments/${activeTournamentId}/events/${activeEvent}/cert_type\?type=${certType}`,
-      {}
-    ).then(replaceActiveTournament);
-  }
-  function setNumRounds(activeEvent: number, numRounds: number) {
-    postData(
-      `/certs/tournaments/${activeTournamentId}/events/${activeEvent}/rounds\?count=${numRounds}`,
-      {}
-    ).then(replaceActiveTournament);
-  }
-
-  function resetResults(eventId: number): void {
-    deleteData(
-      `/certs/tournaments/${activeTournamentId}/events/${eventId}/results`
-    ).then(replaceActiveTournament);
-  }
-
   return (
     <div className={styles.main}>
       <aside>
@@ -171,20 +80,9 @@ function App() {
       </aside>
       <main>
         {activeTournamentId && (
-            <TournamentProvider key={activeTournamentId} id={activeTournamentId}>
-          <TournamentScreen
-            uploadSchools={handleSchoolsUpload}
-            createEvents={createEvents}
-            uploadResults={handleEventResultsUpload}
-            setCutoff={setCutoff}
-            uploadSweeps={handleSweepsUpload}
-            setEventType={setEventType}
-            setCertType={setCertType}
-            setNumRounds={setNumRounds}
-            resetResults={resetResults}
-            setEventName={setEventName}
-          />
-            </TournamentProvider>
+          <TournamentProvider key={activeTournamentId} id={activeTournamentId}>
+            <TournamentScreen />
+          </TournamentProvider>
         )}
       </main>
     </div>
