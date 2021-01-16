@@ -21,6 +21,8 @@ export function useTournament() {
       logoUrl: emptyToNull(evt.target.logoUrl.value),
       slideBackgroundUrl: emptyToNull(evt.target.backgroundUrl.value),
       certificateHeadline: emptyToNull(evt.target.certificateHeadline.value),
+      line1: emptyToNull(evt.target.line1.value),
+      line2: emptyToNull(evt.target.line2.value),
       signature: emptyToNull(evt.target.signature.value),
       signatureTitle: emptyToNull(evt.target.signatureTitle.value),
       styleOverrides: emptyToNull(evt.target.styleOverrides.value),

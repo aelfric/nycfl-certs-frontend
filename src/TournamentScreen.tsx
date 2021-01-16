@@ -17,6 +17,8 @@ export interface Tournament {
   logoUrl?: string;
   slideBackgroundUrl?: string;
   certificateHeadline?: string;
+  line1?: string;
+  line2?: string;
   signature?: string;
   signatureTitle?: string;
   styleOverrides?: string;
@@ -85,6 +87,8 @@ export function TournamentScreen() {
     signatureTitle,
     events,
     certificateHeadline,
+    line1,
+    line2,
     name,
     logoUrl,
     slideBackgroundUrl,
@@ -126,6 +130,18 @@ export function TournamentScreen() {
             name={"certificateHeadline"}
             defaultValue={certificateHeadline}
             placeholder={"New York Catholic Forensics League"}
+          />
+          <FormTextInput
+            label="Line 1"
+            name={"line1"}
+            defaultValue={line1}
+            placeholder={host}
+          />
+          <FormTextInput
+            label="Line 2"
+            name={"line2"}
+            defaultValue={line2}
+            placeholder={name}
           />
           <FormTextInput
             label="Logo"
