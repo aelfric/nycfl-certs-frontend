@@ -4,6 +4,7 @@ import * as React from "react";
 import { Result } from "./App";
 import { ISetCutoff } from "./TournamentScreen";
 import { useTournament } from "./use-tournament";
+import {StripedTable} from "./StripedTable";
 
 interface ResultDisplayProps {
   certificateCutoff: number;
@@ -43,7 +44,7 @@ export function ResultDisplay({
   const btnStyle = [styles.button, styles.btnSmall].join(" ");
 
   return (
-    <table className={styles.stripedTable}>
+    <StripedTable>
       <thead>
         <tr>
           <th>Place (#)</th>
@@ -158,14 +159,14 @@ export function ResultDisplay({
               className={btnStyle}
               onClick={() => setHalfQuals(1)}
               title={"Set Half Quals"}
-              style={{ fontSize: "1.5em" }}
+              style={{ fontSize: "1.5em", userSelect: "none" }}
             >
               ½
             </button>
           </td>
         </tr>
       </tbody>
-    </table>
+    </StripedTable>
   );
 }
 

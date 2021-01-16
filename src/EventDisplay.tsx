@@ -86,7 +86,7 @@ export function EventDisplay({
           url={"/enums/certificate_types"}
           label={"Certificate Type"}
           onSelect={onCertTypeSelect}
-          value={event.eventType}
+          value={event.certificateType}
           key={event.id}
         />
       </p>
