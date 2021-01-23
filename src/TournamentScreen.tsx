@@ -177,7 +177,7 @@ export function TournamentScreen() {
             placeholder={"NYCFL President"}
           />
           <label>
-            Style Overrides:
+            Style Overrides (include valid CSS):
             <textarea
               name={"styleOverrides"}
               style={{ fontFamily: "Courier" }}
@@ -188,13 +188,10 @@ export function TournamentScreen() {
         </form>
       </section>
       <section>
-        <h2>Schools</h2>
-        <FileInput name="schoolsUpload" onChange={uploadSchools} />
-      </section>
-      <section>
         <h2>Events</h2>
         <form onSubmit={createEvents} className={styles.standardForm}>
-          <textarea name={"events"} />
+          <label >Enter a list of events separated by newlines.<textarea name={"events"} />
+          </label>
           <SubmitButton>Save Events</SubmitButton>
         </form>
         <table className={styles.stripedTable}>
@@ -260,15 +257,6 @@ export function TournamentScreen() {
           Generate Slides
         </a>
       </div>
-      <section>
-        <h2>Medals</h2>
-        <SchoolList tournamentId={tournament.id} />
-      </section>
-      <section>
-        <h2>Sweepstakes</h2>
-        <FileInput name={"sweepsResults"} onChange={uploadSweeps} />
-        <Sweepstakes tournamentId={tournament.id} />
-      </section>
     </>
   );
 }
