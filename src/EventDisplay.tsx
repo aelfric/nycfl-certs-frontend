@@ -28,7 +28,7 @@ export function EventDisplay({
   resetResults,
 }: EventDisplayParams) {
   const [roundType, setRoundType] = React.useState("FINALIST");
-  const { uploadResults } = useTournament();
+  const { uploadResults, deleteEvent } = useTournament();
 
   function handleUpload(formEvt: React.ChangeEvent<HTMLInputElement>) {
     return uploadResults(formEvt, event.id, roundType);
@@ -117,6 +117,14 @@ export function EventDisplay({
           title={"Reset Results"}
         >
           Reset Results
+        </button>
+        <button
+          type={"button"}
+          className={styles.button}
+          onClick={() => deleteEvent(event.id)}
+          title={"Delete Event"}
+        >
+          Delete Event
         </button>
       </p>
       <FileInput name="eventResults" onChange={handleUpload} />

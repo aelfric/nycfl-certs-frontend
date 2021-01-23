@@ -109,6 +109,12 @@ export function useTournament() {
     ).then(setTournament);
   }
 
+  function deleteEvent(eventId: number): void {
+    deleteData(
+      `/certs/tournaments/${tournament?.id}/events/${eventId}`
+    ).then(setTournament);
+  }
+
   function handleSweepsUpload(event: React.ChangeEvent<HTMLInputElement>) {
     handleFileUpload(
       event,
@@ -133,6 +139,7 @@ export function useTournament() {
     updateTournament,
     setCutoff,
     resetResults,
+    deleteEvent,
     setEventType,
     createEvents,
     setEventName,
