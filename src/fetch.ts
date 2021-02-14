@@ -46,7 +46,7 @@ export function handleFileUpload(
 ) {
   const files = event.target.files;
   const formData = new FormData();
-  if (files) {
+  if (files && files.length > 0) {
     formData.append("file", files[0]);
     formData.append("fileName", files[0].name);
     formData.append("mimeType", files[0].type);

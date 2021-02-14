@@ -127,7 +127,7 @@ export function EventDisplay({
           Delete Event
         </button>
       </p>
-      <FileInput name="eventResults" onChange={handleUpload} />
+      <FileInput name="eventResults" onChange={handleUpload} key={event.id} />
       <ResultDisplay
         results={event.results}
         placementCutoff={event.placementCutoff}

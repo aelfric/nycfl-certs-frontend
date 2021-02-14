@@ -1,9 +1,8 @@
 import * as React from "react";
 import { getData } from "./fetch";
 import styles from "./App.module.css";
-import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
+import { FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
-import { Sweepstakes } from "./Sweepstakes";
 import { MedalCount, Result, TournamentIdProps } from "./App";
 import { Debate, Speaker, Trophy } from "./icons";
 import { useTournament } from "./use-tournament";
