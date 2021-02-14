@@ -7,14 +7,24 @@ import { Tournament, TournamentScreen } from "./TournamentScreen";
 import { Expandable } from "./Expandable";
 import { FileListing } from "./FileListing";
 import { TournamentProvider } from "./TournamentContextProvider";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom";
 
 const cx = require("classnames");
 
-function App() {
+interface ParamTypes {
+    id: string
+}
+function Interface() {
+    let { id } = useParams<ParamTypes>();
+    const activeTournamentId = Number(id);
+
   const [tournaments, setTournaments] = React.useState<Tournament[]>([]);
-  const [activeTournamentId, setActiveTournament] = React.useState<
-    number | undefined
-  >(undefined);
   React.useEffect(() => {
     getData("/certs/tournaments").then(setTournaments);
   }, []);
@@ -26,7 +36,7 @@ function App() {
       host: evt.target.host.value,
       date: evt.target.date.value,
     }).then((newTournament) =>
-      setTournaments((tournaments) => [...tournaments, newTournament])
+        setTournaments((tournaments) => [...tournaments, newTournament])
     );
   }
   function handleMediaUpload(event: React.ChangeEvent<HTMLInputElement>) {
@@ -34,59 +44,70 @@ function App() {
       alert("Media Saved");
     });
   }
-  return (
-    <div className={styles.main}>
-      <aside>
-        <ul className={cx(styles.tournaments, styles.box)}>
-          {tournaments.map((t) => (
+
+  return <div className={styles.main}>
+    <aside>
+      <ul className={cx(styles.tournaments, styles.box)}>
+        {tournaments.map((t) => (
             <li
-              key={t.id}
-              className={cx({
-                [styles.selected]: activeTournamentId === t.id,
-              })}
-              onClick={() => setActiveTournament(t.id)}
+                key={t.id}
+                className={cx({
+                  [styles.selected]: activeTournamentId === t.id,
+                })}
             >
-              {t.name} {}
+                <Link to={String(t.id)}>{t.name}</Link>
             </li>
-          ))}
-        </ul>
-        <section className={styles.box}>
-          <h2>Media</h2>
-          <FileInput
+        ))}
+      </ul>
+      <section className={styles.box}>
+        <h2>Media</h2>
+        <FileInput
             name="mediaUpload"
             onChange={handleMediaUpload}
             key={activeTournamentId}
-          />
-          <Expandable heading={<h3>Uploaded Files</h3>}>
-            <FileListing />
-          </Expandable>
-        </section>
-        <section className={styles.box}>
-          <form onSubmit={createTournament} className={styles.standardForm}>
-            <FormTextInput name={"tournamentName"} label={"Tournament Name"} />
-            <FormTextInput label={"Host"} name={"host"} />
-            <FormTextInput label="Date" type={"date"} name={"date"} />
-            <SubmitButton>Create Tournament</SubmitButton>
-          </form>
-        </section>
-        <footer>
-          <p>Medal by Gregor Cresnar from the Noun Project</p>
-          <p>Delete by Gregor Cresnar from the Noun Project</p>
-          <p>Trophy by Ken Messenger from the Noun Project</p>
-          <p>Certificate by Iconstock from the Noun Project</p>
-          <p>Speaking by Ayub Irawan from the Noun Project</p>
-          <p>Debate by Mello from the Noun Project</p>
-        </footer>
-      </aside>
-      <main>
-        {activeTournamentId && (
+        />
+        <Expandable heading={<h3>Uploaded Files</h3>}>
+          <FileListing />
+        </Expandable>
+      </section>
+      <section className={styles.box}>
+        <form onSubmit={createTournament} className={styles.standardForm}>
+          <FormTextInput name={"tournamentName"} label={"Tournament Name"} />
+          <FormTextInput label={"Host"} name={"host"} />
+          <FormTextInput label="Date" type={"date"} name={"date"} />
+          <SubmitButton>Create Tournament</SubmitButton>
+        </form>
+      </section>
+      <footer>
+        <p>Medal by Gregor Cresnar from the Noun Project</p>
+        <p>Delete by Gregor Cresnar from the Noun Project</p>
+        <p>Trophy by Ken Messenger from the Noun Project</p>
+        <p>Certificate by Iconstock from the Noun Project</p>
+        <p>Speaking by Ayub Irawan from the Noun Project</p>
+        <p>Debate by Mello from the Noun Project</p>
+      </footer>
+    </aside>
+    <main>
+      {activeTournamentId && (
           <TournamentProvider key={activeTournamentId} id={activeTournamentId}>
             <TournamentScreen />
           </TournamentProvider>
-        )}
-      </main>
-    </div>
-  );
+      )}
+    </main>
+  </div>
+}
+
+function App() {
+    return <Router>
+        <Switch>
+            <Route path="/:id">
+                <Interface/>
+            </Route>
+            <Route>
+                <Interface/>
+            </Route>
+        </Switch>
+    </Router>;
 }
 
 export interface TournamentIdProps {

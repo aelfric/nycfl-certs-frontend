@@ -35,8 +35,6 @@
 .tournaments {
   list-style: none;
   margin: 0;
-  max-height: 400px;
-  overflow-y: auto;
 }
 
 .tournaments li {
@@ -49,6 +47,12 @@
   margin-top: 2px;
   background-color: #daebf1;
   cursor: pointer;
+}
+
+.tournaments li a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
 }
 
 .tournaments li:hover,
