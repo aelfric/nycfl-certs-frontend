@@ -88,11 +88,13 @@ function Interface() {
       </footer>
     </aside>
     <main>
-      {activeTournamentId && (
-          <TournamentProvider key={activeTournamentId} id={activeTournamentId}>
-            <TournamentScreen />
-          </TournamentProvider>
-      )}
+      {isNaN(activeTournamentId) ?
+          <h1>Please select a tournament</h1> :
+          (
+              <TournamentProvider key={activeTournamentId} id={activeTournamentId}>
+                <TournamentScreen/>
+              </TournamentProvider>
+          )}
     </main>
   </div>
 }
