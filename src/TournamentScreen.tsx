@@ -259,33 +259,3 @@ export function TournamentScreen() {
     </>
   );
 }
-
-function SchoolList({ tournamentId }: TournamentIdProps) {
-  const [medals, setMedals] = React.useState([]);
-  React.useEffect(() => {
-    if (tournamentId) {
-      getData(`/certs/tournaments/${tournamentId}/medals`).then(setMedals);
-    }
-  }, [tournamentId]);
-
-  if (!tournamentId) return null;
-
-  return (
-    <table className={styles.stripedTable}>
-      <thead>
-        <tr>
-          <th>School</th>
-          <th>Medal Count</th>
-        </tr>
-      </thead>
-      <tbody>
-        {medals.map((result: MedalCount) => (
-          <tr key={result.school}>
-            <td>{result.school}</td>
-            <td style={{ textAlign: "center" }}>{result.count}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
