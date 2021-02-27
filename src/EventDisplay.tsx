@@ -50,7 +50,7 @@ export function EventDisplay({
   }
 
   return (
-    <section>
+    <section key={event.id}>
       <h2>Results</h2>
       <p>
         <form onSubmit={onRenameEvent}>
@@ -127,7 +127,7 @@ export function EventDisplay({
           Delete Event
         </button>
       </p>
-      <FileInput name="eventResults" onChange={handleUpload} key={event.id} />
+      <FileInput name="eventResults" onChange={handleUpload} />
       <ResultDisplay
         results={event.results}
         placementCutoff={event.placementCutoff}

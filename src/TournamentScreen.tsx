@@ -4,7 +4,7 @@ import styles from "./App.module.css";
 import { FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
 import { MedalCount, Result, TournamentIdProps } from "./App";
-import { Debate, Speaker, Trophy } from "./icons";
+import {Debate, Qualifier, Speaker, Trophy} from "./icons";
 import { useTournament } from "./use-tournament";
 const cx = require("classnames");
 
@@ -57,6 +57,8 @@ function CertificateTypeIcon({ certificateType }: { certificateType: string }) {
       return <Debate style={defaultStyle} />;
     case "DEBATE_SPEAKER":
       return <Speaker style={defaultStyle} />;
+    case "QUALIFIER":
+      return <Qualifier style={defaultStyle} />;
     default:
       return null;
   }
@@ -76,8 +78,6 @@ export function TournamentScreen() {
     setEventName,
     setNumRounds,
     setCertType,
-    handleSchoolsUpload: uploadSchools,
-    handleSweepsUpload: uploadSweeps,
   } = useTournament();
   if (!tournament) return <p>Loading...</p>;
 
@@ -99,9 +99,9 @@ export function TournamentScreen() {
     ? events.findIndex((e: CompetitionEvent) => e.id === activeEventId)
     : -1;
 
-  function checkOrBlank(value: number) {
-    if (value > 1) {
-      return <>✓ ({value})</>;
+  function checkOrBlank(value: number, cutOff: number) {
+    if (value > cutOff) {
+      return <>✓ ({value-cutOff})</>;
     } else {
       return "";
     }
@@ -217,11 +217,11 @@ export function TournamentScreen() {
                   <CertificateTypeIcon certificateType={e.certificateType} />
                 </td>
                 <td>{e.name}</td>
-                <td>{checkOrBlank(e.results.length)}</td>
-                <td>{checkOrBlank(e.placementCutoff)}</td>
-                <td>{checkOrBlank(e.medalCutoff)}</td>
-                <td>{checkOrBlank(e.certificateCutoff)}</td>
-                <td>{checkOrBlank(e.halfQuals)}</td>
+                <td>{checkOrBlank(e.results.length, 0)}</td>
+                <td>{checkOrBlank(e.placementCutoff, 1)}</td>
+                <td>{checkOrBlank(e.medalCutoff, 1)}</td>
+                <td>{checkOrBlank(e.certificateCutoff, 1)}</td>
+                <td>{checkOrBlank(e.halfQuals, 1)}</td>
               </tr>
             ))}
           </tbody>
