@@ -120,7 +120,7 @@ export function EventDisplay({
         </button>
         <button
           type={"button"}
-          className={styles.button}
+          className={[styles.button, styles.danger].join(" ")}
           onClick={() => deleteEvent(event.id)}
           title={"Delete Event"}
         >

@@ -116,6 +116,14 @@ li.selected {
   user-select: none;
 }
 
+.button.danger {
+  background-color: rgb(201,1,1);
+}
+
+.button.danger:hover {
+  color: rgb(201,1,1);
+}
+
 .button svg {
   width: 1.5em;
   top: 0.5em;
