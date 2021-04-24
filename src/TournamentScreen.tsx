@@ -1,9 +1,8 @@
 import * as React from "react";
-import { getData } from "./fetch";
 import styles from "./App.module.css";
 import { FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
-import { MedalCount, Result, TournamentIdProps } from "./App";
+import { Result} from "./App";
 import {Debate, Qualifier, Speaker, Trophy} from "./icons";
 import { useTournament } from "./use-tournament";
 const cx = require("classnames");
@@ -243,6 +242,7 @@ export function TournamentScreen() {
       <div style={{ margin: "50px" }}>
         <a
           className={styles.button}
+          rel="noreferrer"
           target={"_blank"}
           href={`http://localhost:8080/certs/tournaments/${tournament.id}/certificates`}
         >
@@ -250,6 +250,7 @@ export function TournamentScreen() {
         </a>
         <a
           className={styles.button}
+          rel="noreferrer"
           target={"_blank"}
           href={`http://localhost:8080/certs/tournaments/${tournament.id}/slides?dl=0`}
         >

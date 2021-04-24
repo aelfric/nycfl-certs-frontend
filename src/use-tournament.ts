@@ -39,19 +39,19 @@ export function useTournament() {
 
   function setEventName(activeEvent: number, newName: string) {
     postData(
-      `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rename\?name=${newName}`,
+      `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rename?name=${newName}`,
       {}
     ).then(setTournament);
   }
   function setCertType(activeEvent: number, certType: string) {
     postData(
-      `/certs/tournaments/${tournament?.id}/events/${activeEvent}/cert_type\?type=${certType}`,
+      `/certs/tournaments/${tournament?.id}/events/${activeEvent}/cert_type?type=${certType}`,
       {}
     ).then(setTournament);
   }
   function setNumRounds(activeEvent: number, numRounds: number) {
     postData(
-      `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rounds\?count=${numRounds}`,
+      `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rounds?count=${numRounds}`,
       {}
     ).then(setTournament);
   }
@@ -69,7 +69,7 @@ export function useTournament() {
 
   function setEventType(activeEvent: number, eventType: string) {
     postData(
-      `/certs/tournaments/${tournament?.id}/events/${activeEvent}/type\?type=${eventType}`,
+      `/certs/tournaments/${tournament?.id}/events/${activeEvent}/type?type=${eventType}`,
       {}
     ).then(setTournament);
   }
@@ -97,7 +97,7 @@ export function useTournament() {
     if (eventId !== undefined) {
       handleFileUpload(
         event,
-        `/certs/tournaments/${tournament?.id}/events/${eventId}/results\?type=${roundType}`,
+        `/certs/tournaments/${tournament?.id}/events/${eventId}/results?type=${roundType}`,
         setTournament
       );
     }

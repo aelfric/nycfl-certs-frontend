@@ -15,7 +15,7 @@ export function FileListing() {
   return (
     <ul className={styles.fileList}>
       {files.map((file) => (
-        <li>
+        <li key={file.objectName}>
           {
             <a href={file.url} title={file.objectName}>
               {file.objectName}

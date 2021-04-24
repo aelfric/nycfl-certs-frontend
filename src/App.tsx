@@ -96,7 +96,7 @@ function Interface() {
               </TournamentProvider>
           )}
     </main>
-  </div>
+  </div>;
 }
 
 function App() {

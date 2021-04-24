@@ -33,5 +33,5 @@ export function StripedTable({children}: { children: React.ReactNode }) {
             {children}
         </table>
         <button type={"button"} className={styles.btnSmall} onClick={handleCopy}>Copy Table</button>
-    </>
+    </>;
 }
