@@ -1,9 +1,12 @@
 import React from "react";
-import { TournamentContext } from "./tournament-context";
-import { deleteData, handleFileUpload, postData } from "./fetch";
+import {TournamentContext} from "./tournament-context";
+import {deleteData, handleFileUpload, postData} from "./fetch";
+import {useKeycloak} from "@react-keycloak/web";
 
 export function useTournament() {
   const { tournament, setTournament } = React.useContext(TournamentContext);
+
+  const {keycloak} = useKeycloak();
 
   function updateTournament(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
@@ -14,7 +17,7 @@ export function useTournament() {
         return str;
       }
     }
-    postData(`/certs/tournaments/${tournament?.id}`, {
+    postData(`/certs/tournaments/${tournament?.id}`, keycloak.token, {
       name: evt.target.tournamentName.value,
       host: evt.target.host.value,
       date: evt.target.date.value,
@@ -31,7 +34,8 @@ export function useTournament() {
 
   function createEvents(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
-    postData("/certs/events", {
+    postData("/certs/events", keycloak.token,
+    {
       events: evt.target.events.value,
       tournamentId: tournament?.id,
     }).then(setTournament);
@@ -40,18 +44,21 @@ export function useTournament() {
   function setEventName(activeEvent: number, newName: string) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rename?name=${newName}`,
+      keycloak.token,
       {}
     ).then(setTournament);
   }
   function setCertType(activeEvent: number, certType: string) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/cert_type?type=${certType}`,
+      keycloak.token,
       {}
     ).then(setTournament);
   }
   function setNumRounds(activeEvent: number, numRounds: number) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rounds?count=${numRounds}`,
+      keycloak.token,
       {}
     ).then(setTournament);
   }
@@ -63,6 +70,7 @@ export function useTournament() {
   ) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/${type}`,
+      keycloak.token,
       { cutoff: value }
     ).then(setTournament);
   }
@@ -70,6 +78,7 @@ export function useTournament() {
   function setEventType(activeEvent: number, eventType: string) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/type?type=${eventType}`,
+      keycloak.token,
       {}
     ).then(setTournament);
   }
@@ -85,6 +94,7 @@ export function useTournament() {
       }/events/${eventId}/results/${resultId}/rename?name=${encodeURI(
         newName
       ).replace("&", "%26")}`,
+      keycloak.token,
       {}
     ).then(setTournament);
   }
@@ -98,6 +108,7 @@ export function useTournament() {
       handleFileUpload(
         event,
         `/certs/tournaments/${tournament?.id}/events/${eventId}/results?type=${roundType}`,
+        keycloak.token,
         setTournament
       );
     }
@@ -105,13 +116,15 @@ export function useTournament() {
 
   function resetResults(eventId: number): void {
     deleteData(
-      `/certs/tournaments/${tournament?.id}/events/${eventId}/results`
+      `/certs/tournaments/${tournament?.id}/events/${eventId}/results`,
+      keycloak.token
     ).then(setTournament);
   }
 
   function deleteEvent(eventId: number): void {
     deleteData(
-      `/certs/tournaments/${tournament?.id}/events/${eventId}`
+      `/certs/tournaments/${tournament?.id}/events/${eventId}`,
+      keycloak.token
     ).then(setTournament);
   }
 
@@ -119,13 +132,15 @@ export function useTournament() {
     handleFileUpload(
       event,
       `/certs/tournaments/${tournament?.id}/sweeps`,
-      setTournament
+      keycloak.token,
+      setTournament,
     );
   }
   function handleSchoolsUpload(event: React.ChangeEvent<HTMLInputElement>) {
     handleFileUpload(
       event,
       `/certs/tournaments/${tournament?.id}/schools`,
+      keycloak.token,
       () => {
         alert("Schools Loaded");
       }

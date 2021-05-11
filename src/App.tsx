@@ -7,6 +7,7 @@ import { Tournament, TournamentScreen } from "./TournamentScreen";
 import { Expandable } from "./Expandable";
 import { FileListing } from "./FileListing";
 import { TournamentProvider } from "./TournamentContextProvider";
+import { useKeycloak } from "@react-keycloak/web";
 import {
   BrowserRouter as Router,
   Switch,
@@ -25,13 +26,15 @@ function Interface() {
     const activeTournamentId = Number(id);
 
   const [tournaments, setTournaments] = React.useState<Tournament[]>([]);
+  const {keycloak} = useKeycloak();
+
   React.useEffect(() => {
-    getData("/certs/tournaments").then(setTournaments);
-  }, []);
+    getData("/certs/tournaments", keycloak.token).then(setTournaments);
+  }, [keycloak.token]);
 
   function createTournament(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
-    postData("/certs/tournaments", {
+    postData("/certs/tournaments", keycloak.token,{
       name: evt.target.tournamentName.value,
       host: evt.target.host.value,
       date: evt.target.date.value,
@@ -40,7 +43,7 @@ function Interface() {
     );
   }
   function handleMediaUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    handleFileUpload(event, `/s3/upload`, () => {
+    handleFileUpload(event, `/s3/upload`, keycloak.token, () => {
       alert("Media Saved");
     });
   }
@@ -100,6 +103,14 @@ function Interface() {
 }
 
 function App() {
+  const { keycloak, initialized } = useKeycloak();
+
+  if (!initialized) {
+    return <div>Loading...</div>;
+  }
+  if( !keycloak.authenticated ){
+    keycloak.login();
+  }
     return <Router>
         <Switch>
             <Route path="/:id">
