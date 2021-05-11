@@ -9,7 +9,7 @@ import { FileListing } from "./FileListing";
 import { TournamentProvider } from "./TournamentContextProvider";
 import { useKeycloak } from "@react-keycloak/web";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Switch,
   Route,
   Link,
