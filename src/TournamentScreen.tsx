@@ -228,7 +228,6 @@ export function TournamentScreen() {
       </section>
       {events[activeEventIndex] !== undefined && (
         <EventDisplay
-          tournament={tournament}
           event={events[activeEventIndex]}
           setCutoff={setCutoff}
           setEventType={setEventType}

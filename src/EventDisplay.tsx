@@ -2,14 +2,13 @@ import * as React from "react";
 import { useState } from "react";
 import { FileInput } from "./Inputs";
 import { ResultDisplay } from "./ResultDisplay";
-import { CompetitionEvent, ISetCutoff, Tournament } from "./TournamentScreen";
+import { CompetitionEvent, ISetCutoff } from "./TournamentScreen";
 import { getData } from "./fetch";
 import styles from "./App.module.css";
 import { useTournament } from "./use-tournament";
 import {useKeycloak} from "@react-keycloak/web";
 
 type EventDisplayParams = {
-  tournament: Tournament;
   event: CompetitionEvent;
   setCutoff: ISetCutoff;
   setEventType: (eventId: number, type: string) => void;

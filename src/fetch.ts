@@ -42,8 +42,7 @@ export async function postData(
 
 export async function deleteData(
   url: string = "",
-  token: string = "",
-  data: object = {}
+  token: string = ""
 ) {
   try {
     // Default options are marked with *
@@ -95,6 +94,7 @@ export function handleFileUpload(
         .then((response) => response.json())
         .then(onFulfilled)
         .catch((error) => {
+          // eslint-disable-next-line no-console
           console.error(error);
         });
     }
