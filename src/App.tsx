@@ -110,6 +110,7 @@ function App() {
   }
   if( !keycloak.authenticated ){
     keycloak.login();
+    return <div>Logging you in</div>;
   }
     return <Router>
         <Switch>
