@@ -15,6 +15,7 @@ import {
   Link,
   useParams
 } from "react-router-dom";
+import {Certificates, Slides} from "./certificates";
 
 const cx = require("classnames");
 
@@ -58,7 +59,7 @@ function Interface() {
                   [styles.selected]: activeTournamentId === t.id,
                 })}
             >
-                <Link to={String(t.id)}>{t.name}</Link>
+                <Link to={"/tournaments/" + String(t.id)}>{t.name}</Link>
             </li>
         ))}
       </ul>
@@ -114,9 +115,15 @@ function App() {
   }
     return <Router>
         <Switch>
-            <Route path="/:id">
+            <Route path="/tournaments/:id">
                 <Interface/>
             </Route>
+          <Route path="/preview_certificates/:id">
+            <Certificates/>
+          </Route>
+          <Route path="/preview_slides/:id">
+            <Slides/>
+          </Route>
             <Route>
                 <Interface/>
             </Route>

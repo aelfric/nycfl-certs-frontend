@@ -1,12 +1,12 @@
 import * as React from "react";
 // eslint-disable-next-line no-undef
-function DEFAULT_FETCH_OPTIONS(token: string): RequestInit {
+function DEFAULT_FETCH_OPTIONS(token: string, contentType: string = "application/json"): RequestInit {
   return {
     mode: "cors", // no-cors, *cors, same-origin
     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
     credentials: "same-origin", // include, *same-origin, omit
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": contentType,
       Authorization: "Bearer " + token,
       // 'Content-Type': 'application/x-www-form-urlencoded',
     },
@@ -56,15 +56,19 @@ export async function deleteData(
   }
 }
 
-export async function getData(url: string = "", token: string = "") {
+export async function getData(url: string = "", token: string = "", contentType: string ="application/json") {
   try {
     // Default options are marked with *
 
     const response = await fetch(url, {
-      ...DEFAULT_FETCH_OPTIONS(token),
+      ...DEFAULT_FETCH_OPTIONS(token, contentType),
       method: "GET",
     }).then(isResponseOk);
-    return response.json(); // parses JSON response into native JavaScript objects
+    if(contentType === "application/json") {
+      return response.json(); // parses JSON response into native JavaScript objects
+    } else {
+      return response.text();
+    }
   } catch (e) {
     alert("Sorry you can't do that: " + e);
   }

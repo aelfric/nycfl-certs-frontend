@@ -5,6 +5,7 @@ import { EventDisplay } from "./EventDisplay";
 import { Result} from "./App";
 import {Debate, Qualifier, Speaker, Trophy} from "./icons";
 import { useTournament } from "./use-tournament";
+import { Link } from "react-router-dom";
 const cx = require("classnames");
 
 export interface Tournament {
@@ -239,22 +240,22 @@ export function TournamentScreen() {
       )}
 
       <div style={{ margin: "50px" }}>
-        <a
+        <Link
           className={styles.button}
           rel="noreferrer"
           target={"_blank"}
-          href={`http://localhost:8080/certs/tournaments/${tournament.id}/certificates`}
+          to={`/preview_certificates/${tournament.id}`}
         >
           Generate Certificates
-        </a>
-        <a
+        </Link>
+        <Link
           className={styles.button}
           rel="noreferrer"
           target={"_blank"}
-          href={`http://localhost:8080/certs/tournaments/${tournament.id}/slides?dl=0`}
+          to={`/preview_slides/${tournament.id}`}
         >
           Generate Slides
-        </a>
+        </Link>
       </div>
     </>
   );
