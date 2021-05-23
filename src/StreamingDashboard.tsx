@@ -75,7 +75,8 @@ export function StreamingDashboard() {
   const [rows, setRows] = React.useState<DraftStream[]>([]);
   const [streams, setStreams] = React.useState<CreatedStream[]>([]);
   const { keycloak } = useKeycloak();
-  const [selected, setSelected] = React.useState<number>(-1);
+  const [selected, setSelected] = React.useState<string>("");
+  const currentStream = streams.find(s => s.broadcastId === selected);
 
   React.useEffect(() => {
     getData("/youtube").then(setStreams);
@@ -93,21 +94,27 @@ export function StreamingDashboard() {
   }
 
   function startTesting() {
-    postData(`/youtube/${currentStream.broadcastId}/test`, keycloak.token)
-      .then(setStreams)
-      .catch(() => alert("An error"));
+    if(currentStream) {
+      postData(`/youtube/${currentStream.broadcastId}/test`, keycloak.token)
+          .then(setStreams)
+          .catch(() => alert("An error"));
+    }
   }
 
   function goLive() {
-    postData(`/youtube/${currentStream.broadcastId}/golive`, keycloak.token)
-      .then(setStreams)
-      .catch(() => alert("An error"));
+    if(currentStream) {
+      postData(`/youtube/${currentStream.broadcastId}/golive`, keycloak.token)
+          .then(setStreams)
+          .catch(() => alert("An error"));
+    }
   }
 
   function completeStream() {
-    postData(`/youtube/${currentStream.broadcastId}/complete`, keycloak.token)
-      .then(setStreams)
-      .catch(() => alert("An error"));
+    if(currentStream) {
+      postData(`/youtube/${currentStream.broadcastId}/complete`, keycloak.token)
+          .then(setStreams)
+          .catch(() => alert("An error"));
+    }
   }
 
   function submit() {
@@ -135,7 +142,6 @@ export function StreamingDashboard() {
     setRows(updatedRows);
   }
 
-  const currentStream = streams[selected];
   return (
     <div className={styles.main}>
       <main>
@@ -151,16 +157,16 @@ export function StreamingDashboard() {
             </tr>
           </thead>
           <tbody>
-            {streams.map((stream, index) => {
+            {streams.map((stream) => {
               return (
                 <tr
-                  key={stream.title}
+                  key={stream.broadcastId}
                   className={
-                    selected === index
+                    selected === stream.broadcastId
                       ? [styles.selectableRow, styles.selected].join(" ")
                       : ""
                   }
-                  onClick={() => setSelected(index)}
+                  onClick={() => setSelected(stream.broadcastId)}
                 >
                   <td>{stream.title}</td>
                   <td>{new Date(stream.startTime).toLocaleString()}</td>
@@ -177,7 +183,7 @@ export function StreamingDashboard() {
           </tbody>
         </table>
         <div>
-          {selected >= 0 && (
+          {currentStream && (
             <div>
               <h2>{currentStream.title}</h2>
               <table className={styles.stripedTable}>
