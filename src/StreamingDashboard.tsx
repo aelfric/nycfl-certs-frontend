@@ -79,8 +79,8 @@ export function StreamingDashboard() {
   const currentStream = streams.find(s => s.broadcastId === selected);
 
   React.useEffect(() => {
-    getData("/youtube").then(setStreams);
-  }, []);
+    getData("/youtube", keycloak.token).then(setStreams);
+  }, [keycloak.token]);
 
   function addRow() {
     setRows([
