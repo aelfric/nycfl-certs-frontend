@@ -41,7 +41,9 @@
     "src/setupTests.ts"
   ],
   "types": [
-    "typePatches"
+    "typePatches",
+    "gapi",
+    "gapi.auth2"
   ],
   "include": [
     "src"

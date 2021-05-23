@@ -1,21 +1,16 @@
 import * as React from "react";
 import "./App.css";
 import styles from "./App.module.css";
-import { getData, handleFileUpload, postData } from "./fetch";
-import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
-import { Tournament, TournamentScreen } from "./TournamentScreen";
-import { Expandable } from "./Expandable";
-import { FileListing } from "./FileListing";
-import { TournamentProvider } from "./TournamentContextProvider";
-import { useKeycloak } from "@react-keycloak/web";
-import {
-  HashRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams
-} from "react-router-dom";
+import {getData, handleFileUpload, postData} from "./fetch";
+import {FileInput, FormTextInput, SubmitButton} from "./Inputs";
+import {Tournament, TournamentScreen} from "./TournamentScreen";
+import {Expandable} from "./Expandable";
+import {FileListing} from "./FileListing";
+import {TournamentProvider} from "./TournamentContextProvider";
+import {useKeycloak} from "@react-keycloak/web";
+import {HashRouter as Router, Link, Route, Switch, useParams} from "react-router-dom";
 import {Certificates, Slides} from "./certificates";
+import {StreamingDashboard} from "./StreamingDashboard";
 
 const cx = require("classnames");
 
@@ -123,6 +118,9 @@ function App() {
           </Route>
           <Route path="/preview_slides/:id">
             <Slides/>
+          </Route>
+          <Route path={"/stream"}>
+            <StreamingDashboard />
           </Route>
             <Route>
                 <Interface/>
