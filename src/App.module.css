@@ -124,6 +124,28 @@ li.selected {
   color: rgb(201,1,1);
 }
 
+.badge {
+  display: inline-block;
+  padding: .25em .4em;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25rem;
+}
+
+.spoiler {
+  background-color: rgba(0,0,0,0.7);
+  color: transparent;
+}
+
+.spoiler:hover {
+  background-color: inherit;
+  color: inherit;
+}
+
+
 .button svg {
   width: 1.5em;
   top: 0.5em;
