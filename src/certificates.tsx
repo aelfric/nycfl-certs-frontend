@@ -45,3 +45,14 @@ export function Slides() {
         <iframe title={"Slides Preview"} style={{position: "absolute", width: "100%", height: "calc(100% - 36px)"}}
                    ref={iframe}/></>;
 }
+
+export function Postings() {
+    const {id} = useParams<ParamTypes>();
+    const {keycloak} = useKeycloak();
+    const iframe = useAjaxIframe(`/certs/tournaments/${id}/postings?dl=0`, keycloak.token);
+
+    return <>
+        <div style={{textAlign:"right"}}><button type="button" className={styles.button}>Download</button></div>
+        <iframe title={"Slides Preview"} style={{position: "absolute", width: "100%", height: "calc(100% - 36px)"}}
+                   ref={iframe}/></>;
+}
