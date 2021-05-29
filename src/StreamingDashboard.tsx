@@ -151,7 +151,7 @@ export function StreamingDashboard() {
             <tr>
               <th>Title</th>
               <th>Scheduled Start</th>
-              <th>Scheduled End</th>
+              <th>Link</th>
               <th>Status</th>
               <th>Stream Status</th>
             </tr>
@@ -170,7 +170,7 @@ export function StreamingDashboard() {
                 >
                   <td>{stream.title}</td>
                   <td>{new Date(stream.startTime).toLocaleString()}</td>
-                  <td>{new Date(stream.endTime).toLocaleString()}</td>
+                  <td>{`https://www.youtube.com/watch?v=${stream.broadcastId}`}</td>
                   <td>
                     <BroadcastStatusBadge status={stream.status} />
                   </td>

@@ -239,22 +239,33 @@ export function TournamentScreen() {
         />
       )}
 
-      <div style={{ margin: "50px" }}>
+      <div style={{ margin: "50px", display: "flex" }}>
         <Link
           className={styles.button}
           rel="noreferrer"
           target={"_blank"}
-          to={`/preview_certificates/${tournament.id}`}
+          style={{flexGrow: 1}}
+          to={`/postings/${tournament.id}`}
         >
-          Generate Certificates
+          Postings
         </Link>
         <Link
           className={styles.button}
           rel="noreferrer"
           target={"_blank"}
+          style={{flexGrow: 1}}
+          to={`/preview_certificates/${tournament.id}`}
+        >
+          Certificates
+        </Link>
+        <Link
+          className={styles.button}
+          rel="noreferrer"
+          target={"_blank"}
+          style={{flexGrow: 1}}
           to={`/preview_slides/${tournament.id}`}
         >
-          Generate Slides
+          Slides
         </Link>
       </div>
     </>
