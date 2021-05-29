@@ -25,6 +25,7 @@ export interface Tournament {
 }
 
 export interface CompetitionEvent {
+  latestResult: string;
   eventType: string;
   certificateType: string;
   id: number;
@@ -217,7 +218,7 @@ export function TournamentScreen() {
                   <CertificateTypeIcon certificateType={e.certificateType} />
                 </td>
                 <td>{e.name}</td>
-                <td>{checkOrBlank(e.results.length, 0)}</td>
+                <td>{e.latestResult || ""}</td>
                 <td>{checkOrBlank(e.placementCutoff, 1)}</td>
                 <td>{checkOrBlank(e.medalCutoff, 1)}</td>
                 <td>{checkOrBlank(e.certificateCutoff, 1)}</td>
