@@ -9,7 +9,7 @@ import {FileListing} from "./FileListing";
 import {TournamentProvider} from "./TournamentContextProvider";
 import {useKeycloak} from "@react-keycloak/web";
 import {HashRouter as Router, Link, Route, Switch, useParams} from "react-router-dom";
-import {Certificates, Slides} from "./certificates";
+import {Certificates, Postings, Slides} from "./certificates";
 import {StreamingDashboard} from "./StreamingDashboard";
 
 const cx = require("classnames");
@@ -118,6 +118,9 @@ function App() {
           </Route>
           <Route path="/preview_slides/:id">
             <Slides/>
+          </Route>
+          <Route path="/postings/:id">
+            <Postings/>
           </Route>
           <Route path={"/stream"}>
             <StreamingDashboard />
