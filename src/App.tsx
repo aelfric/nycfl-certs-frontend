@@ -11,6 +11,7 @@ import {useKeycloak} from "@react-keycloak/web";
 import {HashRouter as Router, Link, Route, Switch, useParams} from "react-router-dom";
 import {Certificates, Postings, Slides} from "./certificates";
 import {StreamingDashboard} from "./StreamingDashboard";
+import {Mailing} from "./Mailing";
 
 const cx = require("classnames");
 
@@ -122,6 +123,9 @@ function App() {
           <Route path="/postings/:id">
             <Postings/>
           </Route>
+          <Route path="/mailing/:id">
+            <Mailing/>
+          </Route>
           <Route path={"/stream"}>
             <StreamingDashboard />
           </Route>
@@ -131,7 +135,6 @@ function App() {
         </Switch>
     </Router>;
 }
-
 export interface TournamentIdProps {
   tournamentId: number;
 }
@@ -144,6 +147,12 @@ export interface MedalCount {
 export interface School {
   id: number;
   name: string;
+  emails: SchoolEmail[];
+}
+
+export interface SchoolEmail {
+  email: string;
+  isPrimary: boolean;
 }
 
 export interface Result {

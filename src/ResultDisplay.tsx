@@ -74,7 +74,7 @@ export function ResultDisplay({
             <td>
               <ResultName result={result} eventId={eventId} />
             </td>
-            <td>{result.school.name}</td>
+            <td><ResultSchool result={result} eventId={eventId} /></td>
             <td>{result.place < halfQuals ? "Half" : ""}</td>
             <td>
               <button
@@ -193,5 +193,31 @@ function ResultName({ result, eventId }: { result: Result; eventId: number }) {
       </form>
     );
   }
-  return <span onDoubleClick={handleDoubleClick}>{result.name}</span>;
+  return <span onDoubleClick={handleDoubleClick} title={String(result.id)}>{result.name}</span>;
+}
+
+function ResultSchool({ result, eventId }: { result: Result; eventId: number }) {
+  const [editing, setEditing] = React.useState(false);
+  const { switchSchool } = useTournament();
+
+  function handleDoubleClick() {
+    setEditing((e) => !e);
+  }
+
+  function handleSave(evt: React.ChangeEvent<HTMLFormElement>) {
+    evt.preventDefault();
+    switchSchool(eventId, result.id, Number(evt.target.newSchool.value));
+    setEditing(false);
+  }
+
+  if (editing) {
+    return (
+      <form onSubmit={handleSave}>
+        <input type={"text"} name={"newSchool"} defaultValue={result.school.id} />
+        <br />
+        <button type={"submit"}>Save</button>
+      </form>
+    );
+  }
+  return <span onDoubleClick={handleDoubleClick} title={String(result.school.id)}>{result.school.name}</span>;
 }

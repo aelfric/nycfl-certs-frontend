@@ -98,6 +98,19 @@ export function useTournament() {
       {}
     ).then(setTournament);
   }
+  function switchSchool(
+    eventId: number,
+    resultId: number,
+    newSchool: number
+  ) {
+    postData(
+      `/certs/tournaments/${
+        tournament?.id
+      }/events/${eventId}/results/${resultId}/school?schoolId=${newSchool}`,
+      keycloak.token,
+      {}
+    ).then(setTournament);
+  }
 
   function handleEventResultsUpload(
     event: React.ChangeEvent<HTMLInputElement>,
@@ -150,6 +163,7 @@ export function useTournament() {
   return {
     tournament: tournament,
     renameCompetitor: renameCompetitor,
+    switchSchool,
     uploadResults: handleEventResultsUpload,
     updateTournament,
     setCutoff,
