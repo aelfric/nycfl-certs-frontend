@@ -23,6 +23,8 @@ export function useTournament() {
       date: evt.target.date.value,
       logoUrl: emptyToNull(evt.target.logoUrl.value),
       slideBackgroundUrl: emptyToNull(evt.target.backgroundUrl.value),
+      slidePrimaryColor: emptyToNull(evt.target.slidePrimaryColor.value),
+      slideAccentColor: emptyToNull(evt.target.slideAccentColor.value),
       certificateHeadline: emptyToNull(evt.target.certificateHeadline.value),
       line1: emptyToNull(evt.target.line1.value),
       line2: emptyToNull(evt.target.line2.value),

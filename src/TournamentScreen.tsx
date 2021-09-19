@@ -1,6 +1,6 @@
 import * as React from "react";
 import styles from "./App.module.css";
-import { FormTextInput, SubmitButton } from "./Inputs";
+import {FieldGroup, FormTextInput, SubmitButton} from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
 import { Result} from "./App";
 import {Debate, Qualifier, Speaker, Trophy} from "./icons";
@@ -15,6 +15,8 @@ export interface Tournament {
   date: string;
   logoUrl?: string;
   slideBackgroundUrl?: string;
+  slideAccentColor?: string;
+  slidePrimaryColor?: string;
   certificateHeadline?: string;
   line1?: string;
   line2?: string;
@@ -95,6 +97,8 @@ export function TournamentScreen() {
     host,
     date,
     styleOverrides,
+    slidePrimaryColor,
+    slideAccentColor
   } = tournament;
   const activeEventIndex = activeEventId
     ? events.findIndex((e: CompetitionEvent) => e.id === activeEventId)
@@ -149,12 +153,6 @@ export function TournamentScreen() {
             defaultValue={logoUrl}
             placeholder={"/nycfl-logo.svg"}
           />
-          <FormTextInput
-            label="Slide Background"
-            name={"backgroundUrl"}
-            defaultValue={slideBackgroundUrl}
-            placeholder={""}
-          />
           {logoUrl && (
             <p style={{ textAlign: "center" }}>
               <img
@@ -176,6 +174,26 @@ export function TournamentScreen() {
             defaultValue={signatureTitle}
             placeholder={"NYCFL President"}
           />
+          <FieldGroup legend={"Slide Properties"}>
+            <FormTextInput
+                label="Slide Background"
+                name={"backgroundUrl"}
+                defaultValue={slideBackgroundUrl}
+                placeholder={""}
+            />
+            <FormTextInput
+                label="Slide Primary Color"
+                name={"slidePrimaryColor"}
+                defaultValue={slidePrimaryColor}
+                placeholder={"#222222"}
+            />
+            <FormTextInput
+                label="Slide Accent Color"
+                name={"slideAccentColor"}
+                defaultValue={slideAccentColor}
+                placeholder={"#00356b"}
+            />
+          </FieldGroup>
           <label>
             Style Overrides (include valid CSS):
             <textarea
