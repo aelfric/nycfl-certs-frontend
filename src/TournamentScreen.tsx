@@ -16,6 +16,7 @@ export interface Tournament {
   logoUrl?: string;
   slideBackgroundUrl?: string;
   slideAccentColor?: string;
+  slideSecondaryAccentColor?: string;
   slidePrimaryColor?: string;
   certificateHeadline?: string;
   line1?: string;
@@ -98,7 +99,8 @@ export function TournamentScreen() {
     date,
     styleOverrides,
     slidePrimaryColor,
-    slideAccentColor
+    slideAccentColor,
+    slideSecondaryAccentColor
   } = tournament;
   const activeEventIndex = activeEventId
     ? events.findIndex((e: CompetitionEvent) => e.id === activeEventId)
@@ -192,6 +194,12 @@ export function TournamentScreen() {
                 name={"slideAccentColor"}
                 defaultValue={slideAccentColor}
                 placeholder={"#00356b"}
+            />
+            <FormTextInput
+                label="Slide Secondary Accent Color"
+                name={"slideSecondaryAccentColor"}
+                defaultValue={slideSecondaryAccentColor}
+                placeholder={"#4a4a4a"}
             />
           </FieldGroup>
           <label>

@@ -25,6 +25,7 @@ export function useTournament() {
       slideBackgroundUrl: emptyToNull(evt.target.backgroundUrl.value),
       slidePrimaryColor: emptyToNull(evt.target.slidePrimaryColor.value),
       slideAccentColor: emptyToNull(evt.target.slideAccentColor.value),
+      slideSecondaryAccentColor: emptyToNull(evt.target.slideSecondaryAccentColor.value),
       certificateHeadline: emptyToNull(evt.target.certificateHeadline.value),
       line1: emptyToNull(evt.target.line1.value),
       line2: emptyToNull(evt.target.line2.value),
