@@ -40,14 +40,8 @@ export function Slides() {
     const {keycloak} = useKeycloak();
     const iframe = useAjaxIframe(`/certs/tournaments/${id}/slides?dl=0`, keycloak.token);
 
-    function download(){
-        getData(`/certs/tournaments/${id}/slides?dl=1`, keycloak.token, "text/html").then(alert).catch(alert);
-    }
-
-    return <>
-        <div style={{textAlign:"right"}}><button type="button" className={styles.button} onClick={download}>Download</button></div>
-        <iframe title={"Slides Preview"} style={{position: "absolute", width: "100%", height: "calc(100% - 36px)"}}
-                   ref={iframe}/></>;
+    return <iframe title={"Slides Preview"} style={{position: "absolute", width: "100%", height: "100%"}}
+                   ref={iframe}/>;
 }
 
 export function Postings() {
