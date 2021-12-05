@@ -31,8 +31,14 @@ export function Certificates() {
     const {keycloak} = useKeycloak();
 
     const iframe = useAjaxIframe(`/certs/tournaments/${id}/certificates`, keycloak.token);
-    return <iframe title={"Certificates Preview"} style={{position: "absolute", width: "100%", height: "100%"}}
-                   ref={iframe}/>;
+    function doPrint(){
+        if(iframe.current && iframe.current.contentWindow) {
+            iframe.current.contentWindow.print();
+        }
+    }
+    return <><div style={{textAlign:"right"}}><button type="button" className={styles.button} onClick={doPrint}>Print</button></div>
+        <iframe title={"Certificates Preview"} style={{position: "absolute", width: "100%", height: "100%"}}
+                   ref={iframe}/></>;
 }
 
 export function Slides() {
