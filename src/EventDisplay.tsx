@@ -6,7 +6,7 @@ import { CompetitionEvent, ISetCutoff } from "./TournamentScreen";
 import { getData } from "./fetch";
 import styles from "./App.module.css";
 import { useTournament } from "./use-tournament";
-import {useKeycloak} from "@react-keycloak/web";
+import { useKeycloak } from "@react-keycloak/web";
 
 type EventDisplayParams = {
   event: CompetitionEvent;
@@ -66,9 +66,35 @@ export function EventDisplay({
           <button
             type={"submit"}
             className={styles.button}
-            title={"Reset Results"}
+            title={"Update Name"}
           >
             Update Name
+          </button>
+          <button
+            type={"button"}
+            className={styles.button}
+            onClick={() => {
+              if (window.confirm("Are you sure you want to reset results")) {
+                resetResults(event.id);
+              }
+            }}
+            title={"Reset Results"}
+          >
+            Reset Results
+          </button>
+          <button
+            type={"button"}
+            className={[styles.button, styles.danger].join(" ")}
+            onClick={() => {
+              if (
+                window.confirm("Are you sure you want to delete this event?")
+              ) {
+                deleteEvent(event.id);
+              }
+            }}
+            title={"Delete Event"}
+          >
+            Delete Event
           </button>
         </form>
       </p>
@@ -109,24 +135,7 @@ export function EventDisplay({
           key={event.id}
         />
       </p>
-      <p>
-        <button
-          type={"button"}
-          className={styles.button}
-          onClick={() => resetResults(event.id)}
-          title={"Reset Results"}
-        >
-          Reset Results
-        </button>
-        <button
-          type={"button"}
-          className={[styles.button, styles.danger].join(" ")}
-          onClick={() => deleteEvent(event.id)}
-          title={"Delete Event"}
-        >
-          Delete Event
-        </button>
-      </p>
+      <p></p>
       <FileInput name="eventResults" onChange={handleUpload} />
       <ResultDisplay
         results={event.results}
@@ -159,10 +168,10 @@ function EnumSelect({
   value: string | undefined;
 }) {
   const [options, setOptions] = useState<Option[]>([]);
-  const {keycloak} = useKeycloak();
+  const { keycloak } = useKeycloak();
 
   React.useEffect(() => {
-    getData(url,keycloak.token).then(setOptions);
+    getData(url, keycloak.token).then(setOptions);
   }, [url, keycloak.token]);
   return (
     <label>
