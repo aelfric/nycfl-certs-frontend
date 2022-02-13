@@ -18,6 +18,7 @@ export interface Tournament {
   slideAccentColor?: string;
   slideSecondaryAccentColor?: string;
   slidePrimaryColor?: string;
+  slideOverlayColor?: string;
   certificateHeadline?: string;
   line1?: string;
   line2?: string;
@@ -100,7 +101,8 @@ export function TournamentScreen() {
     styleOverrides,
     slidePrimaryColor,
     slideAccentColor,
-    slideSecondaryAccentColor
+    slideSecondaryAccentColor,
+    slideOverlayColor
   } = tournament;
   const activeEventIndex = activeEventId
     ? events.findIndex((e: CompetitionEvent) => e.id === activeEventId)
@@ -182,6 +184,12 @@ export function TournamentScreen() {
                 name={"backgroundUrl"}
                 defaultValue={slideBackgroundUrl}
                 placeholder={""}
+            />
+            <FormTextInput
+                label="Slide Overlay"
+                name={"slideOverlayColor"}
+                defaultValue={slideOverlayColor}
+                placeholder={"#dddddd"}
             />
             <FormTextInput
                 label="Slide Primary Color"
