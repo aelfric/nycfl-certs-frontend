@@ -1,6 +1,9 @@
 import * as React from "react";
 // eslint-disable-next-line no-undef
-function DEFAULT_FETCH_OPTIONS(token: string, contentType: string = "application/json"): RequestInit {
+function DEFAULT_FETCH_OPTIONS(
+  token: string,
+  contentType: string = "application/json"
+): RequestInit {
   return {
     mode: "cors", // no-cors, *cors, same-origin
     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -40,10 +43,7 @@ export async function postData(
   }
 }
 
-export async function deleteData(
-  url: string = "",
-  token: string = ""
-) {
+export async function deleteData(url: string = "", token: string = "") {
   try {
     // Default options are marked with *
     const response = await fetch(url, {
@@ -56,7 +56,11 @@ export async function deleteData(
   }
 }
 
-export async function getData(url: string = "", token: string = "", contentType: string ="application/json") {
+export async function getData(
+  url: string = "",
+  token: string = "",
+  contentType: string = "application/json"
+) {
   try {
     // Default options are marked with *
 
@@ -64,7 +68,7 @@ export async function getData(url: string = "", token: string = "", contentType:
       ...DEFAULT_FETCH_OPTIONS(token, contentType),
       method: "GET",
     }).then(isResponseOk);
-    if(contentType === "application/json") {
+    if (contentType === "application/json") {
       return response.json(); // parses JSON response into native JavaScript objects
     } else {
       return response.text();

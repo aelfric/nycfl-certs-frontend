@@ -1,9 +1,9 @@
 import * as React from "react";
 import styles from "./App.module.css";
-import {FieldGroup, FormTextInput, SubmitButton} from "./Inputs";
+import { FieldGroup, FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
-import { Result} from "./App";
-import {Debate, Qualifier, Speaker, Trophy} from "./icons";
+import { Result } from "./App";
+import { Debate, Qualifier, Speaker, Trophy } from "./icons";
 import { useTournament } from "./use-tournament";
 import { Link } from "react-router-dom";
 const cx = require("classnames");
@@ -102,7 +102,7 @@ export function TournamentScreen() {
     slidePrimaryColor,
     slideAccentColor,
     slideSecondaryAccentColor,
-    slideOverlayColor
+    slideOverlayColor,
   } = tournament;
   const activeEventIndex = activeEventId
     ? events.findIndex((e: CompetitionEvent) => e.id === activeEventId)
@@ -110,7 +110,7 @@ export function TournamentScreen() {
 
   function checkOrBlank(value: number, cutOff: number) {
     if (value > cutOff) {
-      return <>✓ ({value-cutOff})</>;
+      return <>✓ ({value - cutOff})</>;
     } else {
       return "";
     }
@@ -180,34 +180,34 @@ export function TournamentScreen() {
           />
           <FieldGroup legend={"Slide Properties"}>
             <FormTextInput
-                label="Slide Background"
-                name={"backgroundUrl"}
-                defaultValue={slideBackgroundUrl}
-                placeholder={""}
+              label="Slide Background"
+              name={"backgroundUrl"}
+              defaultValue={slideBackgroundUrl}
+              placeholder={""}
             />
             <FormTextInput
-                label="Slide Overlay"
-                name={"slideOverlayColor"}
-                defaultValue={slideOverlayColor}
-                placeholder={"#dddddd"}
+              label="Slide Overlay"
+              name={"slideOverlayColor"}
+              defaultValue={slideOverlayColor}
+              placeholder={"#dddddd"}
             />
             <FormTextInput
-                label="Slide Primary Color"
-                name={"slidePrimaryColor"}
-                defaultValue={slidePrimaryColor}
-                placeholder={"#222222"}
+              label="Slide Primary Color"
+              name={"slidePrimaryColor"}
+              defaultValue={slidePrimaryColor}
+              placeholder={"#222222"}
             />
             <FormTextInput
-                label="Slide Accent Color"
-                name={"slideAccentColor"}
-                defaultValue={slideAccentColor}
-                placeholder={"#00356b"}
+              label="Slide Accent Color"
+              name={"slideAccentColor"}
+              defaultValue={slideAccentColor}
+              placeholder={"#00356b"}
             />
             <FormTextInput
-                label="Slide Secondary Accent Color"
-                name={"slideSecondaryAccentColor"}
-                defaultValue={slideSecondaryAccentColor}
-                placeholder={"#4a4a4a"}
+              label="Slide Secondary Accent Color"
+              name={"slideSecondaryAccentColor"}
+              defaultValue={slideSecondaryAccentColor}
+              placeholder={"#4a4a4a"}
             />
           </FieldGroup>
           <label>
@@ -224,7 +224,9 @@ export function TournamentScreen() {
       <section>
         <h2>Events</h2>
         <form onSubmit={createEvents} className={styles.standardForm}>
-          <label >Enter a list of events separated by newlines.<textarea name={"events"} />
+          <label>
+            Enter a list of events separated by newlines.
+            <textarea name={"events"} />
           </label>
           <SubmitButton>Save Events</SubmitButton>
         </form>
@@ -279,7 +281,7 @@ export function TournamentScreen() {
           className={styles.button}
           rel="noreferrer"
           target={"_blank"}
-          style={{flexGrow: 1}}
+          style={{ flexGrow: 1 }}
           to={`/postings/${tournament.id}`}
         >
           Postings
@@ -288,7 +290,7 @@ export function TournamentScreen() {
           className={styles.button}
           rel="noreferrer"
           target={"_blank"}
-          style={{flexGrow: 1}}
+          style={{ flexGrow: 1 }}
           to={`/preview_certificates/${tournament.id}`}
         >
           Certificates
@@ -297,7 +299,7 @@ export function TournamentScreen() {
           className={styles.button}
           rel="noreferrer"
           target={"_blank"}
-          style={{flexGrow: 1}}
+          style={{ flexGrow: 1 }}
           to={`/preview_slides/${tournament.id}`}
         >
           Slides

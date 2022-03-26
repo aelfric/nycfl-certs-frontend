@@ -117,26 +117,26 @@ li.selected {
 }
 
 .button.danger {
-  background-color: rgb(201,1,1);
+  background-color: rgb(201, 1, 1);
 }
 
 .button.danger:hover {
-  color: rgb(201,1,1);
+  color: rgb(201, 1, 1);
 }
 
 .badge {
   display: inline-block;
-  padding: .25em .4em;
+  padding: 0.25em 0.4em;
   font-weight: 700;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
 }
 
 .spoiler {
-  background-color: rgba(0,0,0,0.7);
+  background-color: rgba(0, 0, 0, 0.7);
   color: transparent;
 }
 
@@ -144,7 +144,6 @@ li.selected {
   background-color: inherit;
   color: inherit;
 }
-
 
 .button svg {
   width: 1.5em;

@@ -4,7 +4,7 @@ import * as React from "react";
 import { Result } from "./App";
 import { ISetCutoff } from "./TournamentScreen";
 import { useTournament } from "./use-tournament";
-import {StripedTable} from "./StripedTable";
+import { StripedTable } from "./StripedTable";
 
 interface ResultDisplayProps {
   certificateCutoff: number;
@@ -124,7 +124,7 @@ export function ResultDisplay({
           ))}
         </tbody>
       </StripedTable>
-      <p style={{textAlign: 'right', width: '90%', margin: '0 auto'}}>
+      <p style={{ textAlign: "right", width: "90%", margin: "0 auto" }}>
         Reset{" "}
         <button
           type={"button"}
@@ -187,10 +187,20 @@ function ResultName({ result, eventId }: { result: Result; eventId: number }) {
       </form>
     );
   }
-  return <span onDoubleClick={handleDoubleClick} title={String(result.id)}>{result.name}</span>;
+  return (
+    <span onDoubleClick={handleDoubleClick} title={String(result.id)}>
+      {result.name}
+    </span>
+  );
 }
 
-function ResultSchool({ result, eventId }: { result: Result; eventId: number }) {
+function ResultSchool({
+  result,
+  eventId,
+}: {
+  result: Result;
+  eventId: number;
+}) {
   const [editing, setEditing] = React.useState(false);
   const { switchSchool } = useTournament();
 
@@ -207,11 +217,19 @@ function ResultSchool({ result, eventId }: { result: Result; eventId: number }) 
   if (editing) {
     return (
       <form onSubmit={handleSave}>
-        <input type={"text"} name={"newSchool"} defaultValue={result.school.id} />
+        <input
+          type={"text"}
+          name={"newSchool"}
+          defaultValue={result.school.id}
+        />
         <br />
         <button type={"submit"}>Save</button>
       </form>
     );
   }
-  return <span onDoubleClick={handleDoubleClick} title={String(result.school.id)}>{result.school.name}</span>;
+  return (
+    <span onDoubleClick={handleDoubleClick} title={String(result.school.id)}>
+      {result.school.name}
+    </span>
+  );
 }

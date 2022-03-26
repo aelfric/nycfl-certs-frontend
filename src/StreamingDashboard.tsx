@@ -76,7 +76,7 @@ export function StreamingDashboard() {
   const [streams, setStreams] = React.useState<CreatedStream[]>([]);
   const { keycloak } = useKeycloak();
   const [selected, setSelected] = React.useState<string>("");
-  const currentStream = streams.find(s => s.broadcastId === selected);
+  const currentStream = streams.find((s) => s.broadcastId === selected);
 
   React.useEffect(() => {
     getData("/youtube", keycloak.token).then(setStreams);
@@ -94,26 +94,26 @@ export function StreamingDashboard() {
   }
 
   function startTesting() {
-    if(currentStream) {
+    if (currentStream) {
       postData(`/youtube/${currentStream.broadcastId}/test`, keycloak.token)
-          .then(setStreams)
-          .catch(() => alert("An error"));
+        .then(setStreams)
+        .catch(() => alert("An error"));
     }
   }
 
   function goLive() {
-    if(currentStream) {
+    if (currentStream) {
       postData(`/youtube/${currentStream.broadcastId}/golive`, keycloak.token)
-          .then(setStreams)
-          .catch(() => alert("An error"));
+        .then(setStreams)
+        .catch(() => alert("An error"));
     }
   }
 
   function completeStream() {
-    if(currentStream) {
+    if (currentStream) {
       postData(`/youtube/${currentStream.broadcastId}/complete`, keycloak.token)
-          .then(setStreams)
-          .catch(() => alert("An error"));
+        .then(setStreams)
+        .catch(() => alert("An error"));
     }
   }
 
@@ -292,7 +292,7 @@ export function StreamingDashboard() {
           <table>
             <tbody>
               {rows.map((row, index) => (
-                  // eslint-disable-next-line react/no-array-index-key
+                // eslint-disable-next-line react/no-array-index-key
                 <tr key={index}>
                   <td>
                     <input

@@ -2,13 +2,18 @@ import styles from "./App.module.css";
 import * as React from "react";
 
 export function FieldGroup({
-    legend,
-    children
-                           } : {legend: string; children: any}) {
-    return <fieldset>
-        <legend>{legend}</legend>
-        {children}
-    </fieldset>;
+  legend,
+  children,
+}: {
+  legend: string;
+  children: any;
+}) {
+  return (
+    <fieldset>
+      <legend>{legend}</legend>
+      {children}
+    </fieldset>
+  );
 }
 
 export function FormTextInput({

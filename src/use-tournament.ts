@@ -1,12 +1,12 @@
 import React from "react";
-import {TournamentContext} from "./tournament-context";
-import {deleteData, handleFileUpload, postData} from "./fetch";
-import {useKeycloak} from "@react-keycloak/web";
+import { TournamentContext } from "./tournament-context";
+import { deleteData, handleFileUpload, postData } from "./fetch";
+import { useKeycloak } from "@react-keycloak/web";
 
 export function useTournament() {
   const { tournament, setTournament } = React.useContext(TournamentContext);
 
-  const {keycloak} = useKeycloak();
+  const { keycloak } = useKeycloak();
 
   function updateTournament(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
@@ -25,7 +25,9 @@ export function useTournament() {
       slideBackgroundUrl: emptyToNull(evt.target.backgroundUrl.value),
       slidePrimaryColor: emptyToNull(evt.target.slidePrimaryColor.value),
       slideAccentColor: emptyToNull(evt.target.slideAccentColor.value),
-      slideSecondaryAccentColor: emptyToNull(evt.target.slideSecondaryAccentColor.value),
+      slideSecondaryAccentColor: emptyToNull(
+        evt.target.slideSecondaryAccentColor.value
+      ),
       slideOverlayColor: emptyToNull(evt.target.slideOverlayColor.value),
       certificateHeadline: emptyToNull(evt.target.certificateHeadline.value),
       line1: emptyToNull(evt.target.line1.value),
@@ -38,8 +40,7 @@ export function useTournament() {
 
   function createEvents(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
-    postData("/certs/events", keycloak.token,
-    {
+    postData("/certs/events", keycloak.token, {
       events: evt.target.events.value,
       tournamentId: tournament?.id,
     }).then(setTournament);
@@ -102,15 +103,9 @@ export function useTournament() {
       {}
     ).then(setTournament);
   }
-  function switchSchool(
-    eventId: number,
-    resultId: number,
-    newSchool: number
-  ) {
+  function switchSchool(eventId: number, resultId: number, newSchool: number) {
     postData(
-      `/certs/tournaments/${
-        tournament?.id
-      }/events/${eventId}/results/${resultId}/school?schoolId=${newSchool}`,
+      `/certs/tournaments/${tournament?.id}/events/${eventId}/results/${resultId}/school?schoolId=${newSchool}`,
       keycloak.token,
       {}
     ).then(setTournament);
@@ -150,7 +145,7 @@ export function useTournament() {
       event,
       `/certs/tournaments/${tournament?.id}/sweeps`,
       keycloak.token,
-      setTournament,
+      setTournament
     );
   }
   function handleSchoolsUpload(event: React.ChangeEvent<HTMLInputElement>) {

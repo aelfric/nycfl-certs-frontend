@@ -3,7 +3,7 @@ import { deleteData, getData } from "./fetch";
 import styles from "./App.module.css";
 import { TournamentIdProps } from "./App";
 import { Certificate, Delete } from "./icons";
-import {useKeycloak} from "@react-keycloak/web";
+import { useKeycloak } from "@react-keycloak/web";
 
 export function Sweepstakes({ tournamentId }: TournamentIdProps) {
   const [showYTD, setShowYTD] = React.useState(false);
@@ -39,7 +39,7 @@ export interface SweepsResult {
 }
 
 function IndividualSweeps({ tournamentId }: TournamentIdProps) {
-  const {keycloak} = useKeycloak();
+  const { keycloak } = useKeycloak();
 
   const [data, setData] = React.useState<SweepsResult[]>([]);
   const [key, setKey] = React.useState<number>(0);
@@ -47,19 +47,21 @@ function IndividualSweeps({ tournamentId }: TournamentIdProps) {
   React.useEffect(() => {
     if (tournamentId) {
       setLoading(true);
-      getData(`/certs/tournaments/${tournamentId}/sweeps?key=${key}`,keycloak.token).then(
-        (resp) => {
-          setData(resp);
-          setLoading(false);
-        }
-      );
+      getData(
+        `/certs/tournaments/${tournamentId}/sweeps?key=${key}`,
+        keycloak.token
+      ).then((resp) => {
+        setData(resp);
+        setLoading(false);
+      });
     }
   }, [tournamentId]);
 
   const deleteSchool = (id: number) =>
-    deleteData(`/certs/tournaments/${tournamentId}/schools/${id}`,keycloak.token).then(() =>
-      setKey((k) => k + 1)
-    );
+    deleteData(
+      `/certs/tournaments/${tournamentId}/schools/${id}`,
+      keycloak.token
+    ).then(() => setKey((k) => k + 1));
 
   if (loading) return <p>Loading...</p>;
 
@@ -114,11 +116,11 @@ function CumulativeSweeps() {
   const [data, setData] = React.useState<CumulativeSweepsData | undefined>(
     undefined
   );
-  const {keycloak} = useKeycloak();
+  const { keycloak } = useKeycloak();
   const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
     setLoading(true);
-    getData(`/certs/tournaments/sweeps`,keycloak.token).then((resp) => {
+    getData(`/certs/tournaments/sweeps`, keycloak.token).then((resp) => {
       setData(resp);
       setLoading(false);
     });

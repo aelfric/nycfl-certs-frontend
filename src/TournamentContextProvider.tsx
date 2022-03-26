@@ -2,7 +2,7 @@ import React from "react";
 import { Tournament } from "./TournamentScreen";
 import { getData } from "./fetch";
 import { TournamentContext } from "./tournament-context";
-import {useKeycloak} from "@react-keycloak/web";
+import { useKeycloak } from "@react-keycloak/web";
 
 export function TournamentProvider({
   id,
@@ -12,10 +12,10 @@ export function TournamentProvider({
   children: React.ReactNode;
 }) {
   const [tournament, setTournament] = React.useState<Tournament | null>(null);
-  const {keycloak} = useKeycloak();
+  const { keycloak } = useKeycloak();
 
   React.useEffect(() => {
-    getData(`/certs/tournaments/${id}`,keycloak.token).then(setTournament);
+    getData(`/certs/tournaments/${id}`, keycloak.token).then(setTournament);
   }, [id, keycloak.token]);
 
   if (!tournament) {

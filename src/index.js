@@ -3,17 +3,17 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { ReactKeycloakProvider } from '@react-keycloak/web';
- 
-import keycloak from './keycloak';
-import {ErrorBoundary} from "./error-boundary";
+import { ReactKeycloakProvider } from "@react-keycloak/web";
+
+import keycloak from "./keycloak";
+import { ErrorBoundary } from "./error-boundary";
 
 ReactDOM.render(
   <React.StrictMode>
     <ReactKeycloakProvider authClient={keycloak}>
-        <ErrorBoundary>
-            <App />
-        </ErrorBoundary>
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
     </ReactKeycloakProvider>
   </React.StrictMode>,
   document.getElementById("root")
