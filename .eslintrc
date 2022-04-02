@@ -4,6 +4,12 @@
     "eslint:recommended",
     "plugin:react/recommended"
   ],
+  "env":{
+    "browser": true
+  },
+  "globals": {
+    "RequestInit": true
+  },
   "rules": {
     "react/jsx-pascal-case": 1,
     "react/no-did-mount-set-state": 2,
