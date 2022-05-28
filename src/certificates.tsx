@@ -77,29 +77,14 @@ export function Postings() {
     keycloak.token
   );
 
-  function download() {
-    getData(
-      `/certs/tournaments/${id}/postings?dl=1`,
-      keycloak.token,
-      "text/html"
-    )
-      .then(alert)
-      .catch(alert);
-  }
-
   return (
     <>
-      <div style={{ textAlign: "right" }}>
-        <button type="button" className={styles.button} onClick={download}>
-          Download
-        </button>
-      </div>
       <iframe
         title={"Slides Preview"}
         style={{
           position: "absolute",
           width: "100%",
-          height: "calc(100% - 36px)",
+          height: "100%",
         }}
         ref={iframe}
       />
