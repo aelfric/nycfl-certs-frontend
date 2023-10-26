@@ -69,7 +69,11 @@ function CertificateTypeIcon({ certificateType }: { certificateType: string }) {
   }
 }
 
-export function TournamentScreen() {
+interface TournamentScreenProps {
+  copyTournament: (evt: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export function TournamentScreen({ copyTournament }: TournamentScreenProps) {
   const [activeEventId, setActiveEventId] = React.useState<number | undefined>(
     undefined
   );
@@ -119,7 +123,16 @@ export function TournamentScreen() {
   return (
     <>
       <section>
-        <h1>{name} </h1>
+        <h1 style={{ display: "flex" }}>
+          <span style={{ flexGrow: "1" }}>{name}</span>
+          <button
+            className={styles.button}
+            type="button"
+            onClick={copyTournament}
+          >
+            Copy
+          </button>{" "}
+        </h1>
         <form onSubmit={updateTournament} className={styles.standardForm}>
           <FormTextInput
             name={"tournamentName"}

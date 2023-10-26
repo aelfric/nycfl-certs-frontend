@@ -42,6 +42,19 @@ function Interface() {
       setTournaments((tournaments) => [...tournaments, newTournament])
     );
   }
+
+  function copyTournament(evt: React.MouseEvent<HTMLButtonElement>) {
+    evt.preventDefault();
+    if (activeTournamentId) {
+      postData(
+        `/certs/tournaments?sourceId=${activeTournamentId}`,
+        keycloak.token,
+        {}
+      ).then((newTournament) =>
+        setTournaments((tournaments) => [...tournaments, newTournament])
+      );
+    }
+  }
   function handleMediaUpload(event: React.ChangeEvent<HTMLInputElement>) {
     handleFileUpload(event, `/s3/upload`, keycloak.token, () => {
       alert("Media Saved");
@@ -96,7 +109,7 @@ function Interface() {
           <h1>Please select a tournament</h1>
         ) : (
           <TournamentProvider key={activeTournamentId} id={activeTournamentId}>
-            <TournamentScreen />
+            <TournamentScreen copyTournament={copyTournament} />
           </TournamentProvider>
         )}
       </main>
