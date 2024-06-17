@@ -6,7 +6,7 @@ import { Result } from "./App";
 import { Debate, Qualifier, Speaker, Trophy } from "./icons";
 import { useTournament } from "./use-tournament";
 import { Link } from "react-router-dom";
-const cx = require("classnames");
+import cx from "classnames";
 
 export interface Tournament {
   id: number;
