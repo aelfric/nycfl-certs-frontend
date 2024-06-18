@@ -9,6 +9,10 @@ export default defineConfig(() => {
                 "/certs" :{
                     target : "http://localhost:8080",
                     changeOrigin: true
+                },
+                "/enums" :{
+                    target : "http://localhost:8080",
+                    changeOrigin: true
                 }
             }
         },

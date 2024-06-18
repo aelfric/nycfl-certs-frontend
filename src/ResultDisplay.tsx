@@ -190,9 +190,9 @@ function ResultName({ result, eventId }: Readonly<ResultNameProps>) {
     );
   }
   return (
-    <span onDoubleClick={handleDoubleClick} title={String(result.id)}>
+    <button className={styles.buttonInline} onDoubleClick={handleDoubleClick} title={String(result.id)}>
       {result.name}
-    </span>
+    </button>
   );
 }
 
@@ -221,10 +221,11 @@ function ResultSchool({
   if (editing) {
     return (
       <form onSubmit={handleSave}>
+        <input type={"hidden"} value={result.school.id} />
         <input
           type={"text"}
           name={"newSchool"}
-          defaultValue={result.school.id}
+          defaultValue={result.school.name}
         />
         <br />
         <button type={"submit"}>Save</button>
@@ -232,8 +233,8 @@ function ResultSchool({
     );
   }
   return (
-    <span onDoubleClick={handleDoubleClick} title={String(result.school.id)}>
+    <button className={styles.buttonInline} onDoubleClick={handleDoubleClick} title={String(result.school.id)}>
       {result.school.name}
-    </span>
+    </button>
   );
 }

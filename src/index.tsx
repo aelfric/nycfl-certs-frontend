@@ -10,11 +10,12 @@ import { ErrorBoundary } from "./error-boundary";
 const root: Root = createRoot(document.getElementById("root")!)
 
 root.render(
-  <React.StrictMode>
     <ReactKeycloakProvider authClient={keycloak}>
-      <ErrorBoundary>
-        <App />
-      </ErrorBoundary>
+        <React.StrictMode>
+            <ErrorBoundary>
+                <App/>
+            </ErrorBoundary>
+        </React.StrictMode>
     </ReactKeycloakProvider>
-  </React.StrictMode>
+
 );
