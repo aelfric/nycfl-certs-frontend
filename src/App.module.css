@@ -124,6 +124,18 @@ li.selected {
   color: rgb(201, 1, 1);
 }
 
+.buttonInline {
+  border: none;
+  font-family: inherit;
+  color: inherit;
+  font-weight: inherit;
+  background: transparent;
+  font-size: inherit;
+  text-align: inherit;
+  margin: 0;
+  padding: 0;
+}
+
 .badge {
   display: inline-block;
   padding: 0.25em 0.4em;
@@ -247,9 +259,6 @@ li.selected {
   background-color: #daebf1;
   text-align: center;
   padding: 0.75rem;
-}
-
-.expandable {
 }
 
 .fileList {

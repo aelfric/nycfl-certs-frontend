@@ -6,7 +6,7 @@ import { Result } from "./App";
 import { Debate, Qualifier, Speaker, Trophy } from "./icons";
 import { useTournament } from "./use-tournament";
 import { Link } from "react-router-dom";
-const cx = require("classnames");
+import cx from "classnames";
 
 export interface Tournament {
   id: number;
@@ -48,7 +48,9 @@ export type ISetCutoff = (
   activeEvent: number
 ) => void;
 
-function CertificateTypeIcon({ certificateType }: { certificateType: string }) {
+type CertificateTypeIconProps = { certificateType: string };
+
+function CertificateTypeIcon({ certificateType }: Readonly<CertificateTypeIconProps>) {
   const defaultStyle: React.CSSProperties = {
     width: "1em",
     top: "0.125em",
@@ -73,7 +75,7 @@ interface TournamentScreenProps {
   copyTournament: (evt: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export function TournamentScreen({ copyTournament }: TournamentScreenProps) {
+export function TournamentScreen({ copyTournament }: Readonly<TournamentScreenProps>) {
   const [activeEventId, setActiveEventId] = React.useState<number | undefined>(
     undefined
   );
@@ -224,7 +226,7 @@ export function TournamentScreen({ copyTournament }: TournamentScreenProps) {
             />
           </FieldGroup>
           <label>
-            Style Overrides (include valid CSS):
+            Style Overrides (include valid CSS):{" "}
             <textarea
               name={"styleOverrides"}
               style={{ fontFamily: "Courier" }}
@@ -238,7 +240,7 @@ export function TournamentScreen({ copyTournament }: TournamentScreenProps) {
         <h2>Events</h2>
         <form onSubmit={createEvents} className={styles.standardForm}>
           <label>
-            Enter a list of events separated by newlines.
+            Enter a list of events separated by newlines.{" "}
             <textarea name={"events"} />
           </label>
           <SubmitButton>Save Events</SubmitButton>

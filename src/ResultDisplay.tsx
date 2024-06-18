@@ -24,7 +24,7 @@ export function ResultDisplay({
   setCutoff,
   eventId,
   halfQuals,
-}: ResultDisplayProps) {
+}: Readonly<ResultDisplayProps>) {
   function setPlacementCutoff(value: number) {
     setCutoff(value, "placement", eventId);
   }
@@ -164,7 +164,9 @@ export function ResultDisplay({
   );
 }
 
-function ResultName({ result, eventId }: { result: Result; eventId: number }) {
+type ResultNameProps = { result: Result; eventId: number };
+
+function ResultName({ result, eventId }: Readonly<ResultNameProps>) {
   const [editing, setEditing] = React.useState(false);
   const { renameCompetitor } = useTournament();
 
@@ -188,19 +190,21 @@ function ResultName({ result, eventId }: { result: Result; eventId: number }) {
     );
   }
   return (
-    <span onDoubleClick={handleDoubleClick} title={String(result.id)}>
+    <button className={styles.buttonInline} onDoubleClick={handleDoubleClick} title={String(result.id)}>
       {result.name}
-    </span>
+    </button>
   );
 }
+
+type ResultSchoolProps = {
+  result: Result;
+  eventId: number;
+};
 
 function ResultSchool({
   result,
   eventId,
-}: {
-  result: Result;
-  eventId: number;
-}) {
+}: Readonly<ResultSchoolProps>) {
   const [editing, setEditing] = React.useState(false);
   const { switchSchool } = useTournament();
 
@@ -217,10 +221,11 @@ function ResultSchool({
   if (editing) {
     return (
       <form onSubmit={handleSave}>
+        <input type={"hidden"} value={result.school.id} />
         <input
           type={"text"}
           name={"newSchool"}
-          defaultValue={result.school.id}
+          defaultValue={result.school.name}
         />
         <br />
         <button type={"submit"}>Save</button>
@@ -228,8 +233,8 @@ function ResultSchool({
     );
   }
   return (
-    <span onDoubleClick={handleDoubleClick} title={String(result.school.id)}>
+    <button className={styles.buttonInline} onDoubleClick={handleDoubleClick} title={String(result.school.id)}>
       {result.school.name}
-    </span>
+    </button>
   );
 }

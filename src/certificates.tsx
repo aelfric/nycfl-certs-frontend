@@ -32,9 +32,7 @@ export function Certificates() {
     keycloak.token
   );
   function doPrint() {
-    if (iframe.current && iframe.current.contentWindow) {
-      iframe.current.contentWindow.print();
-    }
+    iframe.current?.contentWindow?.print()
   }
   return (
     <>
@@ -78,7 +76,6 @@ export function Postings() {
   );
 
   return (
-    <>
       <iframe
         title={"Slides Preview"}
         style={{
@@ -88,6 +85,5 @@ export function Postings() {
         }}
         ref={iframe}
       />
-    </>
   );
 }

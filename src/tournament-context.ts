@@ -1,7 +1,7 @@
 import React from "react";
 import { Tournament } from "./TournamentScreen";
 
-interface ITournamentContext {
+export interface ITournamentContext {
   tournament?: Tournament;
   setTournament: (t: Tournament) => void;
 }

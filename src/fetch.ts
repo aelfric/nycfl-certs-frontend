@@ -81,7 +81,7 @@ export async function getData(
 export function handleFileUpload(
   event: React.ChangeEvent<HTMLInputElement>,
   url: string,
-  token: string = "",
+  token: string | undefined,
   onFulfilled: ((value: any) => any) | null | undefined
 ) {
   try {
@@ -95,7 +95,7 @@ export function handleFileUpload(
         method: "POST",
         body: formData,
         headers: {
-          Authorization: "Bearer " + token,
+          Authorization: "Bearer " + (token || ""),
         },
       })
         .then(isResponseOk)

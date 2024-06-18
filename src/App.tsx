@@ -19,7 +19,7 @@ import { Certificates, Postings, Slides } from "./certificates";
 import { StreamingDashboard } from "./StreamingDashboard";
 import { Mailing } from "./Mailing";
 
-const cx = require("classnames");
+import cx from "classnames";
 
 function Interface() {
   let { id } = useParams<"id">();

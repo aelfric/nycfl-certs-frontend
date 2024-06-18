@@ -26,7 +26,7 @@ export function EventDisplay({
   setNumRounds,
   setEventName,
   resetResults,
-}: EventDisplayParams) {
+}: Readonly<EventDisplayParams>) {
   const [roundType, setRoundType] = React.useState("FINALIST");
   const { uploadResults, deleteEvent } = useTournament();
 
@@ -55,7 +55,7 @@ export function EventDisplay({
       <p>
         <form onSubmit={onRenameEvent}>
           <label>
-            Event Name:
+            Event Name:{" "}
             <input
               name={"newName"}
               type="text"
@@ -118,7 +118,7 @@ export function EventDisplay({
       </p>
       <p>
         <label>
-          Number of Rounds:
+          Number of Rounds:{" "}
           <input
             type={"number"}
             value={String(event.numRounds)}
@@ -156,17 +156,19 @@ type Option = {
   value: string;
 };
 
+type EnumSelectProps = {
+    url: string;
+    label: string;
+    onSelect: (evt: React.ChangeEvent<HTMLSelectElement>) => void;
+    value: string | undefined;
+};
+
 function EnumSelect({
   url,
   label,
   onSelect,
   value,
-}: {
-  url: string;
-  label: string;
-  onSelect: (evt: React.ChangeEvent<HTMLSelectElement>) => void;
-  value: string | undefined;
-}) {
+}: Readonly<EnumSelectProps>) {
   const [options, setOptions] = useState<Option[]>([]);
   const { keycloak } = useKeycloak();
 
