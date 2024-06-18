@@ -24,7 +24,7 @@ export function ResultDisplay({
   setCutoff,
   eventId,
   halfQuals,
-}: ResultDisplayProps) {
+}: Readonly<ResultDisplayProps>) {
   function setPlacementCutoff(value: number) {
     setCutoff(value, "placement", eventId);
   }
@@ -164,7 +164,9 @@ export function ResultDisplay({
   );
 }
 
-function ResultName({ result, eventId }: { result: Result; eventId: number }) {
+type ResultNameProps = { result: Result; eventId: number };
+
+function ResultName({ result, eventId }: Readonly<ResultNameProps>) {
   const [editing, setEditing] = React.useState(false);
   const { renameCompetitor } = useTournament();
 
@@ -194,13 +196,15 @@ function ResultName({ result, eventId }: { result: Result; eventId: number }) {
   );
 }
 
+type ResultSchoolProps = {
+  result: Result;
+  eventId: number;
+};
+
 function ResultSchool({
   result,
   eventId,
-}: {
-  result: Result;
-  eventId: number;
-}) {
+}: Readonly<ResultSchoolProps>) {
   const [editing, setEditing] = React.useState(false);
   const { switchSchool } = useTournament();
 

@@ -22,7 +22,9 @@ interface CreatedStream {
   privacyStatus: string;
 }
 
-function BroadcastStatusBadge(props: { status: string }) {
+type BroadcastStatusBadgeProps = { status: string };
+
+function BroadcastStatusBadge(props: Readonly<BroadcastStatusBadgeProps>) {
   const broadcastStatusColors: Record<string, object> = {
     ready: {
       backgroundColor: "yellow",
@@ -48,7 +50,7 @@ function BroadcastStatusBadge(props: { status: string }) {
     </span>
   );
 }
-function StreamStatusBadge(props: { status: string }) {
+function StreamStatusBadge(props: Readonly<BroadcastStatusBadgeProps>) {
   const streamStatusColors: Record<string, object> = {
     ready: {
       backgroundColor: "yellow",

@@ -1,13 +1,15 @@
 import styles from "./App.module.css";
 import * as React from "react";
 
+type FieldGroupProps = {
+    legend: string;
+    children: any;
+};
+
 export function FieldGroup({
   legend,
   children,
-}: {
-  legend: string;
-  children: any;
-}) {
+}: Readonly<FieldGroupProps>) {
   return (
     <fieldset>
       <legend>{legend}</legend>
@@ -23,7 +25,7 @@ export function FormTextInput({
   value,
   placeholder,
   defaultValue,
-}: FormTextInputProps) {
+}: Readonly<FormTextInputProps>) {
   return (
     <label>
       <span>{label}</span>
@@ -47,7 +49,7 @@ interface FormTextInputProps {
   defaultValue?: string;
 }
 
-export function SubmitButton({ children }: SubmitButtonProps) {
+export function SubmitButton({ children }: Readonly<SubmitButtonProps>) {
   return (
     <div className={styles.submitButtonRow}>
       <button className={styles.button} type={"submit"}>
@@ -58,10 +60,10 @@ export function SubmitButton({ children }: SubmitButtonProps) {
 }
 
 interface SubmitButtonProps {
-  children: React.ReactNode | React.ReactNodeArray;
+  children: React.ReactNode | React.ReactNode[];
 }
 
-export function FileInput({ name, onChange }: FileInputProps) {
+export function FileInput({ name, onChange }: Readonly<FileInputProps>) {
   return (
     <div className={styles.fileUploadRow}>
       <input
@@ -76,11 +78,7 @@ export function FileInput({ name, onChange }: FileInputProps) {
     </div>
   );
 }
-
-interface FileChangeHandler {
-  (event: React.ChangeEvent<HTMLInputElement>): void;
-}
 interface FileInputProps {
   name: string;
-  onChange: FileChangeHandler;
+  onChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
 }

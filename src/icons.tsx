@@ -4,7 +4,7 @@ interface IconProps {
   style?: React.CSSProperties;
 }
 
-export function Medal({ style }: IconProps) {
+export function Medal({ style }: Readonly<IconProps>) {
   return (
     <svg
       style={style}
@@ -18,7 +18,7 @@ export function Medal({ style }: IconProps) {
   );
 }
 
-export function Trophy({ style }: IconProps) {
+export function Trophy({ style }: Readonly<IconProps>) {
   return (
     <svg
       style={style}
@@ -35,7 +35,7 @@ export function Trophy({ style }: IconProps) {
   );
 }
 
-export function Certificate({ style }: IconProps) {
+export function Certificate({ style }: Readonly<IconProps>) {
   return (
     <svg
       style={style}
@@ -55,7 +55,7 @@ export function Certificate({ style }: IconProps) {
     </svg>
   );
 }
-export function Delete({ style }: IconProps) {
+export function Delete({ style }: Readonly<IconProps>) {
   return (
     <svg
       style={style}
@@ -69,7 +69,7 @@ export function Delete({ style }: IconProps) {
   );
 }
 
-export function Speaker({ style }: IconProps) {
+export function Speaker({ style }: Readonly<IconProps>) {
   return (
     <svg
       style={style}
@@ -89,7 +89,7 @@ export function Speaker({ style }: IconProps) {
   );
 }
 
-export function Qualifier({ style }: IconProps) {
+export function Qualifier({ style }: Readonly<IconProps>) {
   return (
     <svg
       style={style}
@@ -106,7 +106,7 @@ export function Qualifier({ style }: IconProps) {
   );
 }
 
-export function Debate({ style }: IconProps) {
+export function Debate({ style }: Readonly<IconProps>) {
   return (
     <svg
       style={style}

@@ -1,7 +1,9 @@
 import styles from "./App.module.css";
 import * as React from "react";
 
-export function StripedTable({ children }: { children: React.ReactNode }) {
+type StripedTableProps = { children: React.ReactNode };
+
+export function StripedTable({ children }: Readonly<StripedTableProps>) {
   const ref = React.useRef<HTMLTableElement>(null);
 
   function handleCopy() {
