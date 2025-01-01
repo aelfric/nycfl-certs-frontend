@@ -1,7 +1,6 @@
 import {render, screen} from "@testing-library/react";
 import {TournamentScreen} from "./TournamentScreen";
 import {describe, expect, it, vi} from "vitest";
-import {TournamentProvider} from "./TournamentContextProvider";
 import {TournamentContext} from "./tournament-context";
 import {MemoryRouter} from "react-router-dom";
 
