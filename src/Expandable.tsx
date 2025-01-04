@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./App.module.css";
 
 type ExpandableProps = {
   heading: React.ReactNode;
@@ -10,7 +9,7 @@ export function Expandable({ heading, children }: Readonly<ExpandableProps>) {
   const [isExpanded, setIsExpanded] = React.useState(false);
   if (isExpanded) {
     return (
-      <div className={styles.expandable}>
+      <div>
         {heading}{" "}
         <button type={"button"} onClick={() => setIsExpanded(false)}>
           Collapse
@@ -20,7 +19,7 @@ export function Expandable({ heading, children }: Readonly<ExpandableProps>) {
     );
   } else {
     return (
-      <div className={styles.expandable}>
+      <div>
         {heading}{" "}
         <button type={"button"} onClick={() => setIsExpanded(true)}>
           Expand
