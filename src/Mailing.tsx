@@ -6,9 +6,15 @@ import { StripedTable } from "./StripedTable";
 import { FileInput } from "./Inputs";
 import { School, SchoolEmail } from "./App";
 
+type MedalCount = {
+  schoolId: string;
+  school: string;
+  count: string;
+}
+
 function Summary() {
-  const { keycloak } = useKeycloak();
-  const [medalCount, setMedalCount] = React.useState([]);
+  const {keycloak} = useKeycloak();
+  const [medalCount, setMedalCount] = React.useState<MedalCount[]>([]);
   React.useEffect(() => {
     getData("/certs/tournaments/13/medals", keycloak.token).then(setMedalCount);
   }, [keycloak.token]);
@@ -33,7 +39,7 @@ function Summary() {
           </tr>
         </thead>
         <tbody>
-          {medalCount.map((row: any) => (
+          {medalCount.map((row) => (
             <tr key={row.schoolId}>
               <td>{row.schoolId}</td>
               <td>{row.school}</td>
@@ -68,7 +74,7 @@ function Detail() {
   }, [keycloak.token]);
 
   const contactMap: Record<number, SchoolEmail[]> = {};
-  for (let school of schools) {
+  for (const school of schools) {
     contactMap[school.id] = school.emails;
   }
 

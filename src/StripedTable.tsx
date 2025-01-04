@@ -13,7 +13,7 @@ export function StripedTable({ children }: Readonly<StripedTableProps>) {
     let range: Range;
     if (document.createRange && window.getSelection) {
       range = document.createRange();
-      let sel = window.getSelection();
+      const sel = window.getSelection();
       if (!sel) {
         alert("could not select");
         return;
@@ -25,6 +25,7 @@ export function StripedTable({ children }: Readonly<StripedTableProps>) {
       } catch (e) {
         range.selectNode(el as Node);
         sel.addRange(range);
+        console.error(e);
       }
     }
   }

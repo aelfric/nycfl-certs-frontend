@@ -1,9 +1,10 @@
 import styles from "./App.module.css";
 import * as React from "react";
+import {ReactNode} from "react";
 
 type FieldGroupProps = {
     legend: string;
-    children: any;
+    children: ReactNode;
 };
 
 export function FieldGroup({

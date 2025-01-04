@@ -22,7 +22,7 @@ import { Mailing } from "./Mailing";
 import cx from "classnames";
 
 function Interface() {
-  let { id } = useParams<"id">();
+  const {id} = useParams<"id">();
   const activeTournamentId = Number(id);
 
   const [tournaments, setTournaments] = React.useState<Tournament[]>([]);

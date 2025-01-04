@@ -39,7 +39,7 @@ describe("<TournamentScreen/>", () => {
                 </TournamentContext.Provider>
             </MemoryRouter>
         )
-        let tournamentName = await screen.findByLabelText("Tournament Name");
+        const tournamentName: HTMLInputElement = await screen.findByLabelText("Tournament Name");
         expect(tournamentName.value).toBe('NYCFL First Regis')
     })
 })

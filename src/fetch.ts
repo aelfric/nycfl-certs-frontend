@@ -1,5 +1,4 @@
 import * as React from "react";
-// eslint-disable-next-line no-undef
 function DEFAULT_FETCH_OPTIONS(
   token: string,
   contentType: string = "application/json"
@@ -82,7 +81,7 @@ export function handleFileUpload(
   event: React.ChangeEvent<HTMLInputElement>,
   url: string,
   token: string | undefined,
-  onFulfilled: ((value: any) => any) | null | undefined
+  onFulfilled: ((value: unknown) => unknown) | null | undefined
 ) {
   try {
     const files = event.target.files;
@@ -102,7 +101,6 @@ export function handleFileUpload(
         .then((response) => response.json())
         .then(onFulfilled)
         .catch((error) => {
-          // eslint-disable-next-line no-console
           console.error(error);
         });
     }
