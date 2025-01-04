@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { getData } from "./fetch";
 import { useKeycloak } from "@react-keycloak/web";
