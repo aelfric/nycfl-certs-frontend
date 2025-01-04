@@ -10,10 +10,10 @@ type MedalCount = {
   schoolId: string;
   school: string;
   count: string;
-}
+};
 
 function Summary() {
-  const {keycloak} = useKeycloak();
+  const { keycloak } = useKeycloak();
   const [medalCount, setMedalCount] = React.useState<MedalCount[]>([]);
   React.useEffect(() => {
     getData("/certs/tournaments/13/medals", keycloak.token).then(setMedalCount);
@@ -24,7 +24,7 @@ function Summary() {
       formEvt,
       `/certs/tournaments/13/contacts`,
       keycloak.token,
-      alert
+      alert,
     );
   }
 
@@ -68,7 +68,7 @@ function Detail() {
   const [schools, setSchools] = React.useState<School[]>([]);
   React.useEffect(() => {
     getData("/certs/tournaments/13/awards_sheet", keycloak.token).then(
-      setResults
+      setResults,
     );
     getData("/certs/tournaments/13/schools", keycloak.token).then(setSchools);
   }, [keycloak.token]);

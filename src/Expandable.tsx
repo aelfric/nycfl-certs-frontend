@@ -2,14 +2,11 @@ import React from "react";
 import styles from "./App.module.css";
 
 type ExpandableProps = {
-    heading: React.ReactNode;
-    children: React.ReactNode;
+  heading: React.ReactNode;
+  children: React.ReactNode;
 };
 
-export function Expandable({
-  heading,
-  children,
-}: Readonly<ExpandableProps>) {
+export function Expandable({ heading, children }: Readonly<ExpandableProps>) {
   const [isExpanded, setIsExpanded] = React.useState(false);
   if (isExpanded) {
     return (

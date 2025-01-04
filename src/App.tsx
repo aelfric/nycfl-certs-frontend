@@ -22,7 +22,7 @@ import { Mailing } from "./Mailing";
 import cx from "classnames";
 
 function Interface() {
-  const {id} = useParams<"id">();
+  const { id } = useParams<"id">();
   const activeTournamentId = Number(id);
 
   const [tournaments, setTournaments] = React.useState<Tournament[]>([]);
@@ -39,7 +39,7 @@ function Interface() {
       host: evt.target.host.value,
       date: evt.target.date.value,
     }).then((newTournament) =>
-      setTournaments((tournaments) => [...tournaments, newTournament])
+      setTournaments((tournaments) => [...tournaments, newTournament]),
     );
   }
 
@@ -49,9 +49,9 @@ function Interface() {
       postData(
         `/certs/tournaments?sourceId=${activeTournamentId}`,
         keycloak.token,
-        {}
+        {},
       ).then((newTournament) =>
-        setTournaments((tournaments) => [...tournaments, newTournament])
+        setTournaments((tournaments) => [...tournaments, newTournament]),
       );
     }
   }

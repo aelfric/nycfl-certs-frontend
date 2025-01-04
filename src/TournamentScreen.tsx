@@ -45,12 +45,14 @@ export interface CompetitionEvent {
 export type ISetCutoff = (
   value: number,
   type: "placement" | "cutoff" | "medal" | "quals",
-  activeEvent: number
+  activeEvent: number,
 ) => void;
 
 type CertificateTypeIconProps = { certificateType: string };
 
-function CertificateTypeIcon({ certificateType }: Readonly<CertificateTypeIconProps>) {
+function CertificateTypeIcon({
+  certificateType,
+}: Readonly<CertificateTypeIconProps>) {
   const defaultStyle: React.CSSProperties = {
     width: "1em",
     top: "0.125em",
@@ -75,9 +77,11 @@ interface TournamentScreenProps {
   copyTournament: (evt: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export function TournamentScreen({ copyTournament }: Readonly<TournamentScreenProps>) {
+export function TournamentScreen({
+  copyTournament,
+}: Readonly<TournamentScreenProps>) {
   const [activeEventId, setActiveEventId] = React.useState<number | undefined>(
-    undefined
+    undefined,
   );
   const {
     tournament,

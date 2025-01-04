@@ -1,16 +1,13 @@
 import styles from "./App.module.css";
 import * as React from "react";
-import {ReactNode} from "react";
+import { ReactNode } from "react";
 
 type FieldGroupProps = {
-    legend: string;
-    children: ReactNode;
+  legend: string;
+  children: ReactNode;
 };
 
-export function FieldGroup({
-  legend,
-  children,
-}: Readonly<FieldGroupProps>) {
+export function FieldGroup({ legend, children }: Readonly<FieldGroupProps>) {
   return (
     <fieldset>
       <legend>{legend}</legend>

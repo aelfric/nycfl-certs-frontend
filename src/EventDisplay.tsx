@@ -157,10 +157,10 @@ type Option = {
 };
 
 type EnumSelectProps = {
-    url: string;
-    label: string;
-    onSelect: (evt: React.ChangeEvent<HTMLSelectElement>) => void;
-    value: string | undefined;
+  url: string;
+  label: string;
+  onSelect: (evt: React.ChangeEvent<HTMLSelectElement>) => void;
+  value: string | undefined;
 };
 
 function EnumSelect({

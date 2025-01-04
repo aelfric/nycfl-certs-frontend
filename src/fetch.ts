@@ -1,7 +1,7 @@
 import * as React from "react";
 function DEFAULT_FETCH_OPTIONS(
   token: string,
-  contentType: string = "application/json"
+  contentType: string = "application/json",
 ): RequestInit {
   return {
     mode: "cors", // no-cors, *cors, same-origin
@@ -27,7 +27,7 @@ function isResponseOk(response: Response) {
 export async function postData(
   url: string = "",
   token: string = "",
-  data: object = {}
+  data: object = {},
 ) {
   try {
     // Default options are marked with *
@@ -58,7 +58,7 @@ export async function deleteData(url: string = "", token: string = "") {
 export async function getData(
   url: string = "",
   token: string = "",
-  contentType: string = "application/json"
+  contentType: string = "application/json",
 ) {
   try {
     // Default options are marked with *
@@ -81,7 +81,7 @@ export function handleFileUpload(
   event: React.ChangeEvent<HTMLInputElement>,
   url: string,
   token: string | undefined,
-  onFulfilled: ((value: unknown) => unknown) | null | undefined
+  onFulfilled: ((value: unknown) => unknown) | null | undefined,
 ) {
   try {
     const files = event.target.files;

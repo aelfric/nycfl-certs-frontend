@@ -6,7 +6,7 @@ import styles from "./App.module.css";
 
 function useAjaxIframe(
   url: string,
-  token?: string
+  token?: string,
 ): RefObject<HTMLIFrameElement> {
   const iframe = useRef<HTMLIFrameElement>(null);
   useEffect(() => {
@@ -29,10 +29,10 @@ export function Certificates() {
 
   const iframe = useAjaxIframe(
     `/certs/tournaments/${id}/certificates`,
-    keycloak.token
+    keycloak.token,
   );
   function doPrint() {
-    iframe.current?.contentWindow?.print()
+    iframe.current?.contentWindow?.print();
   }
   return (
     <>
@@ -55,7 +55,7 @@ export function Slides() {
   const { keycloak } = useKeycloak();
   const iframe = useAjaxIframe(
     `/certs/tournaments/${id}/slides?dl=0`,
-    keycloak.token
+    keycloak.token,
   );
 
   return (
@@ -72,18 +72,18 @@ export function Postings() {
   const { keycloak } = useKeycloak();
   const iframe = useAjaxIframe(
     `/certs/tournaments/${id}/postings?dl=0`,
-    keycloak.token
+    keycloak.token,
   );
 
   return (
-      <iframe
-        title={"Slides Preview"}
-        style={{
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-        }}
-        ref={iframe}
-      />
+    <iframe
+      title={"Slides Preview"}
+      style={{
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+      }}
+      ref={iframe}
+    />
   );
 }

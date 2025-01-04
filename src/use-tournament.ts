@@ -26,7 +26,7 @@ export function useTournament() {
       slidePrimaryColor: emptyToNull(evt.target.slidePrimaryColor.value),
       slideAccentColor: emptyToNull(evt.target.slideAccentColor.value),
       slideSecondaryAccentColor: emptyToNull(
-        evt.target.slideSecondaryAccentColor.value
+        evt.target.slideSecondaryAccentColor.value,
       ),
       slideOverlayColor: emptyToNull(evt.target.slideOverlayColor.value),
       certificateHeadline: emptyToNull(evt.target.certificateHeadline.value),
@@ -50,33 +50,33 @@ export function useTournament() {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rename?name=${newName}`,
       keycloak.token,
-      {}
+      {},
     ).then(setTournament);
   }
   function setCertType(activeEvent: number, certType: string) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/cert_type?type=${certType}`,
       keycloak.token,
-      {}
+      {},
     ).then(setTournament);
   }
   function setNumRounds(activeEvent: number, numRounds: number) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rounds?count=${numRounds}`,
       keycloak.token,
-      {}
+      {},
     ).then(setTournament);
   }
 
   function setCutoff(
     value: number,
     type: "placement" | "cutoff" | "medal" | "quals",
-    activeEvent: number
+    activeEvent: number,
   ) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/${type}`,
       keycloak.token,
-      { cutoff: value }
+      { cutoff: value },
     ).then(setTournament);
   }
 
@@ -84,44 +84,44 @@ export function useTournament() {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/type?type=${eventType}`,
       keycloak.token,
-      {}
+      {},
     ).then(setTournament);
   }
 
   function renameCompetitor(
     eventId: number,
     resultId: number,
-    newName: string
+    newName: string,
   ) {
     postData(
       `/certs/tournaments/${
         tournament?.id
       }/events/${eventId}/results/${resultId}/rename?name=${encodeURI(
-        newName
+        newName,
       ).replace("&", "%26")}`,
       keycloak.token,
-      {}
+      {},
     ).then(setTournament);
   }
   function switchSchool(eventId: number, resultId: number, newSchool: number) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${eventId}/results/${resultId}/school?schoolId=${newSchool}`,
       keycloak.token,
-      {}
+      {},
     ).then(setTournament);
   }
 
   function handleEventResultsUpload(
     event: React.ChangeEvent<HTMLInputElement>,
     eventId: number | undefined,
-    roundType: string = "FINALIST"
+    roundType: string = "FINALIST",
   ) {
     if (eventId !== undefined) {
       handleFileUpload(
         event,
         `/certs/tournaments/${tournament?.id}/events/${eventId}/results?type=${roundType}`,
         keycloak.token,
-        setTournament
+        setTournament,
       );
     }
   }
@@ -129,14 +129,14 @@ export function useTournament() {
   function resetResults(eventId: number): void {
     deleteData(
       `/certs/tournaments/${tournament?.id}/events/${eventId}/results`,
-      keycloak.token
+      keycloak.token,
     ).then(setTournament);
   }
 
   function deleteEvent(eventId: number): void {
     deleteData(
       `/certs/tournaments/${tournament?.id}/events/${eventId}`,
-      keycloak.token
+      keycloak.token,
     ).then(setTournament);
   }
 
@@ -145,7 +145,7 @@ export function useTournament() {
       event,
       `/certs/tournaments/${tournament?.id}/sweeps`,
       keycloak.token,
-      setTournament
+      setTournament,
     );
   }
   function handleSchoolsUpload(event: React.ChangeEvent<HTMLInputElement>) {
@@ -155,7 +155,7 @@ export function useTournament() {
       keycloak.token,
       () => {
         alert("Schools Loaded");
-      }
+      },
     );
   }
 

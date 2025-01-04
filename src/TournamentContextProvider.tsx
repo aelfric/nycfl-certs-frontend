@@ -1,7 +1,7 @@
-import React, {useMemo} from "react";
+import React, { useMemo } from "react";
 import { Tournament } from "./TournamentScreen";
 import { getData } from "./fetch";
-import {ITournamentContext, TournamentContext} from "./tournament-context";
+import { ITournamentContext, TournamentContext } from "./tournament-context";
 import { useKeycloak } from "@react-keycloak/web";
 
 type TournamentProviderProps = {
@@ -20,12 +20,15 @@ export function TournamentProvider({
     getData(`/certs/tournaments/${id}`, keycloak.token).then(setTournament);
   }, [id, keycloak.token]);
 
-    const context: ITournamentContext = useMemo(() => ({
-        tournament: tournament || undefined,
-        setTournament
-    }), [tournament]);
-    if (!tournament) {
-      return <p>Loading...</p>;
+  const context: ITournamentContext = useMemo(
+    () => ({
+      tournament: tournament || undefined,
+      setTournament,
+    }),
+    [tournament],
+  );
+  if (!tournament) {
+    return <p>Loading...</p>;
   }
 
   return (

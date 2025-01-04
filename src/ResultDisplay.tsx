@@ -64,8 +64,8 @@ export function ResultDisplay({
                 result.place < placementCutoff
                   ? styles.placing
                   : result.place < certificateCutoff
-                  ? styles.finalist
-                  : styles.noCert
+                    ? styles.finalist
+                    : styles.noCert
               }
             >
               <td>{result.place}</td>
@@ -190,7 +190,11 @@ function ResultName({ result, eventId }: Readonly<ResultNameProps>) {
     );
   }
   return (
-    <button className={styles.buttonInline} onDoubleClick={handleDoubleClick} title={String(result.id)}>
+    <button
+      className={styles.buttonInline}
+      onDoubleClick={handleDoubleClick}
+      title={String(result.id)}
+    >
       {result.name}
     </button>
   );
@@ -201,10 +205,7 @@ type ResultSchoolProps = {
   eventId: number;
 };
 
-function ResultSchool({
-  result,
-  eventId,
-}: Readonly<ResultSchoolProps>) {
+function ResultSchool({ result, eventId }: Readonly<ResultSchoolProps>) {
   const [editing, setEditing] = React.useState(false);
   const { switchSchool } = useTournament();
 
@@ -233,7 +234,11 @@ function ResultSchool({
     );
   }
   return (
-    <button className={styles.buttonInline} onDoubleClick={handleDoubleClick} title={String(result.school.id)}>
+    <button
+      className={styles.buttonInline}
+      onDoubleClick={handleDoubleClick}
+      title={String(result.school.id)}
+    >
       {result.school.name}
     </button>
   );
