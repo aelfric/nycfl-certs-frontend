@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { TournamentScreen } from "./TournamentScreen";
 import { describe, expect, it, vi } from "vitest";
 import { TournamentContext } from "./tournament-context";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router";
 
 vi.mock("@react-keycloak/web", () => {
   // noinspection JSUnusedGlobalSymbols
