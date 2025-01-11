@@ -7,7 +7,7 @@
   "dependencies": {
     "@react-keycloak/web": "3.4.0",
     "classnames": "2.5.1",
-    "keycloak-js": "21.0.2",
+    "keycloak-js": "26.0.7",
     "prop-types": "15.8.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
