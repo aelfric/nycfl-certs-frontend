@@ -14,7 +14,7 @@ import {
   Route,
   Routes,
   useParams,
-} from "react-router-dom";
+} from "react-router";
 import { Certificates, Postings, Slides } from "./certificates";
 import { StreamingDashboard } from "./StreamingDashboard";
 import { Mailing } from "./Mailing";

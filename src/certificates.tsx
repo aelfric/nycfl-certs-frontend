@@ -1,5 +1,5 @@
 import { RefObject, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { getData } from "./fetch";
 import { useKeycloak } from "@react-keycloak/web";
 import styles from "./App.module.css";

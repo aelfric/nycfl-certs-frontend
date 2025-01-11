@@ -5,7 +5,7 @@ import { EventDisplay } from "./EventDisplay";
 import { Result } from "./App";
 import { Debate, Qualifier, Speaker, Trophy } from "./icons";
 import { useTournament } from "./use-tournament";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import cx from "classnames";
 
 export interface Tournament {
