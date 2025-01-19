@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Tournament } from "./TournamentScreen";
 import { getData } from "./fetch";
 import { ITournamentContext, TournamentContext } from "./tournament-context";
-import { useKeycloak } from "@react-keycloak/web";
+import { useAuth } from "react-oidc-context";
 
 type TournamentProviderProps = {
   id: number;
@@ -14,11 +14,13 @@ export function TournamentProvider({
   children,
 }: Readonly<TournamentProviderProps>) {
   const [tournament, setTournament] = React.useState<Tournament | null>(null);
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
 
   React.useEffect(() => {
-    getData(`/certs/tournaments/${id}`, keycloak.token).then(setTournament);
-  }, [id, keycloak.token]);
+    getData(`/certs/tournaments/${id}`, auth.user?.access_token).then(
+      setTournament,
+    );
+  }, [id, auth.user?.access_token]);
 
   const context: ITournamentContext = useMemo(
     () => ({

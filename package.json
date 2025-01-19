@@ -5,12 +5,12 @@
   "proxy": "http://localhost:8080",
   "type": "module",
   "dependencies": {
-    "@react-keycloak/web": "3.4.0",
     "classnames": "2.5.1",
-    "keycloak-js": "21.0.2",
+    "oidc-client-ts": "^3.1.0",
     "prop-types": "15.8.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-oidc-context": "^3.2.0",
     "react-router-dom": "7.1.1"
   },
   "scripts": {
@@ -19,8 +19,8 @@
     "serve": "vite preview",
     "test": "vitest",
     "format": "prettier --write --end-of-line auto src ",
-    "lint": "eslint src",
-    "prepare": "husky install"
+    "lint": "eslint",
+    "prepare": "husky"
   },
   "eslintConfig": {
     "extends": "react-app"

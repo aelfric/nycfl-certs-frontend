@@ -1,7 +1,7 @@
 import React from "react";
 import { getData } from "./fetch";
 import styles from "./App.module.css";
-import { useKeycloak } from "@react-keycloak/web";
+import { useAuth } from "react-oidc-context";
 
 type FileObject = {
   url: string;
@@ -10,10 +10,10 @@ type FileObject = {
 
 export function FileListing() {
   const [files, setFiles] = React.useState<FileObject[]>([]);
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
   React.useEffect(() => {
-    getData("/s3", keycloak.token).then(setFiles);
-  }, [keycloak.token]);
+    getData("/s3", auth.user?.access_token).then(setFiles);
+  }, [auth.user?.access_token]);
   return (
     <ul className={styles.fileList}>
       {files.map((file) => (

@@ -6,7 +6,7 @@ import { CompetitionEvent, ISetCutoff } from "./TournamentScreen";
 import { getData } from "./fetch";
 import styles from "./App.module.css";
 import { useTournament } from "./use-tournament";
-import { useKeycloak } from "@react-keycloak/web";
+import { useAuth } from "react-oidc-context";
 
 type EventDisplayParams = {
   event: CompetitionEvent;
@@ -170,11 +170,11 @@ function EnumSelect({
   value,
 }: Readonly<EnumSelectProps>) {
   const [options, setOptions] = useState<Option[]>([]);
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
 
   React.useEffect(() => {
-    getData(url, keycloak.token).then(setOptions);
-  }, [url, keycloak.token]);
+    getData(url, auth.user?.access_token).then(setOptions);
+  }, [url, auth.user?.access_token]);
   return (
     <label>
       {label}:{" "}

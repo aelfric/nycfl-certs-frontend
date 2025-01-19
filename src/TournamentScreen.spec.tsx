@@ -4,17 +4,6 @@ import { describe, expect, it, vi } from "vitest";
 import { TournamentContext } from "./tournament-context";
 import { MemoryRouter } from "react-router";
 
-vi.mock("@react-keycloak/web", () => {
-  // noinspection JSUnusedGlobalSymbols
-  return {
-    useKeycloak: () => ({
-      keycloak: {
-        token: "something",
-      },
-    }),
-  };
-});
-
 describe("<TournamentScreen/>", () => {
   it("renders", async () => {
     render(<TournamentScreen copyTournament={vi.fn()} />);

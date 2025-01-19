@@ -7,9 +7,8 @@ import { Tournament, TournamentScreen } from "./TournamentScreen";
 import { Expandable } from "./Expandable";
 import { FileListing } from "./FileListing";
 import { TournamentProvider } from "./TournamentContextProvider";
-import { useKeycloak } from "@react-keycloak/web";
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   Link,
   Route,
   Routes,
@@ -20,21 +19,22 @@ import { StreamingDashboard } from "./StreamingDashboard";
 import { Mailing } from "./Mailing";
 
 import cx from "classnames";
+import { useAuth } from "react-oidc-context";
 
 function Interface() {
   const { id } = useParams<"id">();
   const activeTournamentId = Number(id);
 
   const [tournaments, setTournaments] = React.useState<Tournament[]>([]);
-  const { keycloak } = useKeycloak();
-
+  const auth = useAuth();
+  const token = auth.user?.access_token;
   React.useEffect(() => {
-    getData("/certs/tournaments", keycloak.token).then(setTournaments);
-  }, [keycloak.token]);
+    getData("/certs/tournaments", token).then(setTournaments);
+  }, [token]);
 
   function createTournament(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
-    postData("/certs/tournaments", keycloak.token, {
+    postData("/certs/tournaments", token, {
       name: evt.target.tournamentName.value,
       host: evt.target.host.value,
       date: evt.target.date.value,
@@ -48,15 +48,16 @@ function Interface() {
     if (activeTournamentId) {
       postData(
         `/certs/tournaments?sourceId=${activeTournamentId}`,
-        keycloak.token,
+        token,
         {},
       ).then((newTournament) =>
         setTournaments((tournaments) => [...tournaments, newTournament]),
       );
     }
   }
+
   function handleMediaUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    handleFileUpload(event, `/s3/upload`, keycloak.token, () => {
+    handleFileUpload(event, `/s3/upload`, token, () => {
       alert("Media Saved");
     });
   }
@@ -118,29 +119,59 @@ function Interface() {
 }
 
 function App() {
-  const { keycloak, initialized } = useKeycloak();
+  const auth = useAuth();
 
-  if (!initialized) {
+  if (auth.isLoading) {
     return <div>Loading...</div>;
   }
-  if (!keycloak.authenticated) {
-    keycloak.login();
-    return <div>Logging you in</div>;
+
+  switch (auth.activeNavigator) {
+    case "signinSilent":
+      return <div>Signing you in...</div>;
+    case "signinRedirect":
+      return <div>Signing you in...</div>;
+    case "signoutRedirect":
+      return <div>Signing you out...</div>;
   }
-  return (
-    <Router>
-      <Routes>
-        <Route path="/tournaments/:id" element={<Interface />} />
-        <Route path="/preview_certificates/:id" element={<Certificates />} />
-        <Route path="/preview_slides/:id" element={<Slides />} />
-        <Route path="/postings/:id" element={<Postings />} />
-        <Route path="/mailing/:id" element={<Mailing />} />
-        <Route path={"/stream"} element={<StreamingDashboard />} />
-        <Route path="/" element={<Interface />} />
-      </Routes>
-    </Router>
-  );
+
+  if (auth.error) {
+    return <div>Oops... {auth.error.message}</div>;
+  }
+  if (!auth.isAuthenticated) {
+    return (
+      <button
+        onClick={() =>
+          void auth.signinRedirect({ redirect_uri: window.location.toString() })
+        }
+      >
+        Log in
+      </button>
+    );
+  } else {
+    window.history.replaceState({}, document.title, window.location.pathname);
+    return (
+      <>
+        <button onClick={() => void auth.removeUser()}>Log out</button>{" "}
+        {auth.user?.profile.name}
+        <Router>
+          <Routes>
+            <Route path="/tournaments/:id" element={<Interface />} />
+            <Route
+              path="/preview_certificates/:id"
+              element={<Certificates />}
+            />
+            <Route path="/preview_slides/:id" element={<Slides />} />
+            <Route path="/postings/:id" element={<Postings />} />
+            <Route path="/mailing/:id" element={<Mailing />} />
+            <Route path={"/stream"} element={<StreamingDashboard />} />
+            <Route path="/" element={<Interface />} />
+          </Routes>
+        </Router>
+      </>
+    );
+  }
 }
+
 export interface TournamentIdProps {
   tournamentId: number;
 }

@@ -1,8 +1,8 @@
 import { RefObject, useEffect, useRef } from "react";
 import { useParams } from "react-router";
 import { getData } from "./fetch";
-import { useKeycloak } from "@react-keycloak/web";
 import styles from "./App.module.css";
+import { useAuth } from "react-oidc-context";
 
 function useAjaxIframe(
   url: string,
@@ -25,15 +25,14 @@ function useAjaxIframe(
 
 export function Certificates() {
   const { id } = useParams<"id">();
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
+  const token = auth.user?.access_token;
+  const iframe = useAjaxIframe(`/certs/tournaments/${id}/certificates`, token);
 
-  const iframe = useAjaxIframe(
-    `/certs/tournaments/${id}/certificates`,
-    keycloak.token,
-  );
   function doPrint() {
     iframe.current?.contentWindow?.print();
   }
+
   return (
     <>
       <div style={{ textAlign: "right" }}>
@@ -52,10 +51,10 @@ export function Certificates() {
 
 export function Slides() {
   const { id } = useParams<"id">();
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
   const iframe = useAjaxIframe(
     `/certs/tournaments/${id}/slides?dl=0`,
-    keycloak.token,
+    auth.user?.access_token,
   );
 
   return (
@@ -69,10 +68,10 @@ export function Slides() {
 
 export function Postings() {
   const { id } = useParams<"id">();
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
   const iframe = useAjaxIframe(
     `/certs/tournaments/${id}/postings?dl=0`,
-    keycloak.token,
+    auth.user?.access_token,
   );
 
   return (

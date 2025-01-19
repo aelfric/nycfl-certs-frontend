@@ -1,8 +1,0 @@
-{
-  "realm": "Forensics",
-  "auth-server-url": "https://keycloak.riccobono.dev/",
-  "ssl-required": "external",
-  "resource": "nycfl-frontend",
-  "public-client": true,
-  "confidential-port": 0
-}
