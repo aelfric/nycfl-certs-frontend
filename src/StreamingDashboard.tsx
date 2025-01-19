@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { getData, postData } from "./fetch";
-import { useKeycloak } from "@react-keycloak/web";
+import { useAuth } from "react-oidc-context";
 import styles from "./App.module.css";
 
 interface DraftStream {
@@ -76,13 +76,13 @@ function StreamStatusBadge(props: Readonly<BroadcastStatusBadgeProps>) {
 export function StreamingDashboard() {
   const [rows, setRows] = React.useState<DraftStream[]>([]);
   const [streams, setStreams] = React.useState<CreatedStream[]>([]);
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
   const [selected, setSelected] = React.useState<string>("");
   const currentStream = streams.find((s) => s.broadcastId === selected);
 
   React.useEffect(() => {
-    getData("/youtube", keycloak.token).then(setStreams);
-  }, [keycloak.token]);
+    getData("/youtube", auth.user?.access_token).then(setStreams);
+  }, [auth.user?.access_token]);
 
   function addRow() {
     setRows([
@@ -97,7 +97,10 @@ export function StreamingDashboard() {
 
   function startTesting() {
     if (currentStream) {
-      postData(`/youtube/${currentStream.broadcastId}/test`, keycloak.token)
+      postData(
+        `/youtube/${currentStream.broadcastId}/test`,
+        auth.user?.access_token,
+      )
         .then(setStreams)
         .catch(() => alert("An error"));
     }
@@ -105,7 +108,10 @@ export function StreamingDashboard() {
 
   function goLive() {
     if (currentStream) {
-      postData(`/youtube/${currentStream.broadcastId}/golive`, keycloak.token)
+      postData(
+        `/youtube/${currentStream.broadcastId}/golive`,
+        auth.user?.access_token,
+      )
         .then(setStreams)
         .catch(() => alert("An error"));
     }
@@ -113,7 +119,10 @@ export function StreamingDashboard() {
 
   function completeStream() {
     if (currentStream) {
-      postData(`/youtube/${currentStream.broadcastId}/complete`, keycloak.token)
+      postData(
+        `/youtube/${currentStream.broadcastId}/complete`,
+        auth.user?.access_token,
+      )
         .then(setStreams)
         .catch(() => alert("An error"));
     }
@@ -125,7 +134,7 @@ export function StreamingDashboard() {
       startTime: new Date(row.startTime).toISOString(),
       endTime: new Date(row.endTime).toISOString(),
     }));
-    postData("/youtube", keycloak.token, submission)
+    postData("/youtube", auth.user?.access_token, submission)
       .then(setStreams)
       .catch(() => alert("An error"));
   }

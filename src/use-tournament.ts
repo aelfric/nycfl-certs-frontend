@@ -1,15 +1,17 @@
 import React from "react";
 import { TournamentContext } from "./tournament-context";
 import { deleteData, handleFileUpload, postData } from "./fetch";
-import { useKeycloak } from "@react-keycloak/web";
+import { useAuth } from "react-oidc-context";
 
 export function useTournament() {
   const { tournament, setTournament } = React.useContext(TournamentContext);
 
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
+  const token = auth.user?.access_token;
 
   function updateTournament(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
+
     function emptyToNull(str: string) {
       if (str === "") {
         return null;
@@ -17,7 +19,8 @@ export function useTournament() {
         return str;
       }
     }
-    postData(`/certs/tournaments/${tournament?.id}`, keycloak.token, {
+
+    postData(`/certs/tournaments/${tournament?.id}`, token, {
       name: evt.target.tournamentName.value,
       host: evt.target.host.value,
       date: evt.target.date.value,
@@ -40,7 +43,7 @@ export function useTournament() {
 
   function createEvents(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
-    postData("/certs/events", keycloak.token, {
+    postData("/certs/events", token, {
       events: evt.target.events.value,
       tournamentId: tournament?.id,
     }).then(setTournament);
@@ -49,21 +52,23 @@ export function useTournament() {
   function setEventName(activeEvent: number, newName: string) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rename?name=${newName}`,
-      keycloak.token,
+      token,
       {},
     ).then(setTournament);
   }
+
   function setCertType(activeEvent: number, certType: string) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/cert_type?type=${certType}`,
-      keycloak.token,
+      token,
       {},
     ).then(setTournament);
   }
+
   function setNumRounds(activeEvent: number, numRounds: number) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rounds?count=${numRounds}`,
-      keycloak.token,
+      token,
       {},
     ).then(setTournament);
   }
@@ -75,7 +80,7 @@ export function useTournament() {
   ) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/${type}`,
-      keycloak.token,
+      token,
       { cutoff: value },
     ).then(setTournament);
   }
@@ -83,7 +88,7 @@ export function useTournament() {
   function setEventType(activeEvent: number, eventType: string) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/type?type=${eventType}`,
-      keycloak.token,
+      token,
       {},
     ).then(setTournament);
   }
@@ -99,14 +104,15 @@ export function useTournament() {
       }/events/${eventId}/results/${resultId}/rename?name=${encodeURI(
         newName,
       ).replace("&", "%26")}`,
-      keycloak.token,
+      token,
       {},
     ).then(setTournament);
   }
+
   function switchSchool(eventId: number, resultId: number, newSchool: number) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${eventId}/results/${resultId}/school?schoolId=${newSchool}`,
-      keycloak.token,
+      token,
       {},
     ).then(setTournament);
   }
@@ -120,7 +126,7 @@ export function useTournament() {
       handleFileUpload(
         event,
         `/certs/tournaments/${tournament?.id}/events/${eventId}/results?type=${roundType}`,
-        keycloak.token,
+        token,
         setTournament,
       );
     }
@@ -129,36 +135,16 @@ export function useTournament() {
   function resetResults(eventId: number): void {
     deleteData(
       `/certs/tournaments/${tournament?.id}/events/${eventId}/results`,
-      keycloak.token,
+      token,
     ).then(setTournament);
   }
 
   function deleteEvent(eventId: number): void {
     deleteData(
       `/certs/tournaments/${tournament?.id}/events/${eventId}`,
-      keycloak.token,
+      token,
     ).then(setTournament);
   }
-
-  function handleSweepsUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    handleFileUpload(
-      event,
-      `/certs/tournaments/${tournament?.id}/sweeps`,
-      keycloak.token,
-      setTournament,
-    );
-  }
-  function handleSchoolsUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    handleFileUpload(
-      event,
-      `/certs/tournaments/${tournament?.id}/schools`,
-      keycloak.token,
-      () => {
-        alert("Schools Loaded");
-      },
-    );
-  }
-
   return {
     tournament: tournament,
     renameCompetitor: renameCompetitor,
@@ -173,7 +159,5 @@ export function useTournament() {
     setEventName,
     setCertType,
     setNumRounds,
-    handleSchoolsUpload,
-    handleSweepsUpload,
   };
 }

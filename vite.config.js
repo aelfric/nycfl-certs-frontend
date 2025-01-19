@@ -1,28 +1,34 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig(() => {
-    return {
-        server: {
-            port: 3000,
-            proxy: {
-                "/certs" :{
-                    target : "http://localhost:8080",
-                    changeOrigin: true
-                },
-                "/enums" :{
-                    target : "http://localhost:8080",
-                    changeOrigin: true
-                }
-            }
+  const backendUrl =
+    process.env["BACKEND_URL"] || "https://forensics.frankriccobono.com";
+  return {
+    server: {
+      port: 3000,
+      proxy: {
+        "/certs": {
+          target: backendUrl,
+          changeOrigin: true,
         },
-        build: {
-            outDir: 'build',
+        "/enums": {
+          target: backendUrl,
+          changeOrigin: true,
         },
-        plugins: [react()],
-        test: {
-            environment: 'jsdom',
-            setupFiles: 'src/setupTests.js'
+        "/s3": {
+          target: backendUrl,
+          changeOrigin: true,
         },
-    };
+      },
+    },
+    build: {
+      outDir: "build",
+    },
+    plugins: [react()],
+    test: {
+      environment: "jsdom",
+      setupFiles: "src/setupTests.js",
+    },
+  };
 });

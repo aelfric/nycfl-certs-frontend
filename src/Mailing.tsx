@@ -1,7 +1,7 @@
 import styles from "./App.module.css";
 import React from "react";
 import { getData, handleFileUpload, postData } from "./fetch";
-import { useKeycloak } from "@react-keycloak/web";
+import { useAuth } from "react-oidc-context";
 import { StripedTable } from "./StripedTable";
 import { FileInput } from "./Inputs";
 import { School, SchoolEmail } from "./App";
@@ -13,17 +13,19 @@ type MedalCount = {
 };
 
 function Summary() {
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
   const [medalCount, setMedalCount] = React.useState<MedalCount[]>([]);
   React.useEffect(() => {
-    getData("/certs/tournaments/13/medals", keycloak.token).then(setMedalCount);
-  }, [keycloak.token]);
+    getData("/certs/tournaments/13/medals", auth.user?.access_token).then(
+      setMedalCount,
+    );
+  }, [auth.user?.access_token]);
 
   function handleUpload(formEvt: React.ChangeEvent<HTMLInputElement>) {
     handleFileUpload(
       formEvt,
       `/certs/tournaments/13/contacts`,
-      keycloak.token,
+      auth.user?.access_token,
       alert,
     );
   }
@@ -63,15 +65,17 @@ interface AwardsResult {
 }
 
 function Detail() {
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
   const [results, setResults] = React.useState<AwardsResult[]>([]);
   const [schools, setSchools] = React.useState<School[]>([]);
   React.useEffect(() => {
-    getData("/certs/tournaments/13/awards_sheet", keycloak.token).then(
+    getData("/certs/tournaments/13/awards_sheet", auth.user?.access_token).then(
       setResults,
     );
-    getData("/certs/tournaments/13/schools", keycloak.token).then(setSchools);
-  }, [keycloak.token]);
+    getData("/certs/tournaments/13/schools", auth.user?.access_token).then(
+      setSchools,
+    );
+  }, [auth.user?.access_token]);
 
   const contactMap: Record<number, SchoolEmail[]> = {};
   for (const school of schools) {
@@ -79,7 +83,7 @@ function Detail() {
   }
 
   function doDraft() {
-    postData(`/certs/tournaments/13/awards_sheet`, keycloak.token)
+    postData(`/certs/tournaments/13/awards_sheet`, auth.user?.access_token)
       .then(alert)
       .catch(alert);
   }

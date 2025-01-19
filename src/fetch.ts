@@ -77,11 +77,11 @@ export async function getData(
   }
 }
 
-export function handleFileUpload(
+export function handleFileUpload<T>(
   event: React.ChangeEvent<HTMLInputElement>,
   url: string,
   token: string | undefined,
-  onFulfilled: ((value: unknown) => unknown) | null | undefined,
+  onFulfilled: ((value: T) => unknown) | null | undefined,
 ) {
   try {
     const files = event.target.files;
