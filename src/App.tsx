@@ -65,6 +65,8 @@ function Interface() {
   return (
     <div className={styles.main}>
       <aside>
+        <button onClick={() => void auth.removeUser()}>Log out</button>{" "}
+        {auth.user?.profile.name}
         <ul className={cx(styles.tournaments, styles.box)}>
           {tournaments.map((t) => (
             <li
@@ -151,8 +153,6 @@ function App() {
     window.history.replaceState({}, document.title, window.location.pathname);
     return (
       <>
-        <button onClick={() => void auth.removeUser()}>Log out</button>{" "}
-        {auth.user?.profile.name}
         <Router>
           <Routes>
             <Route path="/tournaments/:id" element={<Interface />} />
