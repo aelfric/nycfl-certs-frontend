@@ -37,9 +37,11 @@ export function EventDisplay({
   function onTypeSelect(evt: React.ChangeEvent<HTMLSelectElement>) {
     setEventType(event.id, evt.target.value);
   }
+
   function onCertTypeSelect(evt: React.ChangeEvent<HTMLSelectElement>) {
     setCertType(event.id, evt.target.value);
   }
+
   function onSetNumRounds(evt: React.ChangeEvent<HTMLInputElement>) {
     setNumRounds(event.id, Number(evt.target.value));
   }
@@ -52,7 +54,7 @@ export function EventDisplay({
   return (
     <section key={event.id}>
       <h2>Results</h2>
-      <p>
+      <div>
         <form onSubmit={onRenameEvent}>
           <label>
             Event Name:{" "}
@@ -97,8 +99,8 @@ export function EventDisplay({
             Delete Event
           </button>
         </form>
-      </p>
-      <p>
+      </div>
+      <div>
         <EnumSelect
           url={"/enums/event_types"}
           label={"Event Type"}
@@ -106,8 +108,8 @@ export function EventDisplay({
           value={event.eventType}
           key={event.id}
         />
-      </p>
-      <p>
+      </div>
+      <div>
         <EnumSelect
           url={"/enums/certificate_types"}
           label={"Certificate Type"}
@@ -115,8 +117,8 @@ export function EventDisplay({
           value={event.certificateType}
           key={event.id}
         />
-      </p>
-      <p>
+      </div>
+      <div>
         <label>
           Number of Rounds:{" "}
           <input
@@ -125,8 +127,8 @@ export function EventDisplay({
             onChange={onSetNumRounds}
           />
         </label>
-      </p>
-      <p>
+      </div>
+      <div>
         <EnumSelect
           url={"/enums/elim_types"}
           label={"Round Type"}
@@ -134,8 +136,7 @@ export function EventDisplay({
           value={roundType}
           key={event.id}
         />
-      </p>
-      <p></p>
+      </div>
       <FileInput name="eventResults" onChange={handleUpload} />
       <ResultDisplay
         results={event.results}
