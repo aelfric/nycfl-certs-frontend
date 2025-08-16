@@ -5,7 +5,7 @@ import { EventDisplay } from "./EventDisplay";
 import { Result } from "./App";
 import { Debate, Qualifier, Speaker, Trophy } from "./icons";
 import { useTournament } from "./use-tournament";
-import { Link } from "react-router";
+import { Form, Link, useLoaderData } from "react-router";
 import cx from "classnames";
 
 export interface Tournament {
@@ -77,14 +77,13 @@ interface TournamentScreenProps {
   copyTournament: (evt: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export function TournamentScreen({
-  copyTournament,
-}: Readonly<TournamentScreenProps>) {
+export function TournamentScreen() {
+  const copyTournament = () => undefined;
   const [activeEventId, setActiveEventId] = React.useState<number | undefined>(
     undefined,
   );
+  const tournament = useLoaderData<Tournament>();
   const {
-    tournament,
     setCutoff,
     updateTournament,
     resetResults,
@@ -131,13 +130,21 @@ export function TournamentScreen({
       <section>
         <h1 style={{ display: "flex" }}>
           <span style={{ flexGrow: "1" }}>{name}</span>
-          <button
-            className={styles.button}
-            type="button"
-            onClick={copyTournament}
-          >
-            Copy
-          </button>{" "}
+          <Form method={"post"} action={"/"}>
+            <input
+              type={"hidden"}
+              name={"tournamentId"}
+              value={tournament.id}
+            />
+            <button
+              className={styles.button}
+              type="submit"
+              name="intent"
+              value="copy"
+            >
+              Copy
+            </button>
+          </Form>
         </h1>
         <form onSubmit={updateTournament} className={styles.standardForm}>
           <FormTextInput
