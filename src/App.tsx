@@ -38,28 +38,8 @@ function App() {
       <>
         <RouterProvider router={router(auth.user)} />
       </>
-      // <Router>
-      //   <Routes>
-      //     <Route path="/tournaments/:id" element={<Interface />} />
-      //     <Route path="/preview_certificates/:id" element={<Certificates />} />
-      //     <Route path="/preview_slides/:id" element={<Slides />} />
-      //     <Route path="/postings/:id" element={<Postings />} />
-      //     <Route path="/mailing/:id" element={<Mailing />} />
-      //     <Route path={"/stream"} element={<StreamingDashboard />} />
-      //     <Route path="/" element={<Interface />} />
-      //   </Routes>
-      // </Router>
     );
   }
-}
-
-export interface TournamentIdProps {
-  tournamentId: number;
-}
-
-export interface MedalCount {
-  school: string;
-  count: number;
 }
 
 export interface School {

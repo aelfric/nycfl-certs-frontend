@@ -6,7 +6,6 @@ import {
   useParams,
 } from "react-router";
 import * as React from "react";
-import { Tournament } from "./TournamentScreen";
 import { useAuth } from "react-oidc-context";
 import { handleFileUpload } from "./fetch";
 import styles from "./App.module.css";
@@ -15,6 +14,7 @@ import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { FileListing } from "./FileListing";
 import { Suspense } from "react";
 import { NavLink } from "react-router-dom";
+import { Tournament } from "./types";
 
 export function Interface() {
   const { id } = useParams<"id">();

@@ -1,5 +1,6 @@
 import React from "react";
-import { Tournament } from "./TournamentScreen";
+
+import { Tournament } from "./types";
 
 export interface ITournamentContext {
   tournament?: Tournament;
