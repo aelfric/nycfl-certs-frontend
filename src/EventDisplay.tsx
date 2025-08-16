@@ -2,11 +2,12 @@ import * as React from "react";
 import { useState } from "react";
 import { FileInput } from "./Inputs";
 import { ResultDisplay } from "./ResultDisplay";
-import { CompetitionEvent, ISetCutoff } from "./TournamentScreen";
+import { ISetCutoff } from "./TournamentScreen";
 import { getData } from "./fetch";
 import styles from "./App.module.css";
 import { useTournament } from "./use-tournament";
 import { useAuth } from "react-oidc-context";
+import { CompetitionEvent } from "./types";
 
 type EventDisplayParams = {
   event: CompetitionEvent;

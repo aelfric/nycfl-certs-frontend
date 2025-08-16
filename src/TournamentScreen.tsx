@@ -2,45 +2,11 @@ import * as React from "react";
 import styles from "./App.module.css";
 import { FieldGroup, FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
-import { Result } from "./App";
 import { Debate, Qualifier, Speaker, Trophy } from "./icons";
 import { useTournament } from "./use-tournament";
-import { Form, Link, useLoaderData } from "react-router";
+import { Form, Link, useFetcher, useLoaderData } from "react-router";
 import cx from "classnames";
-
-export interface Tournament {
-  id: number;
-  name: string;
-  host: string;
-  date: string;
-  logoUrl?: string;
-  slideBackgroundUrl?: string;
-  slideAccentColor?: string;
-  slideSecondaryAccentColor?: string;
-  slidePrimaryColor?: string;
-  slideOverlayColor?: string;
-  certificateHeadline?: string;
-  line1?: string;
-  line2?: string;
-  signature?: string;
-  signatureTitle?: string;
-  styleOverrides?: string;
-  events: CompetitionEvent[];
-}
-
-export interface CompetitionEvent {
-  latestResult: string;
-  eventType: string;
-  certificateType: string;
-  id: number;
-  name: string;
-  results: Result[];
-  placementCutoff: number;
-  medalCutoff: number;
-  certificateCutoff: number;
-  halfQuals: number;
-  numRounds: number | null;
-}
+import { CompetitionEvent, Tournament } from "./types";
 
 export type ISetCutoff = (
   value: number,
@@ -66,20 +32,14 @@ function CertificateTypeIcon({
       return null;
   }
 }
-
-interface TournamentScreenProps {
-  copyTournament: (evt: React.MouseEvent<HTMLButtonElement>) => void;
-}
-
 export function TournamentScreen() {
-  const copyTournament = () => undefined;
+  const fetcher = useFetcher();
   const [activeEventId, setActiveEventId] = React.useState<number | undefined>(
     undefined,
   );
   const tournament = useLoaderData<Tournament>();
   const {
     setCutoff,
-    updateTournament,
     resetResults,
     setEventType,
     createEvents,
@@ -140,8 +100,9 @@ export function TournamentScreen() {
             </button>
           </Form>
         </h1>
-        <form
-          onSubmit={updateTournament}
+        <fetcher.Form
+          method={"POST"}
+          action={`/tournaments/${tournament.id}`}
           className={styles.standardForm}
           key={tournament.id}
         >
@@ -243,7 +204,7 @@ export function TournamentScreen() {
             />
           </label>
           <SubmitButton>Update Tournament</SubmitButton>
-        </form>
+        </fetcher.Form>
       </section>
       <section>
         <h2>Events</h2>

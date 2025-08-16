@@ -8,39 +8,6 @@ export function useTournament() {
 
   const auth = useAuth();
   const token = auth.user?.access_token;
-
-  function updateTournament(evt: React.ChangeEvent<HTMLFormElement>) {
-    evt.preventDefault();
-
-    function emptyToNull(str: string) {
-      if (str === "") {
-        return null;
-      } else {
-        return str;
-      }
-    }
-
-    postData(`/certs/tournaments/${tournament?.id}`, token, {
-      name: evt.target.tournamentName.value,
-      host: evt.target.host.value,
-      date: evt.target.date.value,
-      logoUrl: emptyToNull(evt.target.logoUrl.value),
-      slideBackgroundUrl: emptyToNull(evt.target.backgroundUrl.value),
-      slidePrimaryColor: emptyToNull(evt.target.slidePrimaryColor.value),
-      slideAccentColor: emptyToNull(evt.target.slideAccentColor.value),
-      slideSecondaryAccentColor: emptyToNull(
-        evt.target.slideSecondaryAccentColor.value,
-      ),
-      slideOverlayColor: emptyToNull(evt.target.slideOverlayColor.value),
-      certificateHeadline: emptyToNull(evt.target.certificateHeadline.value),
-      line1: emptyToNull(evt.target.line1.value),
-      line2: emptyToNull(evt.target.line2.value),
-      signature: emptyToNull(evt.target.signature.value),
-      signatureTitle: emptyToNull(evt.target.signatureTitle.value),
-      styleOverrides: emptyToNull(evt.target.styleOverrides.value),
-    }).then(setTournament);
-  }
-
   function createEvents(evt: React.ChangeEvent<HTMLFormElement>) {
     evt.preventDefault();
     postData("/certs/events", token, {
@@ -150,7 +117,6 @@ export function useTournament() {
     renameCompetitor: renameCompetitor,
     switchSchool,
     uploadResults: handleEventResultsUpload,
-    updateTournament,
     setCutoff,
     resetResults,
     deleteEvent,
