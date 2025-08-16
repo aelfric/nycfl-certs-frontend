@@ -6,41 +6,33 @@ import {
 import { Interface, NoTournamentSelected } from "./Interface";
 import { Certificates, Postings, Slides } from "./certificates";
 import { User } from "oidc-client-ts";
-import { getData, postData } from "./fetch";
 import { ActionFunctionArgs, redirect } from "react-router-dom";
-import { TournamentScreen } from "./TournamentScreen";
+import { EventDisplayV2, TournamentScreen } from "./TournamentScreen";
 import { TournamentForEdit } from "./types";
+import { emptyToNull } from "./utils";
+import { TournamentApi } from "./tournament-api";
 
 export const router = (user: User | null | undefined) => {
+  const api = new TournamentApi(user);
   const routes: RouteObject[] = [
     {
       path: "/",
       Component: Interface,
-      loader: async () => {
-        return await getData("/certs/tournaments", user?.access_token);
-      },
+      loader: api.findAll.bind(api),
       action: async (args: ActionFunctionArgs) => {
         const { request } = args;
         const formData = await request.formData();
         const intent = formData.get("intent");
         if (intent === "copy") {
-          const tournamentId = formData.get("tournamentId");
-          if (typeof tournamentId === "string") {
-            await postData(
-              `/certs/tournaments?sourceId=${tournamentId}`,
-              user?.access_token,
-              {},
-            );
-          }
+          await api.copyTournament(formData.get("tournamentId") as string);
         } else {
           const { tournamentName, host, date } = Object.fromEntries(
             formData.entries(),
           );
-
-          await postData("/certs/tournaments", user?.access_token, {
-            name: tournamentName,
-            host,
-            date,
+          await api.createTournament({
+            name: tournamentName as string,
+            host: host as string,
+            date: date as string,
           });
         }
         return redirect("/");
@@ -54,19 +46,9 @@ export const router = (user: User | null | undefined) => {
           path: "tournaments/:id",
           Component: TournamentScreen,
           loader: async ({ params }: LoaderFunctionArgs) => {
-            return await getData(
-              `/certs/tournaments/${params.id}`,
-              user?.access_token,
-            );
+            return api.findOne(params.id as string);
           },
           action: async ({ request, params }) => {
-            function emptyToNull(str: FormDataEntryValue): string | null {
-              if (typeof str === "string") {
-                return str === "" ? null : str;
-              }
-              return null;
-            }
-
             const formData = Object.fromEntries(await request.formData());
             const data: TournamentForEdit = {
               name: formData.tournamentName as string,
@@ -87,12 +69,25 @@ export const router = (user: User | null | undefined) => {
               signatureTitle: emptyToNull(formData.signatureTitle),
               styleOverrides: emptyToNull(formData.styleOverrides),
             };
-            return await postData(
-              `/certs/tournaments/${params.id}`,
-              user?.access_token,
-              data,
-            );
+            return api.updateOne(params.id as string, data);
           },
+          children: [
+            {
+              path: "events",
+              action: async ({ request, params }) => {
+                const formData = await request.formData();
+                await api.createEvents(
+                  params.id as string,
+                  formData.get("events") as string,
+                );
+                return redirect(`/tournaments/${params.id}`);
+              },
+            },
+            {
+              path: "events/:eventId",
+              Component: EventDisplayV2,
+            },
+          ],
         },
       ],
     },

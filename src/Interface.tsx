@@ -1,18 +1,12 @@
-import {
-  Form,
-  Outlet,
-  ScrollRestoration,
-  useLoaderData,
-  useParams,
-} from "react-router";
+import { Form, Outlet, useLoaderData, useParams } from "react-router";
 import * as React from "react";
+import { Suspense } from "react";
 import { useAuth } from "react-oidc-context";
 import { handleFileUpload } from "./fetch";
 import styles from "./App.module.css";
 import cx from "classnames";
 import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { FileListing } from "./FileListing";
-import { Suspense } from "react";
 import { NavLink } from "react-router-dom";
 import { Tournament } from "./types";
 
@@ -80,7 +74,7 @@ export function Interface() {
         <Suspense fallback={<p>Loading...</p>}>
           <Outlet />
         </Suspense>
-        <ScrollRestoration />
+        {/*<ScrollRestoration />*/}
       </main>
     </div>
   );

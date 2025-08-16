@@ -19,7 +19,8 @@
     "test": "vitest",
     "format": "prettier --write --end-of-line auto src ",
     "lint": "eslint",
-    "prepare": "husky"
+    "prepare": "husky",
+    "typecheck": "tsc --noEmit"
   },
   "eslintConfig": {
     "extends": "react-app"
