@@ -1,4 +1,10 @@
-import { Form, Link, Outlet, useLoaderData, useParams } from "react-router";
+import {
+  Form,
+  Outlet,
+  ScrollRestoration,
+  useLoaderData,
+  useParams,
+} from "react-router";
 import * as React from "react";
 import { Tournament } from "./TournamentScreen";
 import { useAuth } from "react-oidc-context";
@@ -6,8 +12,9 @@ import { handleFileUpload } from "./fetch";
 import styles from "./App.module.css";
 import cx from "classnames";
 import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
-import { Expandable } from "./Expandable";
 import { FileListing } from "./FileListing";
+import { Suspense } from "react";
+import { NavLink } from "react-router-dom";
 
 export function Interface() {
   const { id } = useParams<"id">();
@@ -30,13 +37,13 @@ export function Interface() {
         {auth.user?.profile.name}
         <ul className={cx(styles.tournaments, styles.box)}>
           {tournaments.map((t) => (
-            <li
-              key={t.id}
-              className={cx({
-                [styles.selected]: activeTournamentId === t.id,
-              })}
-            >
-              <Link to={"/tournaments/" + String(t.id)}>{t.name}</Link>
+            <li key={t.id}>
+              <NavLink
+                to={`/tournaments/${t.id}`}
+                className={({ isActive }) => (isActive ? styles.selected : "")}
+              >
+                {t.name}
+              </NavLink>
             </li>
           ))}
         </ul>
@@ -47,9 +54,10 @@ export function Interface() {
             onChange={handleMediaUpload}
             key={activeTournamentId}
           />
-          <Expandable heading={<h3>Uploaded Files</h3>}>
+          <h3>Uploaded Files</h3>
+          <details>
             <FileListing />
-          </Expandable>
+          </details>
         </section>
         <section className={styles.box}>
           <Form action={"/"} method="post" className={styles.standardForm}>
@@ -69,7 +77,10 @@ export function Interface() {
         </footer>
       </aside>
       <main>
-        <Outlet />
+        <Suspense fallback={<p>Loading...</p>}>
+          <Outlet />
+        </Suspense>
+        <ScrollRestoration />
       </main>
     </div>
   );

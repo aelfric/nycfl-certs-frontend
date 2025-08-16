@@ -42,9 +42,6 @@
 .tournaments li {
   width: 98%;
   display: block !important;
-  padding-left: 4px;
-  padding-top: 6px;
-  padding-bottom: 6px;
   margin-bottom: 3px;
   margin-top: 2px;
   background-color: #daebf1;
@@ -55,10 +52,11 @@
   color: inherit;
   text-decoration: none;
   display: block;
+  padding: 6px 4px;
 }
 
 .tournaments li:hover,
-li.selected {
+li a.selected {
   background-color: #016f94;
   color: #fdfdfd;
 }
@@ -294,4 +292,10 @@ li.selected {
 .fileList li a {
   text-decoration: none;
   color: inherit;
+}
+
+.certificateIcon {
+  width: 1em;
+  top: 0.125em;
+  position: relative;
 }
