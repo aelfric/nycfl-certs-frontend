@@ -7,8 +7,8 @@ import { useAuth } from "react-oidc-context";
 function useAjaxIframe(
   url: string,
   token?: string,
-): RefObject<HTMLIFrameElement> {
-  const iframe = useRef<HTMLIFrameElement>(null);
+): RefObject<HTMLIFrameElement | null> {
+  const iframe = useRef<HTMLIFrameElement | null>(null);
   useEffect(() => {
     getData(url, token, "text/html").then((response) => {
       if (iframe.current) {
