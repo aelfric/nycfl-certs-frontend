@@ -49,3 +49,10 @@ export type TournamentForEdit = Omit<
   OptionalNullable<Tournament>,
   "id" | "events"
 >;
+
+export type CutoffType = "placement" | "cutoff" | "medal" | "quals";
+export type ISetCutoff = (
+  value: number,
+  type: CutoffType,
+  activeEvent: number,
+) => void;

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { TournamentScreen } from "./TournamentScreen";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 import { createRoutesStub } from "react-router";
 
 describe("<TournamentScreen/>", () => {
@@ -13,6 +13,9 @@ describe("<TournamentScreen/>", () => {
       HydrateFallback: () => <p>Loading...</p>,
     },
   ]);
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
   it("renders", async () => {
     render(<Stub initialEntries={["/tournaments/1"]} />);
     expect(await screen.findByText("Loading...")).toBeInTheDocument();

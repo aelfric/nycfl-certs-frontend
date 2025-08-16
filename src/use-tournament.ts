@@ -1,6 +1,6 @@
 import React from "react";
 import { TournamentContext } from "./tournament-context";
-import { deleteData, handleFileUpload, postData } from "./fetch";
+import { handleFileUpload, postData } from "./fetch";
 import { useAuth } from "react-oidc-context";
 
 export function useTournament() {
@@ -23,18 +23,6 @@ export function useTournament() {
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rounds?count=${numRounds}`,
       token,
       {},
-    ).then(setTournament);
-  }
-
-  function setCutoff(
-    value: number,
-    type: "placement" | "cutoff" | "medal" | "quals",
-    activeEvent: number,
-  ) {
-    postData(
-      `/certs/tournaments/${tournament?.id}/events/${activeEvent}/${type}`,
-      token,
-      { cutoff: value },
     ).then(setTournament);
   }
 
@@ -85,27 +73,11 @@ export function useTournament() {
     }
   }
 
-  function resetResults(eventId: number): void {
-    deleteData(
-      `/certs/tournaments/${tournament?.id}/events/${eventId}/results`,
-      token,
-    ).then(setTournament);
-  }
-
-  function deleteEvent(eventId: number): void {
-    deleteData(
-      `/certs/tournaments/${tournament?.id}/events/${eventId}`,
-      token,
-    ).then(setTournament);
-  }
   return {
     tournament: tournament,
     renameCompetitor: renameCompetitor,
     switchSchool,
     uploadResults: handleEventResultsUpload,
-    setCutoff,
-    resetResults,
-    deleteEvent,
     setEventType,
     setCertType,
     setNumRounds,

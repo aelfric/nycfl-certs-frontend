@@ -8,7 +8,7 @@ import { Certificates, Postings, Slides } from "./certificates";
 import { User } from "oidc-client-ts";
 import { ActionFunctionArgs, redirect } from "react-router-dom";
 import { EventDisplayV2, TournamentScreen } from "./TournamentScreen";
-import { TournamentForEdit } from "./types";
+import { CutoffType, TournamentForEdit } from "./types";
 import { emptyToNull } from "./utils";
 import { TournamentApi } from "./tournament-api";
 
@@ -112,6 +112,22 @@ export const router = (user: User | null | undefined) => {
                     return null;
                 }
               },
+              children: [
+                {
+                  path: "cutoff",
+                  action: async ({ request, params }) => {
+                    const formData = await request.formData();
+                    const value = Number(formData.get("value"));
+                    const cutoffType = formData.get("cutoffType") as CutoffType;
+                    await api.setCutoff(
+                      value,
+                      cutoffType,
+                      Number(params.eventId),
+                      params.id as string,
+                    );
+                  },
+                },
+              ],
             },
           ],
         },

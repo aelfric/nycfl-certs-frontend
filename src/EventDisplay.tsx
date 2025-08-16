@@ -2,7 +2,6 @@ import * as React from "react";
 import { useState } from "react";
 import { FileInput, FormTextInput } from "./Inputs";
 import { ResultDisplay } from "./ResultDisplay";
-import { ISetCutoff } from "./TournamentScreen";
 import { getData } from "./fetch";
 import styles from "./App.module.css";
 import { useTournament } from "./use-tournament";
@@ -13,7 +12,6 @@ import { useLocation } from "react-router-dom";
 
 type EventDisplayParams = {
   event: CompetitionEvent;
-  setCutoff: ISetCutoff;
   setEventType: (eventId: number, type: string) => void;
   setCertType: (eventId: number, type: string) => void;
   setNumRounds: (eventId: number, num: number) => void;
@@ -21,7 +19,6 @@ type EventDisplayParams = {
 
 export function EventDisplay({
   event,
-  setCutoff,
   setEventType,
   setCertType,
   setNumRounds,
@@ -146,7 +143,6 @@ export function EventDisplay({
         certificateCutoff={event.certificateCutoff}
         medalCutoff={event.medalCutoff}
         halfQuals={event.halfQuals}
-        setCutoff={setCutoff}
         eventId={event.id}
         key={event.id}
       />

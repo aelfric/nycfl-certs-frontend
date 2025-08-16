@@ -15,12 +15,6 @@ import {
 import cx from "classnames";
 import { CompetitionEvent, Tournament } from "./types";
 
-export type ISetCutoff = (
-  value: number,
-  type: "placement" | "cutoff" | "medal" | "quals",
-  activeEvent: number,
-) => void;
-
 type CertificateTypeIconProps = { certificateType: string };
 
 function CertificateTypeIcon({
@@ -41,9 +35,8 @@ function CertificateTypeIcon({
 }
 export function TournamentScreen() {
   const fetcher = useFetcher();
-  const [activeEventId, setActiveEventId] = React.useState<number | undefined>(
-    undefined,
-  );
+  const { eventId } = useParams();
+  const activeEventId = Number(eventId);
   const tournament = useLoaderData<Tournament>();
   if (!tournament) return <p>Loading...</p>;
 
@@ -229,7 +222,6 @@ export function TournamentScreen() {
           <tbody>
             {events.map((e: CompetitionEvent) => (
               <tr
-                onClick={() => setActiveEventId(e.id)}
                 key={e.id}
                 className={cx(styles.selectableRow, {
                   [styles.selected]: activeEventId === e.id,
@@ -295,9 +287,6 @@ export const EventDisplayV2 = () => {
   return activeEventIndex >= 0 ? (
     <EventDisplay
       event={events[activeEventIndex]}
-      setCutoff={(): void => {
-        throw new Error("Function not implemented.");
-      }}
       setEventType={(): void => {
         throw new Error("Function not implemented.");
       }}
