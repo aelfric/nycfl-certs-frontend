@@ -10,14 +10,6 @@ export function useTournament() {
   const user = auth.user;
   const token = user?.access_token;
 
-  function setEventName(activeEvent: number, newName: string) {
-    postData(
-      `/certs/tournaments/${tournament?.id}/events/${activeEvent}/rename?name=${newName}`,
-      token,
-      {},
-    ).then(setTournament);
-  }
-
   function setCertType(activeEvent: number, certType: string) {
     postData(
       `/certs/tournaments/${tournament?.id}/events/${activeEvent}/cert_type?type=${certType}`,
@@ -115,7 +107,6 @@ export function useTournament() {
     resetResults,
     deleteEvent,
     setEventType,
-    setEventName,
     setCertType,
     setNumRounds,
   };

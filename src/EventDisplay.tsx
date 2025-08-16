@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
-import { FileInput } from "./Inputs";
+import { FileInput, FormTextInput } from "./Inputs";
 import { ResultDisplay } from "./ResultDisplay";
 import { ISetCutoff } from "./TournamentScreen";
 import { getData } from "./fetch";
@@ -8,6 +8,8 @@ import styles from "./App.module.css";
 import { useTournament } from "./use-tournament";
 import { useAuth } from "react-oidc-context";
 import { CompetitionEvent } from "./types";
+import { useFetcher } from "react-router";
+import { useLocation } from "react-router-dom";
 
 type EventDisplayParams = {
   event: CompetitionEvent;
@@ -15,8 +17,6 @@ type EventDisplayParams = {
   setEventType: (eventId: number, type: string) => void;
   setCertType: (eventId: number, type: string) => void;
   setNumRounds: (eventId: number, num: number) => void;
-  setEventName: (eventId: number, newName: string) => void;
-  resetResults: (eventId: number) => void;
 };
 
 export function EventDisplay({
@@ -25,11 +25,11 @@ export function EventDisplay({
   setEventType,
   setCertType,
   setNumRounds,
-  setEventName,
-  resetResults,
 }: Readonly<EventDisplayParams>) {
+  const fetcher = useFetcher();
+  const location = useLocation();
   const [roundType, setRoundType] = React.useState("FINALIST");
-  const { uploadResults, deleteEvent } = useTournament();
+  const { uploadResults } = useTournament();
 
   function handleUpload(formEvt: React.ChangeEvent<HTMLInputElement>) {
     return uploadResults(formEvt, event.id, roundType);
@@ -46,39 +46,38 @@ export function EventDisplay({
   function onSetNumRounds(evt: React.ChangeEvent<HTMLInputElement>) {
     setNumRounds(event.id, Number(evt.target.value));
   }
-
-  function onRenameEvent(evt: React.ChangeEvent<HTMLFormElement>) {
-    evt.preventDefault();
-    setEventName(event.id, evt.target.newName.value);
-  }
-
   return (
     <section key={event.id}>
       <h2>Results</h2>
       <div>
-        <form onSubmit={onRenameEvent}>
-          <label>
-            Event Name:{" "}
-            <input
-              name={"newName"}
-              type="text"
-              defaultValue={event.name}
-              key={event.id}
-            />
-          </label>
+        <fetcher.Form
+          action={location.pathname}
+          method="POST"
+          className={styles.standardForm}
+        >
+          <FormTextInput
+            name={"newName"}
+            label={"Event Name: "}
+            defaultValue={event.name}
+            key={event.id}
+          />
           <button
             type={"submit"}
+            name="intent"
+            value={"rename"}
             className={styles.button}
             title={"Update Name"}
           >
             Update Name
           </button>
           <button
-            type={"button"}
+            type={"submit"}
+            name="intent"
+            value={"reset"}
             className={styles.button}
-            onClick={() => {
-              if (window.confirm("Are you sure you want to reset results")) {
-                resetResults(event.id);
+            onClick={(evt) => {
+              if (!window.confirm("Are you sure you want to reset results")) {
+                evt.preventDefault();
               }
             }}
             title={"Reset Results"}
@@ -86,22 +85,24 @@ export function EventDisplay({
             Reset Results
           </button>
           <button
-            type={"button"}
+            name="intent"
+            value={"delete"}
+            type={"submit"}
             className={[styles.button, styles.danger].join(" ")}
-            onClick={() => {
+            onClick={(evt) => {
               if (
-                window.confirm("Are you sure you want to delete this event?")
+                !window.confirm("Are you sure you want to delete this event?")
               ) {
-                deleteEvent(event.id);
+                evt.preventDefault();
               }
             }}
             title={"Delete Event"}
           >
             Delete Event
           </button>
-        </form>
+        </fetcher.Form>
       </div>
-      <div>
+      <div className={styles.standardForm}>
         <EnumSelect
           url={"/enums/event_types"}
           label={"Event Type"}
@@ -110,7 +111,7 @@ export function EventDisplay({
           key={event.id}
         />
       </div>
-      <div>
+      <div className={styles.standardForm}>
         <EnumSelect
           url={"/enums/certificate_types"}
           label={"Certificate Type"}
@@ -119,9 +120,9 @@ export function EventDisplay({
           key={event.id}
         />
       </div>
-      <div>
+      <div className={styles.standardForm}>
         <label>
-          Number of Rounds:{" "}
+          <span>Number of Rounds:</span>
           <input
             type={"number"}
             value={String(event.numRounds)}
@@ -129,7 +130,7 @@ export function EventDisplay({
           />
         </label>
       </div>
-      <div>
+      <div className={styles.standardForm}>
         <EnumSelect
           url={"/enums/elim_types"}
           label={"Round Type"}
@@ -179,7 +180,7 @@ function EnumSelect({
   }, [url, auth.user?.access_token]);
   return (
     <label>
-      {label}:{" "}
+      <span>{label}:</span>
       <select onChange={onSelect} value={value}>
         {options.map((o) => (
           <option key={o.value} value={o.value}>

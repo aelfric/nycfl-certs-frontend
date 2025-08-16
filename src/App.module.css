@@ -206,7 +206,8 @@ li a.selected {
   background-color: #efefef;
 }
 
-.standardForm label input {
+.standardForm label input,
+.standardForm label select {
   border-width: 1px;
   border-color: #ccc;
   border-style: solid;
