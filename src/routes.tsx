@@ -86,6 +86,32 @@ export const router = (user: User | null | undefined) => {
             {
               path: "events/:eventId",
               Component: EventDisplayV2,
+              action: async ({ request, params }) => {
+                const formData = await request.formData();
+                const intent = formData.get("intent") as string;
+                switch (intent) {
+                  case "rename":
+                    return await api.setEventName(
+                      Number(params.eventId),
+                      formData.get("newName") as string,
+                      params.id as string,
+                    );
+                  case "reset":
+                    return await api.resetResults(
+                      Number(params.eventId),
+                      params.id as string,
+                    );
+                  case "delete":
+                    await api.deleteEvent(
+                      Number(params.eventId),
+                      params.id as string,
+                    );
+                    return redirect(`/tournaments/${params.id}`);
+                  default:
+                    console.log(intent);
+                    return null;
+                }
+              },
             },
           ],
         },

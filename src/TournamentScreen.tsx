@@ -3,7 +3,6 @@ import styles from "./App.module.css";
 import { FieldGroup, FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
 import { Debate, Qualifier, Speaker, Trophy } from "./icons";
-import { useTournament } from "./use-tournament";
 import {
   Form,
   Link,
@@ -306,12 +305,6 @@ export const EventDisplayV2 = () => {
         throw new Error("Function not implemented.");
       }}
       setNumRounds={(): void => {
-        throw new Error("Function not implemented.");
-      }}
-      setEventName={(): void => {
-        throw new Error("Function not implemented.");
-      }}
-      resetResults={(): void => {
         throw new Error("Function not implemented.");
       }}
     />
