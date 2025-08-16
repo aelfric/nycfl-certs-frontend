@@ -35,7 +35,9 @@ function App() {
   } else {
     window.history.replaceState({}, document.title, window.location.pathname);
     return (
-      <RouterProvider router={router(auth.user)} />
+      <>
+        <RouterProvider router={router(auth.user)} />
+      </>
       // <Router>
       //   <Routes>
       //     <Route path="/tournaments/:id" element={<Interface />} />

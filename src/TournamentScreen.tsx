@@ -53,21 +53,15 @@ type CertificateTypeIconProps = { certificateType: string };
 function CertificateTypeIcon({
   certificateType,
 }: Readonly<CertificateTypeIconProps>) {
-  const defaultStyle: React.CSSProperties = {
-    width: "1em",
-    top: "0.125em",
-    position: "relative",
-  };
-
   switch (certificateType) {
     case "PLACEMENT":
-      return <Trophy style={defaultStyle} />;
+      return <Trophy />;
     case "DEBATE_RECORD":
-      return <Debate style={defaultStyle} />;
+      return <Debate />;
     case "DEBATE_SPEAKER":
-      return <Speaker style={defaultStyle} />;
+      return <Speaker />;
     case "QUALIFIER":
-      return <Qualifier style={defaultStyle} />;
+      return <Qualifier />;
     default:
       return null;
   }
@@ -130,7 +124,7 @@ export function TournamentScreen() {
       <section>
         <h1 style={{ display: "flex" }}>
           <span style={{ flexGrow: "1" }}>{name}</span>
-          <Form method={"post"} action={"/"}>
+          <Form method={"post"} action={"/"} key={tournament.id}>
             <input
               type={"hidden"}
               name={"tournamentId"}
@@ -146,7 +140,11 @@ export function TournamentScreen() {
             </button>
           </Form>
         </h1>
-        <form onSubmit={updateTournament} className={styles.standardForm}>
+        <form
+          onSubmit={updateTournament}
+          className={styles.standardForm}
+          key={tournament.id}
+        >
           <FormTextInput
             name={"tournamentName"}
             label={"Tournament Name"}
@@ -249,7 +247,11 @@ export function TournamentScreen() {
       </section>
       <section>
         <h2>Events</h2>
-        <form onSubmit={createEvents} className={styles.standardForm}>
+        <form
+          onSubmit={createEvents}
+          className={styles.standardForm}
+          key={tournament.id}
+        >
           <label>
             Enter a list of events separated by newlines.{" "}
             <textarea name={"events"} />
