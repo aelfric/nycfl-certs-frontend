@@ -7,14 +7,8 @@ export function useTournament() {
   const { tournament, setTournament } = React.useContext(TournamentContext);
 
   const auth = useAuth();
-  const token = auth.user?.access_token;
-  function createEvents(evt: React.ChangeEvent<HTMLFormElement>) {
-    evt.preventDefault();
-    postData("/certs/events", token, {
-      events: evt.target.events.value,
-      tournamentId: tournament?.id,
-    }).then(setTournament);
-  }
+  const user = auth.user;
+  const token = user?.access_token;
 
   function setEventName(activeEvent: number, newName: string) {
     postData(
@@ -121,7 +115,6 @@ export function useTournament() {
     resetResults,
     deleteEvent,
     setEventType,
-    createEvents,
     setEventName,
     setCertType,
     setNumRounds,

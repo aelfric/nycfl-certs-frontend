@@ -4,7 +4,15 @@ import { FieldGroup, FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
 import { Debate, Qualifier, Speaker, Trophy } from "./icons";
 import { useTournament } from "./use-tournament";
-import { Form, Link, useFetcher, useLoaderData } from "react-router";
+import {
+  Form,
+  Link,
+  Outlet,
+  useFetcher,
+  useLoaderData,
+  useOutletContext,
+  useParams,
+} from "react-router";
 import cx from "classnames";
 import { CompetitionEvent, Tournament } from "./types";
 
@@ -38,15 +46,6 @@ export function TournamentScreen() {
     undefined,
   );
   const tournament = useLoaderData<Tournament>();
-  const {
-    setCutoff,
-    resetResults,
-    setEventType,
-    createEvents,
-    setEventName,
-    setNumRounds,
-    setCertType,
-  } = useTournament();
   if (!tournament) return <p>Loading...</p>;
 
   const {
@@ -67,9 +66,6 @@ export function TournamentScreen() {
     slideSecondaryAccentColor,
     slideOverlayColor,
   } = tournament;
-  const activeEventIndex = activeEventId
-    ? events.findIndex((e: CompetitionEvent) => e.id === activeEventId)
-    : -1;
 
   function checkOrBlank(value: number, cutOff: number) {
     if (value > cutOff) {
@@ -208,8 +204,9 @@ export function TournamentScreen() {
       </section>
       <section>
         <h2>Events</h2>
-        <form
-          onSubmit={createEvents}
+        <Form
+          action={"./events"}
+          method="POST"
           className={styles.standardForm}
           key={tournament.id}
         >
@@ -218,7 +215,7 @@ export function TournamentScreen() {
             <textarea name={"events"} />
           </label>
           <SubmitButton>Save Events</SubmitButton>
-        </form>
+        </Form>
         <table className={styles.stripedTable}>
           <thead>
             <tr>
@@ -242,7 +239,9 @@ export function TournamentScreen() {
                 <td>
                   <CertificateTypeIcon certificateType={e.certificateType} />
                 </td>
-                <td>{e.name}</td>
+                <td>
+                  <Link to={`./events/${e.id}`}>{e.name}</Link>
+                </td>
                 <td>{e.latestResult || ""}</td>
                 <td>{checkOrBlank(e.placementCutoff, 1)}</td>
                 <td>{checkOrBlank(e.medalCutoff, 1)}</td>
@@ -253,18 +252,7 @@ export function TournamentScreen() {
           </tbody>
         </table>
       </section>
-      {events[activeEventIndex] !== undefined && (
-        <EventDisplay
-          event={events[activeEventIndex]}
-          setCutoff={setCutoff}
-          setEventType={setEventType}
-          setCertType={setCertType}
-          setNumRounds={setNumRounds}
-          setEventName={setEventName}
-          resetResults={resetResults}
-        />
-      )}
-
+      <Outlet context={tournament.events} />
       <div style={{ margin: "50px", display: "flex" }}>
         <Link
           className={styles.button}
@@ -297,3 +285,35 @@ export function TournamentScreen() {
     </>
   );
 }
+export const EventDisplayV2 = () => {
+  const events = useOutletContext<CompetitionEvent[]>();
+
+  const params = useParams<{ eventId: string }>();
+  const activeEventIndex =
+    events.findIndex(
+      (e: CompetitionEvent) => e.id === Number(params.eventId),
+    ) ?? -1;
+  return activeEventIndex >= 0 ? (
+    <EventDisplay
+      event={events[activeEventIndex]}
+      setCutoff={(): void => {
+        throw new Error("Function not implemented.");
+      }}
+      setEventType={(): void => {
+        throw new Error("Function not implemented.");
+      }}
+      setCertType={(): void => {
+        throw new Error("Function not implemented.");
+      }}
+      setNumRounds={(): void => {
+        throw new Error("Function not implemented.");
+      }}
+      setEventName={(): void => {
+        throw new Error("Function not implemented.");
+      }}
+      resetResults={(): void => {
+        throw new Error("Function not implemented.");
+      }}
+    />
+  ) : null;
+};
