@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
-import { Tournament } from "./TournamentScreen";
 import { getData } from "./fetch";
 import { ITournamentContext, TournamentContext } from "./tournament-context";
 import { useAuth } from "react-oidc-context";
+import { Tournament } from "./types";
 
 type TournamentProviderProps = {
   id: number;

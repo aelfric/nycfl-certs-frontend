@@ -1,99 +1,42 @@
-import * as React from "react";
 import styles from "./App.module.css";
 import { FieldGroup, FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
-import { Result } from "./App";
 import { Debate, Qualifier, Speaker, Trophy } from "./icons";
-import { useTournament } from "./use-tournament";
-import { Link } from "react-router";
+import {
+  Form,
+  Link,
+  Outlet,
+  useFetcher,
+  useLoaderData,
+  useOutletContext,
+  useParams,
+} from "react-router";
 import cx from "classnames";
-
-export interface Tournament {
-  id: number;
-  name: string;
-  host: string;
-  date: string;
-  logoUrl?: string;
-  slideBackgroundUrl?: string;
-  slideAccentColor?: string;
-  slideSecondaryAccentColor?: string;
-  slidePrimaryColor?: string;
-  slideOverlayColor?: string;
-  certificateHeadline?: string;
-  line1?: string;
-  line2?: string;
-  signature?: string;
-  signatureTitle?: string;
-  styleOverrides?: string;
-  events: CompetitionEvent[];
-}
-
-export interface CompetitionEvent {
-  latestResult: string;
-  eventType: string;
-  certificateType: string;
-  id: number;
-  name: string;
-  results: Result[];
-  placementCutoff: number;
-  medalCutoff: number;
-  certificateCutoff: number;
-  halfQuals: number;
-  numRounds: number | null;
-}
-
-export type ISetCutoff = (
-  value: number,
-  type: "placement" | "cutoff" | "medal" | "quals",
-  activeEvent: number,
-) => void;
+import { CompetitionEvent, Tournament } from "./types";
 
 type CertificateTypeIconProps = { certificateType: string };
 
 function CertificateTypeIcon({
   certificateType,
 }: Readonly<CertificateTypeIconProps>) {
-  const defaultStyle: React.CSSProperties = {
-    width: "1em",
-    top: "0.125em",
-    position: "relative",
-  };
-
   switch (certificateType) {
     case "PLACEMENT":
-      return <Trophy style={defaultStyle} />;
+      return <Trophy />;
     case "DEBATE_RECORD":
-      return <Debate style={defaultStyle} />;
+      return <Debate />;
     case "DEBATE_SPEAKER":
-      return <Speaker style={defaultStyle} />;
+      return <Speaker />;
     case "QUALIFIER":
-      return <Qualifier style={defaultStyle} />;
+      return <Qualifier />;
     default:
       return null;
   }
 }
-
-interface TournamentScreenProps {
-  copyTournament: (evt: React.MouseEvent<HTMLButtonElement>) => void;
-}
-
-export function TournamentScreen({
-  copyTournament,
-}: Readonly<TournamentScreenProps>) {
-  const [activeEventId, setActiveEventId] = React.useState<number | undefined>(
-    undefined,
-  );
-  const {
-    tournament,
-    setCutoff,
-    updateTournament,
-    resetResults,
-    setEventType,
-    createEvents,
-    setEventName,
-    setNumRounds,
-    setCertType,
-  } = useTournament();
+export function TournamentScreen() {
+  const fetcher = useFetcher();
+  const { eventId } = useParams();
+  const activeEventId = Number(eventId);
+  const tournament = useLoaderData<Tournament>();
   if (!tournament) return <p>Loading...</p>;
 
   const {
@@ -114,9 +57,6 @@ export function TournamentScreen({
     slideSecondaryAccentColor,
     slideOverlayColor,
   } = tournament;
-  const activeEventIndex = activeEventId
-    ? events.findIndex((e: CompetitionEvent) => e.id === activeEventId)
-    : -1;
 
   function checkOrBlank(value: number, cutOff: number) {
     if (value > cutOff) {
@@ -131,15 +71,28 @@ export function TournamentScreen({
       <section>
         <h1 style={{ display: "flex" }}>
           <span style={{ flexGrow: "1" }}>{name}</span>
-          <button
-            className={styles.button}
-            type="button"
-            onClick={copyTournament}
-          >
-            Copy
-          </button>{" "}
+          <Form method={"post"} action={"/"} key={tournament.id}>
+            <input
+              type={"hidden"}
+              name={"tournamentId"}
+              value={tournament.id}
+            />
+            <button
+              className={styles.button}
+              type="submit"
+              name="intent"
+              value="copy"
+            >
+              Copy
+            </button>
+          </Form>
         </h1>
-        <form onSubmit={updateTournament} className={styles.standardForm}>
+        <fetcher.Form
+          method={"POST"}
+          action={`/tournaments/${tournament.id}`}
+          className={styles.standardForm}
+          key={tournament.id}
+        >
           <FormTextInput
             name={"tournamentName"}
             label={"Tournament Name"}
@@ -238,17 +191,22 @@ export function TournamentScreen({
             />
           </label>
           <SubmitButton>Update Tournament</SubmitButton>
-        </form>
+        </fetcher.Form>
       </section>
       <section>
         <h2>Events</h2>
-        <form onSubmit={createEvents} className={styles.standardForm}>
+        <Form
+          action={"./events"}
+          method="POST"
+          className={styles.standardForm}
+          key={tournament.id}
+        >
           <label>
             Enter a list of events separated by newlines.{" "}
             <textarea name={"events"} />
           </label>
           <SubmitButton>Save Events</SubmitButton>
-        </form>
+        </Form>
         <table className={styles.stripedTable}>
           <thead>
             <tr>
@@ -263,7 +221,6 @@ export function TournamentScreen({
           <tbody>
             {events.map((e: CompetitionEvent) => (
               <tr
-                onClick={() => setActiveEventId(e.id)}
                 key={e.id}
                 className={cx(styles.selectableRow, {
                   [styles.selected]: activeEventId === e.id,
@@ -272,7 +229,9 @@ export function TournamentScreen({
                 <td>
                   <CertificateTypeIcon certificateType={e.certificateType} />
                 </td>
-                <td>{e.name}</td>
+                <td>
+                  <Link to={`./events/${e.id}`}>{e.name}</Link>
+                </td>
                 <td>{e.latestResult || ""}</td>
                 <td>{checkOrBlank(e.placementCutoff, 1)}</td>
                 <td>{checkOrBlank(e.medalCutoff, 1)}</td>
@@ -283,18 +242,7 @@ export function TournamentScreen({
           </tbody>
         </table>
       </section>
-      {events[activeEventIndex] !== undefined && (
-        <EventDisplay
-          event={events[activeEventIndex]}
-          setCutoff={setCutoff}
-          setEventType={setEventType}
-          setCertType={setCertType}
-          setNumRounds={setNumRounds}
-          setEventName={setEventName}
-          resetResults={resetResults}
-        />
-      )}
-
+      <Outlet context={tournament.events} />
       <div style={{ margin: "50px", display: "flex" }}>
         <Link
           className={styles.button}
@@ -327,3 +275,26 @@ export function TournamentScreen({
     </>
   );
 }
+export const EventDisplayV2 = () => {
+  const events = useOutletContext<CompetitionEvent[]>();
+
+  const params = useParams<{ eventId: string }>();
+  const activeEventIndex =
+    events.findIndex(
+      (e: CompetitionEvent) => e.id === Number(params.eventId),
+    ) ?? -1;
+  return activeEventIndex >= 0 ? (
+    <EventDisplay
+      event={events[activeEventIndex]}
+      setEventType={(): void => {
+        throw new Error("Function not implemented.");
+      }}
+      setCertType={(): void => {
+        throw new Error("Function not implemented.");
+      }}
+      setNumRounds={(): void => {
+        throw new Error("Function not implemented.");
+      }}
+    />
+  ) : null;
+};
