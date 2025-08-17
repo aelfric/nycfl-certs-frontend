@@ -1,4 +1,3 @@
-import * as React from "react";
 import styles from "./App.module.css";
 import { FieldGroup, FormTextInput, SubmitButton } from "./Inputs";
 import { EventDisplay } from "./EventDisplay";
