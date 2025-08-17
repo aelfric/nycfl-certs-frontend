@@ -3,10 +3,9 @@ import { Certificate, Medal, Trophy } from "./icons";
 import * as React from "react";
 import { ReactNode } from "react";
 import { Result } from "./App";
-import { useTournament } from "./use-tournament";
 import { StripedTable } from "./StripedTable";
 import { CutoffType } from "./types";
-import { useFetcher, useParams } from "react-router";
+import { Form, useFetcher, useParams } from "react-router";
 import cx from "classnames";
 
 interface ResultDisplayProps {
@@ -96,9 +95,7 @@ export function ResultDisplay({
               <td>
                 <ResultName result={result} eventId={eventId} />
               </td>
-              <td>
-                <ResultSchool result={result} eventId={eventId} />
-              </td>
+              <td>{result.school.name}</td>
               <td>{result.place < halfQuals ? "Half" : ""}</td>
               <td>
                 <fetcher.Form
@@ -134,26 +131,25 @@ export function ResultDisplay({
 type ResultNameProps = { result: Result; eventId: number };
 
 function ResultName({ result, eventId }: Readonly<ResultNameProps>) {
+  const { id: tournamentId } = useParams();
+
   const [editing, setEditing] = React.useState(false);
-  const { renameCompetitor } = useTournament();
 
   function handleDoubleClick() {
     setEditing((e) => !e);
   }
-
-  function handleSave(evt: React.ChangeEvent<HTMLFormElement>) {
-    evt.preventDefault();
-    renameCompetitor(eventId, result.id, evt.target.newName.value);
-    setEditing(false);
-  }
-
   if (editing) {
     return (
-      <form onSubmit={handleSave}>
+      <Form
+        action={`/tournaments/${tournamentId}/events/${eventId}/results`}
+        onSubmit={() => setEditing(false)}
+        method={"POST"}
+      >
+        <input type={"hidden"} name={"resultId"} defaultValue={result.id} />
         <input type={"text"} name={"newName"} defaultValue={result.name} />
         <br />
         <button type={"submit"}>Save</button>
-      </form>
+      </Form>
     );
   }
   return (
@@ -163,50 +159,6 @@ function ResultName({ result, eventId }: Readonly<ResultNameProps>) {
       title={String(result.id)}
     >
       {result.name}
-    </button>
-  );
-}
-
-type ResultSchoolProps = {
-  result: Result;
-  eventId: number;
-};
-
-function ResultSchool({ result, eventId }: Readonly<ResultSchoolProps>) {
-  const [editing, setEditing] = React.useState(false);
-  const { switchSchool } = useTournament();
-
-  function handleDoubleClick() {
-    setEditing((e) => !e);
-  }
-
-  function handleSave(evt: React.ChangeEvent<HTMLFormElement>) {
-    evt.preventDefault();
-    switchSchool(eventId, result.id, Number(evt.target.newSchool.value));
-    setEditing(false);
-  }
-
-  if (editing) {
-    return (
-      <form onSubmit={handleSave}>
-        <input type={"hidden"} value={result.school.id} />
-        <input
-          type={"text"}
-          name={"newSchool"}
-          defaultValue={result.school.name}
-        />
-        <br />
-        <button type={"submit"}>Save</button>
-      </form>
-    );
-  }
-  return (
-    <button
-      className={styles.buttonInline}
-      onDoubleClick={handleDoubleClick}
-      title={String(result.school.id)}
-    >
-      {result.school.name}
     </button>
   );
 }

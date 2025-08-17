@@ -130,19 +130,6 @@ export class TournamentApi {
     );
   }
 
-  async switchSchool(
-    eventId: number,
-    resultId: number,
-    newSchool: number,
-    tournamentId: string,
-  ) {
-    return await postData(
-      `/certs/tournaments/${tournamentId}/events/${eventId}/results/${resultId}/school?schoolId=${newSchool}`,
-      this.getToken(),
-      {},
-    );
-  }
-
   async handleEventResultsUpload(
     event: React.ChangeEvent<HTMLInputElement>,
     eventId: number | undefined,
