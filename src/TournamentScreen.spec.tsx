@@ -17,6 +17,7 @@ describe("<TournamentScreen/>", () => {
     vi.resetAllMocks();
   });
   it("renders", async () => {
+    mockLoadOneTournament.mockReturnValue(new Promise(() => {}));
     render(<Stub initialEntries={["/tournaments/1"]} />);
     expect(await screen.findByText("Loading...")).toBeInTheDocument();
   });
