@@ -127,6 +127,21 @@ export const router = (user: User | null | undefined) => {
                     );
                   },
                 },
+                {
+                  path: "results",
+                  action: async ({ request, params }) => {
+                    const formData = await request.formData();
+                    await api.renameCompetitor(
+                      Number(params.eventId),
+                      Number(formData.get("resultId")),
+                      formData.get("newName") as string,
+                      params.id as string,
+                    );
+                    return redirect(
+                      `/tournaments/${params.id}/events/${params.eventId}`,
+                    );
+                  },
+                },
               ],
             },
           ],
