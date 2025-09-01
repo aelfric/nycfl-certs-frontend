@@ -7,42 +7,30 @@ import styles from "./App.module.css";
 import { useTournament } from "./use-tournament";
 import { useAuth } from "react-oidc-context";
 import { CompetitionEvent } from "./types";
-import { useFetcher } from "react-router";
+import { useFetcher, useOutletContext, useParams } from "react-router";
 import { useLocation } from "react-router-dom";
 
-type EventDisplayParams = {
-  event: CompetitionEvent;
-  setEventType: (eventId: number, type: string) => void;
-  setCertType: (eventId: number, type: string) => void;
-  setNumRounds: (eventId: number, num: number) => void;
-};
+export function EventDisplay() {
+  const events = useOutletContext<CompetitionEvent[]>();
 
-export function EventDisplay({
-  event,
-  setEventType,
-  setCertType,
-  setNumRounds,
-}: Readonly<EventDisplayParams>) {
+  const params = useParams<{ eventId: string }>();
+  const event = events.find(
+    (e: CompetitionEvent) => e.id === Number(params.eventId),
+  );
+
   const fetcher = useFetcher();
   const location = useLocation();
   const [roundType, setRoundType] = React.useState("FINALIST");
   const { uploadResults } = useTournament();
 
+  if (!event) {
+    return null;
+  }
+
   function handleUpload(formEvt: React.ChangeEvent<HTMLInputElement>) {
-    return uploadResults(formEvt, event.id, roundType);
+    return uploadResults(formEvt, event?.id, roundType);
   }
 
-  function onTypeSelect(evt: React.ChangeEvent<HTMLSelectElement>) {
-    setEventType(event.id, evt.target.value);
-  }
-
-  function onCertTypeSelect(evt: React.ChangeEvent<HTMLSelectElement>) {
-    setCertType(event.id, evt.target.value);
-  }
-
-  function onSetNumRounds(evt: React.ChangeEvent<HTMLInputElement>) {
-    setNumRounds(event.id, Number(evt.target.value));
-  }
   return (
     <section key={event.id}>
       <h2>Results</h2>
@@ -99,41 +87,61 @@ export function EventDisplay({
           </button>
         </fetcher.Form>
       </div>
-      <div className={styles.standardForm}>
+      <fetcher.Form
+        className={styles.inlineSubmit}
+        action={location.pathname}
+        method="POST"
+      >
         <EnumSelect
           url={"/enums/event_types"}
           label={"Event Type"}
-          onSelect={onTypeSelect}
-          value={event.eventType}
+          defaultValue={event.eventType}
           key={event.id}
+          name={"eventType"}
         />
-      </div>
-      <div className={styles.standardForm}>
+        <button type={"submit"} name={"intent"} value={"update"}>
+          Update
+        </button>{" "}
+      </fetcher.Form>
+      <fetcher.Form
+        className={styles.inlineSubmit}
+        action={location.pathname}
+        method="POST"
+      >
         <EnumSelect
           url={"/enums/certificate_types"}
           label={"Certificate Type"}
-          onSelect={onCertTypeSelect}
-          value={event.certificateType}
+          defaultValue={event.certificateType}
           key={event.id}
+          name={"certType"}
         />
-      </div>
-      <div className={styles.standardForm}>
-        <label>
-          <span>Number of Rounds:</span>
-          <input
-            type={"number"}
-            value={String(event.numRounds)}
-            onChange={onSetNumRounds}
-          />
-        </label>
-      </div>
-      <div className={styles.standardForm}>
+        <button type={"submit"} name={"intent"} value={"update"}>
+          Update
+        </button>{" "}
+      </fetcher.Form>
+      <fetcher.Form
+        className={styles.inlineSubmit}
+        action={location.pathname}
+        method={"POST"}
+      >
+        <label htmlFor={"numRounds"}>Number of Rounds:</label>
+        <input
+          type={"number"}
+          name={"numRounds"}
+          defaultValue={String(event.numRounds)}
+        />
+        <button type={"submit"} name={"intent"} value={"update"}>
+          Update
+        </button>
+      </fetcher.Form>
+      <div className={styles.inlineSubmit}>
         <EnumSelect
           url={"/enums/elim_types"}
           label={"Round Type"}
-          onSelect={(evt) => setRoundType(evt.target.value)}
+          onChange={(evt) => setRoundType(evt.target.value)}
           value={roundType}
           key={event.id}
+          name={"roundType"}
         />
       </div>
       <FileInput name="eventResults" onChange={handleUpload} />
@@ -158,16 +166,16 @@ type Option = {
 type EnumSelectProps = {
   url: string;
   label: string;
-  onSelect: (evt: React.ChangeEvent<HTMLSelectElement>) => void;
-  value: string | undefined;
 };
 
 function EnumSelect({
   url,
   label,
-  onSelect,
+  onChange,
   value,
-}: Readonly<EnumSelectProps>) {
+  defaultValue,
+  name,
+}: Readonly<EnumSelectProps & React.HTMLProps<HTMLSelectElement>>) {
   const [options, setOptions] = useState<Option[]>([]);
   const auth = useAuth();
 
@@ -175,15 +183,20 @@ function EnumSelect({
     getData(url, auth.user?.access_token).then(setOptions);
   }, [url, auth.user?.access_token]);
   return (
-    <label>
-      <span>{label}:</span>
-      <select onChange={onSelect} value={value}>
+    <>
+      <label htmlFor={name}>{label}:</label>
+      <select
+        name={name}
+        onChange={onChange}
+        value={value}
+        defaultValue={defaultValue}
+      >
         {options.map((o) => (
           <option key={o.value} value={o.value}>
             {o.label}
           </option>
         ))}
       </select>
-    </label>
+    </>
   );
 }

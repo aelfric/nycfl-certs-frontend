@@ -271,26 +271,3 @@ export function TournamentScreen() {
     </>
   );
 }
-export const EventDisplayV2 = () => {
-  const events = useOutletContext<CompetitionEvent[]>();
-
-  const params = useParams<{ eventId: string }>();
-  const activeEventIndex =
-    events.findIndex(
-      (e: CompetitionEvent) => e.id === Number(params.eventId),
-    ) ?? -1;
-  return activeEventIndex >= 0 ? (
-    <EventDisplay
-      event={events[activeEventIndex]}
-      setEventType={(): void => {
-        throw new Error("Function not implemented.");
-      }}
-      setCertType={(): void => {
-        throw new Error("Function not implemented.");
-      }}
-      setNumRounds={(): void => {
-        throw new Error("Function not implemented.");
-      }}
-    />
-  ) : null;
-};

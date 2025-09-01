@@ -7,10 +7,11 @@ import { Interface, NoTournamentSelected } from "./Interface";
 import { Certificates, Postings, Slides } from "./certificates";
 import { User } from "oidc-client-ts";
 import { ActionFunctionArgs, redirect } from "react-router-dom";
-import { EventDisplayV2, TournamentScreen } from "./TournamentScreen";
+import { TournamentScreen } from "./TournamentScreen";
 import { CutoffType, TournamentForEdit } from "./types";
 import { emptyToNull } from "./utils";
 import { TournamentApi } from "./tournament-api";
+import { EventDisplay } from "./EventDisplay";
 
 export const router = (user: User | null | undefined) => {
   const api = new TournamentApi(user);
@@ -85,7 +86,7 @@ export const router = (user: User | null | undefined) => {
             },
             {
               path: "events/:eventId",
-              Component: EventDisplayV2,
+              Component: EventDisplay,
               action: async ({ request, params }) => {
                 const formData = await request.formData();
                 const intent = formData.get("intent") as string;
@@ -96,6 +97,28 @@ export const router = (user: User | null | undefined) => {
                       formData.get("newName") as string,
                       params.id as string,
                     );
+                  case "update":
+                    if (formData.get("numRounds")) {
+                      return await api.setNumRounds(
+                        Number(params.eventId),
+                        Number(formData.get("numRounds")),
+                        params.id as string,
+                      );
+                    } else if (formData.get("certType")) {
+                      return await api.setCertType(
+                        Number(params.eventId),
+                        formData.get("certType") as string,
+                        params.id as string,
+                      );
+                    } else if (formData.get("eventType")) {
+                      return await api.setEventType(
+                        Number(params.eventId),
+                        formData.get("eventType") as string,
+                        params.id as string,
+                      );
+                    } else {
+                      throw new Error("Not implemented");
+                    }
                   case "reset":
                     return await api.resetResults(
                       Number(params.eventId),
