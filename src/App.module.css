@@ -194,7 +194,8 @@ li a.selected {
     0 3px 1px -1px rgba(0, 0, 0, 0.2);
 }
 
-.standardForm label {
+.standardForm label,
+.inlineSubmit {
   display: flex;
   flex-wrap: wrap;
   margin: 0;
@@ -202,7 +203,8 @@ li a.selected {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
 }
-.standardForm label:nth-child(even) {
+.standardForm label:nth-child(even),
+.inlineSubmit:nth-child(even) {
   background-color: #efefef;
 }
 
@@ -225,16 +227,7 @@ li a.selected {
   padding: 0.75rem;
 }
 
-.fileInput {
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: -1;
-}
-
-.fileInput + label {
+input.fileInput::file-selector-button {
   font-weight: bold;
   border: none;
   border-radius: 2px;
@@ -256,7 +249,7 @@ li a.selected {
   cursor: pointer;
 }
 
-.fileInput + label:hover {
+input.fileInput::file-selector-button:hover {
   background-color: #fefefe;
   color: #016f94;
 }
@@ -337,4 +330,5 @@ li a.selected {
   border: none;
   border-radius: 2px;
   display: inline-block;
+  min-width: 12%;
 }

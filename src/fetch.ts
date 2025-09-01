@@ -77,11 +77,32 @@ export async function getData(
   }
 }
 
-export function handleFileUpload<T>(
+export async function handleFileUploadFormData<T>(
+  url: string,
+  formData: FormData,
+  token: string | undefined,
+): Promise<T | undefined> {
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+      headers: {
+        Authorization: "Bearer " + (token || ""),
+      },
+    });
+    const response_1 = isResponseOk(response);
+    return await response_1.json();
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+}
+
+export function handleFileUpload(
   event: React.ChangeEvent<HTMLInputElement>,
   url: string,
   token: string | undefined,
-  onFulfilled: ((value: T) => unknown) | null | undefined,
+  onFulfilled: ((value: unknown) => unknown) | null | undefined,
 ) {
   try {
     const files = event.target.files;
@@ -90,21 +111,12 @@ export function handleFileUpload<T>(
       formData.append("file", files[0]);
       formData.append("fileName", files[0].name);
       formData.append("mimeType", files[0].type);
-      fetch(url, {
-        method: "POST",
-        body: formData,
-        headers: {
-          Authorization: "Bearer " + (token || ""),
-        },
-      })
-        .then(isResponseOk)
-        .then((response) => response.json())
-        .then(onFulfilled)
-        .catch((error) => {
-          console.error(error);
-        });
+      return handleFileUploadFormData(url, formData, token).then(onFulfilled);
+    } else {
+      return Promise.resolve();
     }
   } catch (e) {
     alert("Sorry you can't do that: " + e);
+    return Promise.reject("Not allowed");
   }
 }

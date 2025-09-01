@@ -1,10 +1,7 @@
-import * as React from "react";
-import { FormEvent } from "react";
-import { FileInput, FormTextInput } from "./Inputs";
+import { FormTextInput } from "./Inputs";
 import { ResultDisplay } from "./ResultDisplay";
 import { getData } from "./fetch";
 import styles from "./App.module.css";
-import { useTournament } from "./use-tournament";
 import { CompetitionEvent } from "./types";
 import {
   useFetcher,
@@ -55,17 +52,10 @@ export function EventDisplay() {
 
   const fetcher = useFetcher();
   const location = useLocation();
-  const [roundType, setRoundType] = React.useState("FINALIST");
-  const { uploadResults } = useTournament();
 
   if (!event) {
     return null;
   }
-
-  function handleUpload(formEvt: React.ChangeEvent<HTMLInputElement>) {
-    return uploadResults(formEvt, event?.id, roundType);
-  }
-
   return (
     <section key={event.id}>
       <h2>Results</h2>
@@ -137,7 +127,7 @@ export function EventDisplay() {
         </select>
         <button type={"submit"} name={"intent"} value={"update"}>
           Update
-        </button>{" "}
+        </button>
       </fetcher.Form>
       <fetcher.Form
         className={styles.inlineSubmit}
@@ -154,7 +144,7 @@ export function EventDisplay() {
         </select>
         <button type={"submit"} name={"intent"} value={"update"}>
           Update
-        </button>{" "}
+        </button>
       </fetcher.Form>
       <fetcher.Form
         className={styles.inlineSubmit}
@@ -171,23 +161,35 @@ export function EventDisplay() {
           Update
         </button>
       </fetcher.Form>
-      <div className={styles.inlineSubmit}>
-        <label htmlFor={"roundType"}>Round Type:</label>
-        <select
-          name={"roundType"}
-          onChange={(evt: FormEvent<HTMLSelectElement>) =>
-            setRoundType(evt.currentTarget.value)
-          }
-          value={roundType}
-        >
-          {enums.elimTypes?.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
-      </div>
-      <FileInput name="eventResults" onChange={handleUpload} />
+      <fetcher.Form
+        action={location.pathname + "/results"}
+        method={"POST"}
+        encType={"multipart/form-data"}
+      >
+        <div className={styles.standardForm}>
+          <label htmlFor={"eventResults"}>
+            <span>Event Results:</span>
+            <input
+              type="file"
+              id={"eventResults"}
+              name={"file"}
+              disabled={false}
+              className={styles.fileInput}
+            />
+          </label>
+        </div>
+        <div className={styles.inlineSubmit}>
+          <label htmlFor={"roundType"}>Round Type:</label>
+          <select name={"roundType"} defaultValue={"FINALIST"}>
+            {enums.elimTypes?.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+          <button type={"submit"}>Save</button>
+        </div>
+      </fetcher.Form>
       <ResultDisplay
         results={event.results}
         placementCutoff={event.placementCutoff}

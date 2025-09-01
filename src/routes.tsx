@@ -155,16 +155,33 @@ export const router = (user: User | null | undefined) => {
                   path: "results",
                   action: async ({ request, params }) => {
                     const formData = await request.formData();
-                    await api.renameCompetitor(
+                    await api.handleEventResultsUpload(
                       Number(params.eventId),
-                      Number(formData.get("resultId")),
-                      formData.get("newName") as string,
+                      formData.get("roundType") as string,
                       params.id as string,
+                      formData,
                     );
                     return redirect(
                       `/tournaments/${params.id}/events/${params.eventId}`,
                     );
                   },
+                  children: [
+                    {
+                      path: ":resultId",
+                      action: async ({ request, params }) => {
+                        const formData = await request.formData();
+                        await api.renameCompetitor(
+                          Number(params.eventId),
+                          Number(params.resultId),
+                          formData.get("newName") as string,
+                          params.id as string,
+                        );
+                        return redirect(
+                          `/tournaments/${params.id}/events/${params.eventId}`,
+                        );
+                      },
+                    },
+                  ],
                 },
               ],
             },

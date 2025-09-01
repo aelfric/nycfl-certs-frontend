@@ -141,11 +141,10 @@ function ResultName({ result, eventId }: Readonly<ResultNameProps>) {
   if (editing) {
     return (
       <Form
-        action={`/tournaments/${tournamentId}/events/${eventId}/results`}
+        action={`/tournaments/${tournamentId}/events/${eventId}/results/${result.id}`}
         onSubmit={() => setEditing(false)}
         method={"POST"}
       >
-        <input type={"hidden"} name={"resultId"} defaultValue={result.id} />
         <input type={"text"} name={"newName"} defaultValue={result.name} />
         <br />
         <button type={"submit"}>Save</button>

@@ -18,8 +18,8 @@ export function Interface() {
   const auth = useAuth();
   const token = auth.user?.access_token;
 
-  function handleMediaUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    handleFileUpload(event, `/s3/upload`, token, () => {
+  async function handleMediaUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    await handleFileUpload(event, `/s3/upload`, token, () => {
       alert("Media Saved");
     });
   }
@@ -74,7 +74,6 @@ export function Interface() {
         <Suspense fallback={<p>Loading...</p>}>
           <Outlet />
         </Suspense>
-        {/*<ScrollRestoration />*/}
       </main>
     </div>
   );

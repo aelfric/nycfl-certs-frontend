@@ -1,7 +1,11 @@
 import { User } from "oidc-client-ts";
-import { deleteData, getData, handleFileUpload, postData } from "./fetch";
+import {
+  deleteData,
+  getData,
+  handleFileUploadFormData,
+  postData,
+} from "./fetch";
 import { Tournament, TournamentForEdit } from "./types";
-import React from "react";
 
 export class TournamentApi {
   private user: User | undefined | null;
@@ -131,19 +135,19 @@ export class TournamentApi {
   }
 
   async handleEventResultsUpload(
-    event: React.ChangeEvent<HTMLInputElement>,
     eventId: number | undefined,
-    roundType: string = "FINALIST",
+    roundType: string,
     tournamentId: string,
+    formData: FormData,
   ) {
     if (eventId !== undefined) {
-      return await handleFileUpload(
-        event,
+      return handleFileUploadFormData(
         `/certs/tournaments/${tournamentId}/events/${eventId}/results?type=${roundType}`,
+        formData,
         this.getToken(),
-        () => undefined,
       );
     }
+    return Promise.resolve();
   }
 
   async resetResults(eventId: number, tournamentId: string): Promise<void> {

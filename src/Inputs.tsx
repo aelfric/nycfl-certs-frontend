@@ -72,7 +72,6 @@ export function FileInput({ name, onChange }: Readonly<FileInputProps>) {
         disabled={false}
         className={styles.fileInput}
       />
-      <label htmlFor={name}>Choose a file</label>
     </div>
   );
 }
