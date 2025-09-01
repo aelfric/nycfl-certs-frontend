@@ -1,6 +1,5 @@
 import styles from "./App.module.css";
 import { FieldGroup, FormTextInput, SubmitButton } from "./Inputs";
-import { EventDisplay } from "./EventDisplay";
 import { Debate, Qualifier, Speaker, Trophy } from "./icons";
 import {
   Form,
@@ -8,7 +7,6 @@ import {
   Outlet,
   useFetcher,
   useLoaderData,
-  useOutletContext,
   useParams,
 } from "react-router";
 import cx from "classnames";
