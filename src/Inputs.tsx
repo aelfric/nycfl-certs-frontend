@@ -23,7 +23,11 @@ export function FormTextInput({
   value,
   placeholder,
   defaultValue,
-}: Readonly<FormTextInputProps>) {
+}: Readonly<
+  {
+    label: string;
+  } & React.HTMLProps<HTMLInputElement>
+>) {
   return (
     <label>
       <span>{label}</span>
@@ -38,16 +42,9 @@ export function FormTextInput({
   );
 }
 
-interface FormTextInputProps {
-  name: string;
-  label: string;
-  type?: string;
-  value?: string;
-  placeholder?: string;
-  defaultValue?: string;
-}
-
-export function SubmitButton({ children }: Readonly<SubmitButtonProps>) {
+export function SubmitButton({
+  children,
+}: Readonly<React.HTMLProps<HTMLButtonElement>>) {
   return (
     <div className={styles.submitButtonRow}>
       <button className={styles.button} type={"submit"}>
@@ -57,11 +54,10 @@ export function SubmitButton({ children }: Readonly<SubmitButtonProps>) {
   );
 }
 
-interface SubmitButtonProps {
-  children: React.ReactNode | React.ReactNode[];
-}
-
-export function FileInput({ name, onChange }: Readonly<FileInputProps>) {
+export function FileInput({
+  name,
+  onChange,
+}: Readonly<React.HTMLProps<HTMLInputElement>>) {
   return (
     <div className={styles.fileUploadRow}>
       <input
@@ -74,8 +70,4 @@ export function FileInput({ name, onChange }: Readonly<FileInputProps>) {
       />
     </div>
   );
-}
-interface FileInputProps {
-  name: string;
-  onChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
 }

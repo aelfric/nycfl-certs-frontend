@@ -40,18 +40,6 @@ export function Certificate() {
     </svg>
   );
 }
-export function Delete() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 100 125"
-      x="0px"
-      y="0px"
-    >
-      <path d="M28,34.58l4,41A6,6,0,0,0,38,81H62a6,6,0,0,0,6-5.42l4-41c0-.19,0-.39,0-.58h8V28H53V19H47v9H20v6h8C28,34.19,28,34.39,28,34.58ZM66,34,62,75H38L34,34Z" />
-    </svg>
-  );
-}
 
 export function Speaker() {
   return (
