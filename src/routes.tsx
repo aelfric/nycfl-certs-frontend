@@ -11,7 +11,7 @@ import { TournamentScreen } from "./TournamentScreen";
 import { CutoffType, TournamentForEdit } from "./types";
 import { emptyToNull } from "./utils";
 import { TournamentApi } from "./tournament-api";
-import { EventDisplay } from "./EventDisplay";
+import { EventDisplay, loader as eventDisplayLoader } from "./EventDisplay";
 
 export const router = (user: User | null | undefined) => {
   const api = new TournamentApi(user);
@@ -85,6 +85,7 @@ export const router = (user: User | null | undefined) => {
               },
             },
             {
+              loader: eventDisplayLoader.bind(user),
               path: "events/:eventId",
               Component: EventDisplay,
               action: async ({ request, params }) => {

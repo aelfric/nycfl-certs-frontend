@@ -1,18 +1,53 @@
 import * as React from "react";
-import { useState } from "react";
+import { FormEvent } from "react";
 import { FileInput, FormTextInput } from "./Inputs";
 import { ResultDisplay } from "./ResultDisplay";
 import { getData } from "./fetch";
 import styles from "./App.module.css";
 import { useTournament } from "./use-tournament";
-import { useAuth } from "react-oidc-context";
 import { CompetitionEvent } from "./types";
-import { useFetcher, useOutletContext, useParams } from "react-router";
+import {
+  useFetcher,
+  useLoaderData,
+  useOutletContext,
+  useParams,
+} from "react-router";
 import { useLocation } from "react-router-dom";
+import { User } from "oidc-client-ts";
+
+type Enums = {
+  eventTypes?: Option[];
+  certTypes?: Option[];
+  elimTypes?: Option[];
+};
+
+export async function loader(this: User | null | undefined): Promise<Enums> {
+  if (!this) {
+    return Promise.resolve({});
+  }
+  const eventTypes: Option[] = await getData(
+    "/enums/event_types",
+    this.access_token,
+  );
+  const certTypes: Option[] = await getData(
+    "/enums/certificate_types",
+    this.access_token,
+  );
+  const elimTypes: Option[] = await getData(
+    "/enums/elim_types",
+    this.access_token,
+  );
+
+  return {
+    eventTypes,
+    certTypes,
+    elimTypes,
+  };
+}
 
 export function EventDisplay() {
   const events = useOutletContext<CompetitionEvent[]>();
-
+  const enums: Enums = useLoaderData();
   const params = useParams<{ eventId: string }>();
   const event = events.find(
     (e: CompetitionEvent) => e.id === Number(params.eventId),
@@ -92,13 +127,14 @@ export function EventDisplay() {
         action={location.pathname}
         method="POST"
       >
-        <EnumSelect
-          url={"/enums/event_types"}
-          label={"Event Type"}
-          defaultValue={event.eventType}
-          key={event.id}
-          name={"eventType"}
-        />
+        <label htmlFor={"eventType"}>Event Type:</label>
+        <select name={"eventType"} defaultValue={event.eventType}>
+          {enums.eventTypes?.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </select>
         <button type={"submit"} name={"intent"} value={"update"}>
           Update
         </button>{" "}
@@ -108,13 +144,14 @@ export function EventDisplay() {
         action={location.pathname}
         method="POST"
       >
-        <EnumSelect
-          url={"/enums/certificate_types"}
-          label={"Certificate Type"}
-          defaultValue={event.certificateType}
-          key={event.id}
-          name={"certType"}
-        />
+        <label htmlFor={"certType"}>Certificate Type:</label>
+        <select name={"certType"} defaultValue={event.certificateType}>
+          {enums.certTypes?.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </select>
         <button type={"submit"} name={"intent"} value={"update"}>
           Update
         </button>{" "}
@@ -135,14 +172,20 @@ export function EventDisplay() {
         </button>
       </fetcher.Form>
       <div className={styles.inlineSubmit}>
-        <EnumSelect
-          url={"/enums/elim_types"}
-          label={"Round Type"}
-          onChange={(evt) => setRoundType(evt.target.value)}
-          value={roundType}
-          key={event.id}
+        <label htmlFor={"roundType"}>Round Type:</label>
+        <select
           name={"roundType"}
-        />
+          onChange={(evt: FormEvent<HTMLSelectElement>) =>
+            setRoundType(evt.currentTarget.value)
+          }
+          value={roundType}
+        >
+          {enums.elimTypes?.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </select>
       </div>
       <FileInput name="eventResults" onChange={handleUpload} />
       <ResultDisplay
@@ -162,41 +205,3 @@ type Option = {
   label: string;
   value: string;
 };
-
-type EnumSelectProps = {
-  url: string;
-  label: string;
-};
-
-function EnumSelect({
-  url,
-  label,
-  onChange,
-  value,
-  defaultValue,
-  name,
-}: Readonly<EnumSelectProps & React.HTMLProps<HTMLSelectElement>>) {
-  const [options, setOptions] = useState<Option[]>([]);
-  const auth = useAuth();
-
-  React.useEffect(() => {
-    getData(url, auth.user?.access_token).then(setOptions);
-  }, [url, auth.user?.access_token]);
-  return (
-    <>
-      <label htmlFor={name}>{label}:</label>
-      <select
-        name={name}
-        onChange={onChange}
-        value={value}
-        defaultValue={defaultValue}
-      >
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
-    </>
-  );
-}
