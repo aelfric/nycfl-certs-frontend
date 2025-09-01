@@ -13,25 +13,21 @@ import {
 } from "react-router";
 import cx from "classnames";
 import { CompetitionEvent, Tournament } from "./types";
+import { ReactNode } from "react";
 
-type CertificateTypeIconProps = { certificateType: string };
+type CertificateType =
+  | "PLACEMENT"
+  | "DEBATE_RECORD"
+  | "DEBATE_SPEAKER"
+  | "QUALIFIER";
 
-function CertificateTypeIcon({
-  certificateType,
-}: Readonly<CertificateTypeIconProps>) {
-  switch (certificateType) {
-    case "PLACEMENT":
-      return <Trophy />;
-    case "DEBATE_RECORD":
-      return <Debate />;
-    case "DEBATE_SPEAKER":
-      return <Speaker />;
-    case "QUALIFIER":
-      return <Qualifier />;
-    default:
-      return null;
-  }
-}
+const certificateTypeIcons: Required<Record<CertificateType, ReactNode>> = {
+  PLACEMENT: <Trophy />,
+  DEBATE_RECORD: <Debate />,
+  DEBATE_SPEAKER: <Speaker />,
+  QUALIFIER: <Qualifier />,
+};
+
 export function TournamentScreen() {
   const fetcher = useFetcher();
   const { eventId } = useParams();
@@ -227,7 +223,7 @@ export function TournamentScreen() {
                 })}
               >
                 <td>
-                  <CertificateTypeIcon certificateType={e.certificateType} />
+                  {certificateTypeIcons[e.certificateType as CertificateType]}
                 </td>
                 <td>
                   <Link to={`./events/${e.id}`}>{e.name}</Link>
