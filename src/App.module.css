@@ -42,9 +42,6 @@
 .tournaments li {
   width: 98%;
   display: block !important;
-  padding-left: 4px;
-  padding-top: 6px;
-  padding-bottom: 6px;
   margin-bottom: 3px;
   margin-top: 2px;
   background-color: #daebf1;
@@ -55,10 +52,11 @@
   color: inherit;
   text-decoration: none;
   display: block;
+  padding: 6px 4px;
 }
 
 .tournaments li:hover,
-li.selected {
+li a.selected {
   background-color: #016f94;
   color: #fdfdfd;
 }
@@ -196,7 +194,8 @@ li.selected {
     0 3px 1px -1px rgba(0, 0, 0, 0.2);
 }
 
-.standardForm label {
+.standardForm label,
+.inlineSubmit {
   display: flex;
   flex-wrap: wrap;
   margin: 0;
@@ -204,11 +203,13 @@ li.selected {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
 }
-.standardForm label:nth-child(even) {
+.standardForm label:nth-child(even),
+.inlineSubmit:nth-child(even) {
   background-color: #efefef;
 }
 
-.standardForm label input {
+.standardForm label input,
+.standardForm label select {
   border-width: 1px;
   border-color: #ccc;
   border-style: solid;
@@ -226,16 +227,7 @@ li.selected {
   padding: 0.75rem;
 }
 
-.fileInput {
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: -1;
-}
-
-.fileInput + label {
+input.fileInput::file-selector-button {
   font-weight: bold;
   border: none;
   border-radius: 2px;
@@ -257,14 +249,17 @@ li.selected {
   cursor: pointer;
 }
 
-.fileInput + label:hover {
+input.fileInput::file-selector-button:hover {
   background-color: #fefefe;
   color: #016f94;
 }
+
+/*noinspection CssOverwrittenProperties*/
 .fileInput:focus + label {
   outline: 1px dotted #000;
   outline: -webkit-focus-ring-color auto 5px;
 }
+
 .fileUploadRow {
   background-color: #daebf1;
   text-align: center;
@@ -294,4 +289,46 @@ li.selected {
 .fileList li a {
   text-decoration: none;
   color: inherit;
+}
+
+.certificateIcon {
+  width: 1em;
+  top: 0.125em;
+  position: relative;
+}
+
+.inlineSubmit {
+  display: flex;
+  padding: 0.75rem;
+  margin: 0;
+}
+
+.inlineSubmit label {
+  min-width: 32%;
+  margin: 0;
+}
+.inlineSubmit input,
+.inlineSubmit select {
+  border-width: 1px;
+  border-color: #ccc;
+  border-style: solid;
+  border-radius: 10px 0 0 10px;
+  font-size: 1em;
+  flex-grow: 1;
+}
+.inlineSubmit button {
+  color: #fefefe;
+  background-color: #016f94;
+  text-transform: uppercase;
+  box-shadow:
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12),
+    0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  user-select: none;
+  font-weight: bold;
+  border: none;
+  border-radius: 2px;
+  display: inline-block;
+  min-width: 12%;
 }

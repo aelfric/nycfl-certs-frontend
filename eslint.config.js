@@ -10,7 +10,7 @@ export default [
     files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
   },
   {
-    ignores: ["build/", "vite.config.js"],
+    ignores: ["build/", "vite.config.js", "coverage/"],
   },
   { languageOptions: { globals: globals.browser } },
   {
