@@ -1,8 +1,7 @@
-import { FormTextInput } from "./Inputs";
-import { ResultDisplay } from "./ResultDisplay";
-import { getData } from "./fetch";
-import styles from "./App.module.css";
-import { CompetitionEvent } from "./types";
+import { FormTextInput } from "../../Inputs";
+import { ResultDisplay } from "../../ResultDisplay";
+import styles from "../../App.module.css";
+import { CompetitionEvent } from "../tournament/types";
 import {
   useFetcher,
   useLoaderData,
@@ -10,37 +9,12 @@ import {
   useParams,
 } from "react-router";
 import { useLocation } from "react-router-dom";
-import { User } from "oidc-client-ts";
 
-type Enums = {
+export type Enums = {
   eventTypes?: Option[];
   certTypes?: Option[];
   elimTypes?: Option[];
 };
-
-export async function loader(this: User | null | undefined): Promise<Enums> {
-  if (!this) {
-    return Promise.resolve({});
-  }
-  const eventTypes: Option[] = await getData(
-    "/enums/event_types",
-    this.access_token,
-  );
-  const certTypes: Option[] = await getData(
-    "/enums/certificate_types",
-    this.access_token,
-  );
-  const elimTypes: Option[] = await getData(
-    "/enums/elim_types",
-    this.access_token,
-  );
-
-  return {
-    eventTypes,
-    certTypes,
-    elimTypes,
-  };
-}
 
 export function EventDisplay() {
   const events = useOutletContext<CompetitionEvent[]>();
@@ -203,7 +177,7 @@ export function EventDisplay() {
   );
 }
 
-type Option = {
+export type Option = {
   label: string;
   value: string;
 };

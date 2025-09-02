@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { TournamentScreen } from "./TournamentScreen";
+import { TournamentScreen } from "./tournament-screen";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { createRoutesStub } from "react-router";
 

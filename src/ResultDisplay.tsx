@@ -4,7 +4,7 @@ import * as React from "react";
 import { ReactNode } from "react";
 import { Result } from "./App";
 import { StripedTable } from "./StripedTable";
-import { CutoffType } from "./types";
+import { CutoffType } from "./features/tournament/types";
 import { Form, useFetcher, useParams } from "react-router";
 import cx from "classnames";
 

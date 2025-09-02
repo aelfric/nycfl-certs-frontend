@@ -1,4 +1,4 @@
-import { Result } from "./App";
+import { Result } from "../../App";
 
 export interface CompetitionEvent {
   latestResult: string;

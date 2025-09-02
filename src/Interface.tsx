@@ -8,7 +8,7 @@ import cx from "classnames";
 import { FileInput, FormTextInput, SubmitButton } from "./Inputs";
 import { FileListing } from "./FileListing";
 import { NavLink } from "react-router-dom";
-import { Tournament } from "./types";
+import { Tournament } from "./features/tournament/types";
 
 export function Interface() {
   const { id } = useParams<"id">();

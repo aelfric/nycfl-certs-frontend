@@ -5,7 +5,7 @@ import {
   handleFileUploadFormData,
   postData,
 } from "./fetch";
-import { Tournament, TournamentForEdit } from "./types";
+import { Tournament, TournamentForEdit } from "./features/tournament/types";
 
 export class TournamentApi {
   private user: User | undefined | null;

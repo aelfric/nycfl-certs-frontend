@@ -1,6 +1,6 @@
-import styles from "./App.module.css";
-import { FieldGroup, FormTextInput, SubmitButton } from "./Inputs";
-import { Debate, Qualifier, Speaker, Trophy } from "./icons";
+import styles from "../../App.module.css";
+import { FieldGroup, FormTextInput, SubmitButton } from "../../Inputs";
+import { Debate, Qualifier, Speaker, Trophy } from "../../icons";
 import {
   Form,
   Link,
