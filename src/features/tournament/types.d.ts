@@ -12,6 +12,7 @@ export interface CompetitionEvent {
   certificateCutoff: number;
   halfQuals: number;
   numRounds: number | null;
+  entriesPerPostingSlide: number;
 }
 
 export interface Tournament {

@@ -144,7 +144,7 @@ export function EventDisplay() {
         <input
           type={"number"}
           name={"perSlide"}
-          defaultValue={String(event.numRounds)}
+          defaultValue={String(event.entriesPerPostingSlide)}
         />
         <button type={"submit"} name={"intent"} value={"update"}>
           Update
