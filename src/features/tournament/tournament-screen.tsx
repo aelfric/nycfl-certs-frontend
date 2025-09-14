@@ -252,7 +252,7 @@ export function TournamentScreen() {
           rel="noreferrer"
           target={"_blank"}
           style={{ flexGrow: 1 }}
-          to={`/preview_certificates/${tournament.id}`}
+          to={`/certificates/${tournament.id}`}
         >
           Certificates
         </Link>
