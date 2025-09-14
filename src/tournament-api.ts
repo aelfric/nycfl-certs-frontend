@@ -94,7 +94,7 @@ export class TournamentApi {
 
   async setCutoff(
     value: number,
-    type: "placement" | "cutoff" | "medal" | "quals",
+    type: "placement" | "cutoff" | "medal" | "quals" | "slide_size",
     activeEvent: number,
     tournamentId: string,
   ) {

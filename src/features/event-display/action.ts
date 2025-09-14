@@ -33,6 +33,13 @@ export async function action<Context>(
           formData.get("eventType") as string,
           params.id as string,
         );
+      } else if(formData.get("perSlide")){
+        return await this.setCutoff(
+          Number(formData.get("perSlide")),
+          "slide_size",
+          Number(params.eventId),
+          params.id as string,
+        );
       } else {
         throw new Error("Not implemented");
       }

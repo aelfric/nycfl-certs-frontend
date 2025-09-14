@@ -136,6 +136,21 @@ export function EventDisplay() {
         </button>
       </fetcher.Form>
       <fetcher.Form
+        className={styles.inlineSubmit}
+        action={location.pathname}
+        method={"POST"}
+      >
+        <label htmlFor={"perSlide"}>Entries per Posting Slide:</label>
+        <input
+          type={"number"}
+          name={"perSlide"}
+          defaultValue={String(event.numRounds)}
+        />
+        <button type={"submit"} name={"intent"} value={"update"}>
+          Update
+        </button>
+      </fetcher.Form>
+      <fetcher.Form
         action={location.pathname + "/results"}
         method={"POST"}
         encType={"multipart/form-data"}
