@@ -16,6 +16,10 @@ updates:
           - "react-dom"
           - "@types/react"
           - "@types/react-dom"
+      react-router:
+        patterns:
+          - "@types/react-router-dom"
+          - "react-router-dom"
       vite:
         patterns:
           - "vite"
