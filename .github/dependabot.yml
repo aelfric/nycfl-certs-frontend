@@ -16,6 +16,12 @@ updates:
           - "react-dom"
           - "@types/react"
           - "@types/react-dom"
+      eslint:
+        patterns:
+          - "eslint"
+          - "@eslint/**"
+          - "eslint-plugin-react"
+          - "eslint-plugin-react-hooks"
       react-router:
         patterns:
           - "@types/react-router-dom"
