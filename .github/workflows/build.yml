@@ -25,6 +25,14 @@ jobs:
     - run: npm test
     - run: npm run lint --if-present
     - run: npm run build --if-present
+    - name: Debug FTP_PASSWORD secret
+      run: |
+        if [ -z "${{ secrets.FTP_PASSWORD }}" ]; then
+          echo "FTP_PASSWORD secret is NOT set or accessible."
+          exit 1
+        else
+          echo "FTP_PASSWORD secret is present."
+        fi
     - name: 📂 Sync files
       if: github.ref == 'refs/heads/master'
       uses: SamKirkland/FTP-Deploy-Action@v4.3.6
