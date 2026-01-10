@@ -32,7 +32,7 @@ jobs:
       if: github.ref == 'refs/heads/master'
       uses: SamKirkland/web-deploy@v1
       with:
-        local-dir: ./build/
+        source-path: ./build/
         target-server: frankriccobono.com
         remote-user: nycfl-certs
         private-ssh-key: ${{ secrets.SSH_KEY }}
