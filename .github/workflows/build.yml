@@ -33,6 +33,7 @@ jobs:
       uses: SamKirkland/web-deploy@v1
       with:
         source-path: ./build/
+        destination-path: ~/public_html
         target-server: frankriccobono.com
         remote-user: nycfl-certs
         private-ssh-key: ${{ secrets.SSH_KEY }}
