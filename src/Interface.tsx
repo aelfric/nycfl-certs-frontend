@@ -27,7 +27,9 @@ export function Interface() {
   return (
     <div className={styles.main}>
       <aside>
-        <button onClick={() => void auth.removeUser()}>Log out</button>{" "}
+        <button onClick={() => void auth.removeUser()} type="button">
+          Log out
+        </button>{" "}
         {auth.user?.profile.name}
         <ul className={cx(styles.tournaments, styles.box)}>
           {tournaments.map((t) => (

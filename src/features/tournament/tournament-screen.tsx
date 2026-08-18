@@ -14,10 +14,7 @@ import { CompetitionEvent, Tournament } from "./types";
 import { ReactNode } from "react";
 
 type CertificateType =
-  | "PLACEMENT"
-  | "DEBATE_RECORD"
-  | "DEBATE_SPEAKER"
-  | "QUALIFIER";
+  "PLACEMENT" | "DEBATE_RECORD" | "DEBATE_SPEAKER" | "QUALIFIER";
 
 const certificateTypeIcons: Required<Record<CertificateType, ReactNode>> = {
   PLACEMENT: <Trophy />,
@@ -25,6 +22,14 @@ const certificateTypeIcons: Required<Record<CertificateType, ReactNode>> = {
   DEBATE_SPEAKER: <Speaker />,
   QUALIFIER: <Qualifier />,
 };
+
+function checkOrBlank(value: number, cutOff: number) {
+  if (value > cutOff) {
+    return <>✓ ({value - cutOff})</>;
+  } else {
+    return "";
+  }
+}
 
 export function TournamentScreen() {
   const fetcher = useFetcher();
@@ -51,14 +56,6 @@ export function TournamentScreen() {
     slideSecondaryAccentColor,
     slideOverlayColor,
   } = tournament;
-
-  function checkOrBlank(value: number, cutOff: number) {
-    if (value > cutOff) {
-      return <>✓ ({value - cutOff})</>;
-    } else {
-      return "";
-    }
-  }
 
   return (
     <>

@@ -19,7 +19,7 @@ function DEFAULT_FETCH_OPTIONS(
 
 function isResponseOk(response: Response) {
   if (!response.ok) {
-    throw Error(response.statusText);
+    throw new Error(response.statusText);
   }
   return response;
 }
@@ -117,6 +117,6 @@ export function handleFileUpload(
     }
   } catch (e) {
     alert("Sorry you can't do that: " + e);
-    return Promise.reject("Not allowed");
+    return Promise.reject(new Error("Not allowed"));
   }
 }

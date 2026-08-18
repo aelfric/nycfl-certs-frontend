@@ -12,10 +12,14 @@ function useAjaxIframe(
   useEffect(() => {
     getData(url, token, "text/html").then((response) => {
       if (iframe.current) {
-        const document = iframe.current?.contentDocument;
-        document?.open();
-        document?.write(response);
-        document?.close();
+        const document =
+          iframe.current?.contentDocument ||
+          iframe.current?.contentWindow?.document;
+
+        if (document) {
+          document.body.innerHTML = "";
+          document.body.innerHTML = response;
+        }
       }
     });
   }, [url, token]);
