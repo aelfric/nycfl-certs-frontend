@@ -156,6 +156,7 @@ function ResultName({ result, eventId }: Readonly<ResultNameProps>) {
       className={styles.buttonInline}
       onDoubleClick={handleDoubleClick}
       title={String(result.id)}
+      type="button"
     >
       {result.name}
     </button>

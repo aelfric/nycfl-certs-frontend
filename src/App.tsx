@@ -28,17 +28,14 @@ function App() {
         onClick={() =>
           void auth.signinRedirect({ redirect_uri: window.location.toString() })
         }
+        type="button"
       >
         Log in
       </button>
     );
   } else {
     window.history.replaceState({}, document.title, window.location.pathname);
-    return (
-      <>
-        <RouterProvider router={router(auth.user)} />
-      </>
-    );
+    return <RouterProvider router={router(auth.user)} />;
   }
 }
 

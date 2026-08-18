@@ -8,7 +8,7 @@ import {
 import { Tournament, TournamentForEdit } from "./features/tournament/types";
 
 export class TournamentApi {
-  private user: User | undefined | null;
+  private readonly user: User | undefined | null;
 
   constructor(user: User | undefined | null) {
     this.user = user;
@@ -147,7 +147,7 @@ export class TournamentApi {
         this.getToken(),
       );
     }
-    return Promise.resolve();
+    return undefined;
   }
 
   async resetResults(eventId: number, tournamentId: string): Promise<void> {

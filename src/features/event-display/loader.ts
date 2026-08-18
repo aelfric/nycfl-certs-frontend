@@ -4,7 +4,7 @@ import { Enums, Option } from "./event-display";
 
 export async function loader(this: User | null | undefined): Promise<Enums> {
   if (!this) {
-    return Promise.resolve({});
+    return {}
   }
   const eventTypes: Option[] = await getData(
     "/enums/event_types",

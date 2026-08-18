@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 24.x
           cache: "npm"
-      - run: npm ci
+      - run: npm ci --ignore-scripts
       - run: npm test -- --coverage
       - run: npm run lint --if-present
       - run: npm run build --if-present
@@ -34,7 +34,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: 📂 Sync Files
         if: github.ref == 'refs/heads/master'
-        uses: SamKirkland/web-deploy@v1
+        uses: SamKirkland/web-deploy@8a74c6948a31575b5776ff1e8304d5c2aef5bdbd # v1
         with:
           source-path: ./build/
           destination-path: ~/public_html
