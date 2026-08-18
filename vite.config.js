@@ -31,6 +31,7 @@ export default defineConfig(() => {
       setupFiles: "src/setupTests.js",
       coverage: {
         exclude: ["./build/**/*"],
+        reporter: ["text", "lcov"],
       },
     },
   };
