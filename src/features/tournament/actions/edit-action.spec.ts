@@ -27,7 +27,6 @@ describe("edit-action", () => {
   });
 
   it("handles POST", async () => {
-    const api = vi.mocked(TournamentApi);
     // 1. Construct a standard Web API Request object mimicking a form submission
     const formData = new FormData();
     formData.append("tournamentName", "Isolated Test Tournament");
@@ -65,10 +64,9 @@ describe("edit-action", () => {
       slideSecondaryAccentColor: null,
       styleOverrides: null,
     });
-  })
+  });
 
   it("handles PUT", async () => {
-    const api = vi.mocked(TournamentApi);
     // 1. Construct a standard Web API Request object mimicking a form submission
     const formData = new FormData();
     formData.append("circuit", "nycfl");
@@ -92,6 +90,5 @@ describe("edit-action", () => {
 
     // 3. Assert on the response output
     expect(response).toEqual({ circuit: "updated" });
-
   });
 });
