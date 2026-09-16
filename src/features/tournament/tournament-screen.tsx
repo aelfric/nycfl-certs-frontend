@@ -55,6 +55,7 @@ export function TournamentScreen() {
     slideAccentColor,
     slideSecondaryAccentColor,
     slideOverlayColor,
+    circuitId,
   } = tournament;
 
   return (
@@ -78,6 +79,16 @@ export function TournamentScreen() {
             </button>
           </Form>
         </h1>
+        <fetcher.Form
+          method={"PATCH"}
+          action={`/tournaments/${tournament.id}`}
+          className={styles.inlineSubmit}
+          key={`${tournament.id}-circuit`}
+        >
+          <label htmlFor={"circuit"}>Circuit</label>
+          <input name={"circuit"} defaultValue={circuitId} />
+          <button type={"submit"}>Update</button>
+        </fetcher.Form>
         <fetcher.Form
           method={"POST"}
           action={`/tournaments/${tournament.id}`}

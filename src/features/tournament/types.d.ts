@@ -29,6 +29,7 @@ export interface Tournament {
   certificateHeadline?: string;
   line1?: string;
   line2?: string;
+  circuitId?: string;
   signature?: string;
   signatureTitle?: string;
   styleOverrides?: string;
