@@ -22,6 +22,25 @@ export const restHandlers = [
       id: 1,
     });
   }),
+
+  http.post<{ id: string }>(
+    "/certs/tournaments/:id",
+    async ({ params, request }) => {
+      if (Number(params.id) < 0) {
+        return new HttpResponse(null, { status: 404 });
+      }
+      return HttpResponse.json(await request.json());
+    },
+  ),
+
+  http.put<{ id: string }>("/certs/tournaments/:id", async ({ params }) => {
+    if (Number(params.id) < 0) {
+      return new HttpResponse(null, { status: 404 });
+    }
+    return HttpResponse.json({
+      circuit: "updated",
+    });
+  }),
 ];
 
 export const server = setupServer(...restHandlers);

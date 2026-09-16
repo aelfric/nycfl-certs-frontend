@@ -3,6 +3,7 @@ import {
   deleteData,
   getData,
   handleFileUploadFormData,
+  putData,
   postData,
 } from "./fetch";
 import { Tournament, TournamentForEdit } from "./features/tournament/types";
@@ -18,11 +19,26 @@ export class TournamentApi {
     return this.user?.access_token;
   }
   async findAll() {
-    return await getData("/certs/tournaments", this.getToken());
+    try {
+      return await getData("/certs/tournaments", this.getToken());
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
   }
 
-  async findOne(tournamentId: string | number): Promise<Tournament> {
-    return await getData(`/certs/tournaments/${tournamentId}`, this.getToken());
+  async findOne(
+    tournamentId: string | number,
+  ): Promise<Tournament | undefined> {
+    try {
+      return await getData(
+        `/certs/tournaments/${tournamentId}`,
+        this.getToken(),
+      );
+    } catch (e) {
+      alert("Sorry you can't do that: " + e);
+      return undefined;
+    }
   }
 
   async createTournament({
@@ -172,6 +188,13 @@ export class TournamentApi {
       `/certs/tournaments/${tournamentId}`,
       this.getToken(),
       tournament,
+    );
+  }
+
+  async setCircuit(tournamentId: string, circuit: string) {
+    return await putData(
+      `/certs/tournaments/${tournamentId}?circuit=${circuit}`,
+      this.getToken(),
     );
   }
 }
