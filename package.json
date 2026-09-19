@@ -7,8 +7,8 @@
   "dependencies": {
     "classnames": "2.5.1",
     "oidc-client-ts": "^3.5.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "react-oidc-context": "^3.3.1",
     "react-router-dom": "^7.18.3"
   },
@@ -46,8 +46,8 @@
     "@types/isomorphic-fetch": "0.0.39",
     "@types/jest": "30.0.0",
     "@types/node": "^26.4.1",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.7",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "@types/react-router-dom": "5.3.3",
     "@typescript/native": "npm:typescript@^7.0.2",
     "@vitejs/plugin-react": "^6.1.1",
