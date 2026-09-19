@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "build/dist",
     "module": "esnext",
-    "target": "es5",
+    "target": "es2025",
     "lib": [
       "ESNext",
       "dom",
@@ -11,7 +11,6 @@
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react-jsx",
-    "moduleResolution": "node",
     "rootDir": "src",
     "noImplicitReturns": true,
     "noImplicitThis": true,
@@ -42,6 +41,7 @@
     "src/setupTests.ts"
   ],
   "types": [
+    "node",
     "typePatches",
     "gapi",
     "gapi.auth2"

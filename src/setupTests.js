@@ -2,6 +2,7 @@ import { expect, afterEach, vitest } from "vitest";
 import { cleanup } from "@testing-library/react";
 import * as matchers from "@testing-library/jest-dom/matchers";
 import "@testing-library/jest-dom/vitest";
+import { File } from "node:buffer";
 
 expect.extend(matchers);
 
@@ -31,3 +32,10 @@ vitest.mock("react-oidc-context", () => ({
     };
   },
 }));
+
+Object.defineProperty(globalThis, "File", {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  value: File,
+});
