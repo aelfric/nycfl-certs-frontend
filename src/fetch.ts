@@ -17,9 +17,14 @@ function DEFAULT_FETCH_OPTIONS(
   };
 }
 
-function isResponseOk(response: Response) {
+async function isResponseOk(response: Response) {
   if (!response.ok) {
-    throw new Error(response.statusText);
+    const errorMessage = await response.text().catch(() => "");
+    if (errorMessage) {
+      throw new Error(errorMessage);
+    } else {
+      throw new Error(`${response.statusText}`);
+    }
   }
   return response;
 }
@@ -35,6 +40,19 @@ export async function postData(
       ...DEFAULT_FETCH_OPTIONS(token),
       method: "POST",
       body: JSON.stringify(data),
+    }).then(isResponseOk);
+    return await response.json(); // parses JSON response into native JavaScript objects
+  } catch (e) {
+    alert("Sorry you can't do that: " + e);
+  }
+}
+
+export async function putData(url: string = "", token: string = "") {
+  try {
+    // Default options are marked with *
+    const response = await fetch(url, {
+      ...DEFAULT_FETCH_OPTIONS(token),
+      method: "PUT",
     }).then(isResponseOk);
     return response.json(); // parses JSON response into native JavaScript objects
   } catch (e) {
@@ -60,20 +78,16 @@ export async function getData(
   token: string = "",
   contentType: string = "application/json",
 ) {
-  try {
-    // Default options are marked with *
+  // Default options are marked with *
 
-    const response = await fetch(url, {
-      ...DEFAULT_FETCH_OPTIONS(token, contentType),
-      method: "GET",
-    }).then(isResponseOk);
-    if (contentType === "application/json") {
-      return response.json(); // parses JSON response into native JavaScript objects
-    } else {
-      return response.text();
-    }
-  } catch (e) {
-    alert("Sorry you can't do that: " + e);
+  const response = await fetch(url, {
+    ...DEFAULT_FETCH_OPTIONS(token, contentType),
+    method: "GET",
+  }).then(isResponseOk);
+  if (contentType === "application/json") {
+    return response.json(); // parses JSON response into native JavaScript objects
+  } else {
+    return response.text();
   }
 }
 
@@ -90,7 +104,7 @@ export async function handleFileUploadFormData<T>(
         Authorization: "Bearer " + (token || ""),
       },
     });
-    const response_1 = isResponseOk(response);
+    const response_1 = await isResponseOk(response);
     return await response_1.json();
   } catch (error) {
     console.error(error);
