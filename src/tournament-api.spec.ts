@@ -10,6 +10,7 @@ import {
 import { TournamentApi } from "./tournament-api";
 import { User } from "oidc-client-ts";
 import { server } from "./tournament-api.mock";
+import { http, HttpResponse } from "msw";
 
 const tournamentApi = new TournamentApi({
   access_token: "some-token",
@@ -31,6 +32,15 @@ describe("Tournament API", () => {
   });
 
   it("can get all tournaments with authorization header", async () => {
+    expect(await tournamentApi.findAll()).toHaveLength(0);
+  });
+
+  it("returns no tournaments in case of error", async () => {
+    server.use(
+      http.get("/certs/tournaments", () => {
+        return new HttpResponse("Not Allowed", { status: 401 });
+      }),
+    );
     expect(await tournamentApi.findAll()).toHaveLength(0);
   });
 
