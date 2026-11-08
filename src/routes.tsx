@@ -11,6 +11,7 @@ import { CutoffType } from "./features/tournament/types";
 import { TournamentApi } from "./tournament-api";
 import * as EventDisplay from "./features/event-display";
 import * as Tournament from "./features/tournament";
+import * as TournamentLinks from "./features/tournament-links";
 
 export const router = (user: User | null | undefined) => {
   const api = new TournamentApi(user);
@@ -33,6 +34,13 @@ export const router = (user: User | null | undefined) => {
           },
           action: Tournament.editAction.bind(api),
           children: [
+            {
+              path: "links",
+              loader: async ({ params }: LoaderFunctionArgs) => {
+                return api.findLinks(params.id as string);
+              },
+              Component: TournamentLinks.Component,
+            },
             {
               path: "events",
               action: async ({ request, params }) => {

@@ -197,4 +197,11 @@ export class TournamentApi {
       this.getToken(),
     );
   }
+
+  async findLinks(tournamentId: string) {
+    return await getData(
+      `/s3?prefix=tournaments/${tournamentId}`,
+      this.getToken()
+    )
+  }
 }

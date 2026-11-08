@@ -264,6 +264,9 @@ export function TournamentScreen() {
         >
           Certificates
         </Link>
+        <Link className={styles.button} style={{ flexGrow: 1 }} to={`links`}>
+          Files
+        </Link>
         <Link
           className={styles.button}
           rel="noreferrer"
