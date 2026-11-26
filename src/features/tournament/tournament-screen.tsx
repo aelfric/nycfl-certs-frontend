@@ -11,16 +11,14 @@ import {
 } from "react-router";
 import cx from "classnames";
 import { ReactNode } from "react";
-import { CompetitionEvent, Tournament } from "../../api/types";
-
-type CertificateType =
-  "PLACEMENT" | "DEBATE_RECORD" | "DEBATE_SPEAKER" | "QUALIFIER";
+import { CertificateType, CompetitionEvent, Tournament } from "../../api/types";
 
 const certificateTypeIcons: Required<Record<CertificateType, ReactNode>> = {
   PLACEMENT: <Trophy />,
   DEBATE_RECORD: <Debate />,
   DEBATE_SPEAKER: <Speaker />,
   QUALIFIER: <Qualifier />,
+  CONGRESS_PO: null, // TODO gavel icon
 };
 
 function checkOrBlank(value: number, cutOff: number) {
@@ -228,9 +226,7 @@ export function TournamentScreen() {
                   [styles.selected]: activeEventId === e.id,
                 })}
               >
-                <td>
-                  {certificateTypeIcons[e.certificateType as CertificateType]}
-                </td>
+                <td>{certificateTypeIcons[e.certificateType]}</td>
                 <td>
                   <Link to={`./events/${e.id}`}>{e.name}</Link>
                 </td>

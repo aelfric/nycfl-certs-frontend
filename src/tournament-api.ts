@@ -191,9 +191,9 @@ export class TournamentApi {
     );
   }
 
-  async setCircuit(tournamentId: string, circuit: string) {
+  async setCircuit(tournamentId: string, circuitId: string) {
     return await putData(
-      `/certs/tournaments/${tournamentId}?circuitId=${circuit}`,
+      `/certs/tournaments/${tournamentId}?circuitId=${circuitId}`,
       this.getToken(),
     );
   }

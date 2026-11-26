@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 import { StripedTable } from "./StripedTable";
 import { Form, useFetcher, useParams } from "react-router";
 import cx from "classnames";
-import { CutoffType, Result } from "./api/types";
+import { Result } from "./api/types";
 
 interface ResultDisplayProps {
   certificateCutoff: number;
@@ -15,6 +15,8 @@ interface ResultDisplayProps {
   results: Result[];
   eventId: number;
 }
+
+export type CutoffType = "placement" | "cutoff" | "medal" | "quals";
 
 const cutoffButtons: Required<
   Record<CutoffType, { icon: ReactNode; title: string }>

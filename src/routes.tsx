@@ -11,7 +11,7 @@ import { TournamentApi } from "./tournament-api";
 import * as EventDisplay from "./features/event-display";
 import * as Tournament from "./features/tournament";
 import * as TournamentLinks from "./features/tournament-links";
-import { CutoffType } from "./api/types";
+import { CutoffType } from "./ResultDisplay";
 
 export const router = (user: User | null | undefined) => {
   const api = new TournamentApi(user);
