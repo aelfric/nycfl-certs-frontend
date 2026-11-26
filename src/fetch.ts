@@ -32,14 +32,14 @@ async function isResponseOk(response: Response) {
 export async function postData(
   url: string = "",
   token: string = "",
-  data: object = {},
+  data: object | null = {},
 ) {
   try {
     // Default options are marked with *
     const response = await fetch(url, {
       ...DEFAULT_FETCH_OPTIONS(token),
       method: "POST",
-      body: JSON.stringify(data),
+      body: data ? JSON.stringify(data) : undefined,
     }).then(isResponseOk);
     return await response.json(); // parses JSON response into native JavaScript objects
   } catch (e) {

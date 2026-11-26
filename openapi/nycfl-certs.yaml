@@ -1,0 +1,1691 @@
+---
+openapi: 3.1.0
+paths:
+  /certs/background.svg:
+    get:
+      parameters:
+      - name: color
+        in: query
+        schema:
+          type: string
+          default: ffffff
+      - name: color2
+        in: query
+        schema:
+          type: string
+          default: "323131"
+      - name: color3
+        in: query
+        schema:
+          type: string
+          default: "323131"
+      responses:
+        "200":
+          description: OK
+          content:
+            image/svg+xml:
+              schema:
+                type: string
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Get Background Image
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/events:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventList"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+        "400":
+          description: Bad Request
+      summary: Create Events
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TournamentStub"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: List All Tournaments
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+    post:
+      parameters:
+      - name: sourceId
+        in: query
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTournamentRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+        "400":
+          description: Bad Request
+      summary: Create Tournament
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - superuser
+  /certs/tournaments/sweeps:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AggregateSweeps"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Get Sweeps
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}:
+    post:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TournamentInput"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+        "400":
+          description: Bad Request
+      summary: Update Tournament
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Get Tournament
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+    put:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: circuitId
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Assign Tournament
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - superuser
+  /certs/tournaments/{id}/certificates:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Generate Certificates
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/certificates/index:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv:
+              schema:
+                type: string
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Generate Certificates Index
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/contacts:
+    post:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Upload Contact Info
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/School"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Get Contact Info
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/events/{evtId}/abbreviate:
+    post:
+      parameters:
+      - name: evtId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: abbreviation
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Abbreviate Event
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/events/{evtId}/cert_type:
+    post:
+      parameters:
+      - name: evtId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: type
+        in: query
+        schema:
+          $ref: "#/components/schemas/CertificateType"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Set Certificate Type
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/events/{evtId}/cutoff:
+    post:
+      parameters:
+      - name: evtId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CutoffRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+        "400":
+          description: Bad Request
+      summary: Set Certificate Cutoff
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/events/{evtId}/medal:
+    post:
+      parameters:
+      - name: evtId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CutoffRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+        "400":
+          description: Bad Request
+      summary: Set Medal Cutoff
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/events/{evtId}/placement:
+    post:
+      parameters:
+      - name: evtId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CutoffRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+        "400":
+          description: Bad Request
+      summary: Set Placement Cutoff
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/events/{evtId}/quals:
+    post:
+      parameters:
+      - name: evtId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CutoffRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+        "400":
+          description: Bad Request
+      summary: Set Half Quals
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/events/{evtId}/rename:
+    post:
+      parameters:
+      - name: evtId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: name
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Rename Event
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/events/{evtId}/results/{resultId}/rename:
+    post:
+      parameters:
+      - name: evtId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: resultId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: name
+        in: query
+        schema:
+          type: string
+          default: ""
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Rename Competitor
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/events/{evtId}/results/{resultId}/school:
+    post:
+      parameters:
+      - name: evtId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: resultId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: schoolId
+        in: query
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Switch Competitor School
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/events/{evtId}/rounds:
+    post:
+      parameters:
+      - name: evtId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: count
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Set Num Rounds
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/events/{evtId}/slide_size:
+    post:
+      parameters:
+      - name: evtId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CutoffRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+        "400":
+          description: Bad Request
+      summary: Set Entries Per Slide
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/events/{evtId}/type:
+    post:
+      parameters:
+      - name: evtId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: type
+        in: query
+        schema:
+          $ref: "#/components/schemas/EventType"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Set Event Type
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/medals:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MedalCount"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Get Medal Count
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/postings:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: dl
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        "200":
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Generate Postings Preview
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/schools:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/School"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: List Schools
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+    post:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/School"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Add Schools
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/schools/{schoolId}:
+    delete:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: schoolId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/School"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Delete School
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/slides:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: dl
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        "200":
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Generate Slides Preview
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{id}/sweeps:
+    get:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SweepsResult"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Get Sweeps
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+    post:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Add Sweeps Results
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{tournamentId}/events/{eventId}:
+    delete:
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: tournamentId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Delete Event
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /certs/tournaments/{tournamentId}/events/{eventId}/results:
+    delete:
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: tournamentId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Clear Results
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+    post:
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: tournamentId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: type
+        in: query
+        schema:
+          allOf:
+          - $ref: "#/components/schemas/EliminationRound"
+          - default: FINALIST
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tournament"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Add Elim Results
+      tags:
+      - Certificates Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /enums/certificate_types:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LabeledEnumDTO"
+      summary: Get Cert Types
+      tags:
+      - Enum Resource
+  /enums/elim_types:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LabeledEnumDTO"
+      summary: Get Rounds
+      tags:
+      - Enum Resource
+  /enums/event_types:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LabeledEnumDTO"
+      summary: Get Types
+      tags:
+      - Enum Resource
+  /s3:
+    get:
+      parameters:
+      - name: prefix
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PublicListing"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: List Files
+      tags:
+      - S 3 Sync Resource
+      security:
+      - SecurityScheme:
+        - basicuser
+        - superuser
+  /s3/upload:
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        "201":
+          description: File uploaded
+        "400":
+          description: No file provided
+        "500":
+          description: Upload to S3 failed
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Upload File
+      tags:
+      - S 3 Sync Resource
+      security:
+      - SecurityScheme:
+        - superuser
+components:
+  schemas:
+    AggregateSweeps:
+      type: object
+      properties:
+        resultsMap:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              $ref: "#/components/schemas/SweepsResult"
+        totals:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+    CertificateType:
+      type: string
+      enum:
+      - PLACEMENT
+      - DEBATE_SPEAKER
+      - DEBATE_RECORD
+      - CONGRESS_PO
+      - QUALIFIER
+    CreateTournamentRequest:
+      type: object
+      required:
+      - name
+      - host
+      - date
+      properties:
+        name:
+          type: string
+        host:
+          type: string
+        date:
+          $ref: "#/components/schemas/LocalDate"
+    CutoffRequest:
+      type: object
+      required:
+      - cutoff
+      properties:
+        cutoff:
+          type: integer
+          format: int32
+    EliminationRound:
+      type: string
+      enum:
+      - FINALIST
+      - SEMIFINALIST
+      - QUARTER_FINALIST
+      - OCTOFINALIST
+      - PLAY_IN
+      - DOUBLE_OCTOFINALIST
+      - PLAY_IN_BEFORE
+      - TRIPLE_OCTOFINALIST
+      - PRELIM
+    Event:
+      type: object
+      required:
+      - id
+      - name
+      - entriesPerPostingSlide
+      - results
+      - placementCutoff
+      - certificateCutoff
+      - medalCutoff
+      - halfQuals
+      - eventType
+      - certificateType
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        abbreviation:
+          type: string
+        entriesPerPostingSlide:
+          type: integer
+          format: int32
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/Result"
+        placementCutoff:
+          type: integer
+          format: int32
+        certificateCutoff:
+          type: integer
+          format: int32
+        medalCutoff:
+          type: integer
+          format: int32
+        halfQuals:
+          type: integer
+          format: int32
+        numRounds:
+          type:
+          - integer
+          - "null"
+          format: int32
+        eventType:
+          $ref: "#/components/schemas/EventType"
+        certificateType:
+          $ref: "#/components/schemas/CertificateType"
+        latestResult:
+          type:
+          - string
+          - "null"
+    EventList:
+      type: object
+      properties:
+        events:
+          type: string
+        tournamentId:
+          type: integer
+          format: int64
+    EventType:
+      type: string
+      enum:
+      - SPEECH
+      - CONGRESS
+      - CONGRESS_PO
+      - DEBATE_PF
+      - DEBATE_LD
+      - DEBATE_CX
+      - DEBATE_SPEAKS
+    LabeledEnumDTO:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+    LocalDate:
+      type: string
+      format: date
+      examples:
+      - 2022-03-10
+    MedalCount:
+      type: object
+      properties:
+        school:
+          type: string
+        count:
+          type: integer
+          format: int64
+        schoolId:
+          type: integer
+          format: int64
+    PublicListing:
+      type: object
+      properties:
+        url:
+          type: string
+        objectName:
+          type: string
+        displayName:
+          type: string
+    Result:
+      type: object
+      required:
+      - id
+      - place
+      - name
+      - school
+      - placeString
+      properties:
+        id:
+          type: integer
+          format: int64
+        count:
+          type: integer
+          format: int32
+        place:
+          type: integer
+          format: int32
+        code:
+          type: string
+        name:
+          type: string
+        school:
+          $ref: "#/components/schemas/School"
+        numWins:
+          type: integer
+          format: int32
+        eliminationRound:
+          $ref: "#/components/schemas/EliminationRound"
+        placeString:
+          type: string
+        certColor:
+          type: string
+        htmlName:
+          type: string
+    School:
+      type: object
+      required:
+      - id
+      - name
+      - emails
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        displayName:
+          type: string
+        debateCode:
+          type: string
+        sweepsPoints:
+          type: integer
+          format: int32
+        emails:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/SchoolEmail"
+    SchoolEmail:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        isPrimary:
+          type: boolean
+      required:
+      - email
+      - isPrimary
+    SweepsResult:
+      type: object
+      properties:
+        school:
+          type: string
+        points:
+          type: integer
+          format: int32
+        tournament:
+          type: string
+        tournamentId:
+          type: integer
+          format: int64
+        schoolId:
+          type: integer
+          format: int64
+    Tournament:
+      type: object
+      required:
+      - events
+      - id
+      - name
+      - host
+      - date
+      properties:
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        host:
+          type: string
+        logoUrl:
+          type: string
+        slideBackgroundUrl:
+          type: string
+        certificateHeadline:
+          type: string
+        signature:
+          type: string
+        signatureTitle:
+          type: string
+        line1:
+          type: string
+        line2:
+          type: string
+        circuitId:
+          type: string
+        slideAccentColor:
+          type: string
+        slideSecondaryAccentColor:
+          type: string
+        slidePrimaryColor:
+          type: string
+        slideOverlayColor:
+          type: string
+        date:
+          $ref: "#/components/schemas/LocalDate"
+        schools:
+          type: array
+          items:
+            $ref: "#/components/schemas/School"
+        styleOverrides:
+          type: string
+        certLine1:
+          type: string
+        certLine2:
+          type: string
+        longDate:
+          type: string
+        shortDate:
+          type: string
+    TournamentInput:
+      type: object
+      required:
+      - host
+      - date
+      - name
+      properties:
+        host:
+          type: string
+        date:
+          $ref: "#/components/schemas/LocalDate"
+        name:
+          type: string
+        logoUrl:
+          type:
+          - string
+          - "null"
+        slideBackgroundUrl:
+          type:
+          - string
+          - "null"
+        slideAccentColor:
+          type:
+          - string
+          - "null"
+        slideSecondaryAccentColor:
+          type:
+          - string
+          - "null"
+        slidePrimaryColor:
+          type:
+          - string
+          - "null"
+        slideOverlayColor:
+          type:
+          - string
+          - "null"
+        signature:
+          type:
+          - string
+          - "null"
+        signatureTitle:
+          type:
+          - string
+          - "null"
+        certificateHeadline:
+          type:
+          - string
+          - "null"
+        styleOverrides:
+          type:
+          - string
+          - "null"
+        line1:
+          type:
+          - string
+          - "null"
+        line2:
+          type:
+          - string
+          - "null"
+    TournamentStub:
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+  securitySchemes:
+    SecurityScheme:
+      type: openIdConnect
+      openIdConnectUrl: https://keycloak.riccobono.dev/realms/Forensics/.well-known/openid-configuration
+      description: Authentication
+info:
+  title: nycfl-certs API
+  version: 3.0.2--SNAPSHOT

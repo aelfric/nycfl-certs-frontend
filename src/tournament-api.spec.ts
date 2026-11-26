@@ -71,6 +71,7 @@ describe("Tournament API", () => {
           if (newTournament && typeof newTournament === "object") {
             return HttpResponse.json({ ...newTournament, id: 1 });
           }
+          return HttpResponse.json({ });
         }),
       );
       expect(
@@ -99,6 +100,8 @@ describe("Tournament API", () => {
               host: "Nowhere Academy",
               name: "Copy of Some Name",
             });
+          } else {
+            return HttpResponse.json({});
           }
         }),
       );
@@ -124,6 +127,8 @@ describe("Tournament API", () => {
       expect(
         await tournamentApi.updateOne(1, {
           name: "New Name",
+          host: "Nowhere Academy",
+          date: "2026-08-19"
         }),
       ).toEqual({
         id: 1,

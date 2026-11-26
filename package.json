@@ -21,7 +21,8 @@
     "format": "prettier --write --end-of-line auto src ",
     "lint": "eslint",
     "prepare": "husky",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "api:types": "openapi-typescript ./openapi/nycfl-certs.yaml -o src/api/schema.d.ts"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -60,6 +61,7 @@
     "jsdom": "^30.1.0",
     "lint-staged": "^17.6.0",
     "msw": "^2.15.0",
+    "openapi-typescript": "^7.13.0",
     "prettier": "^3.9.9",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
     "typescript-eslint": "^8.70.0",
@@ -70,6 +72,9 @@
   "overrides": {
     "eslint-plugin-react": {
       "eslint": ">=9"
+    },
+    "openapi-typescript": {
+      "typescript": "$typescript"
     }
   },
   "lint-staged": {

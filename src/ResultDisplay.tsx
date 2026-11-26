@@ -2,11 +2,10 @@ import styles from "./App.module.css";
 import { Certificate, Medal, Trophy } from "./icons";
 import * as React from "react";
 import { ReactNode } from "react";
-import { Result } from "./App";
 import { StripedTable } from "./StripedTable";
-import { CutoffType } from "./features/tournament/types";
 import { Form, useFetcher, useParams } from "react-router";
 import cx from "classnames";
+import { CutoffType, Result } from "./api/types";
 
 interface ResultDisplayProps {
   certificateCutoff: number;

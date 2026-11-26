@@ -6,7 +6,7 @@ import {
   putData,
   postData,
 } from "./fetch";
-import { Tournament, TournamentForEdit } from "./features/tournament/types";
+import { Tournament, TournamentForEdit } from "./api/types";
 
 export class TournamentApi {
   private readonly user: User | undefined | null;
@@ -61,7 +61,7 @@ export class TournamentApi {
     return await postData(
       `/certs/tournaments?sourceId=${tournamentId}`,
       this.getToken(),
-      {},
+      null,
     );
   }
 
@@ -193,7 +193,7 @@ export class TournamentApi {
 
   async setCircuit(tournamentId: string, circuit: string) {
     return await putData(
-      `/certs/tournaments/${tournamentId}?circuit=${circuit}`,
+      `/certs/tournaments/${tournamentId}?circuitId=${circuit}`,
       this.getToken(),
     );
   }
@@ -201,7 +201,7 @@ export class TournamentApi {
   async findLinks(tournamentId: string) {
     return await getData(
       `/s3?prefix=tournaments/${tournamentId}`,
-      this.getToken()
-    )
+      this.getToken(),
+    );
   }
 }

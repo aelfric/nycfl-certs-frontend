@@ -10,8 +10,8 @@ import {
   useParams,
 } from "react-router";
 import cx from "classnames";
-import { CompetitionEvent, Tournament } from "./types";
 import { ReactNode } from "react";
+import { CompetitionEvent, Tournament } from "../../api/types";
 
 type CertificateType =
   "PLACEMENT" | "DEBATE_RECORD" | "DEBATE_SPEAKER" | "QUALIFIER";
