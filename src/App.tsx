@@ -50,13 +50,4 @@ export interface SchoolEmail {
   isPrimary: boolean;
 }
 
-export interface Result {
-  school: School;
-  points: number;
-  id: number;
-  place: number;
-  placeString: string;
-  name: string;
-}
-
 export default App;

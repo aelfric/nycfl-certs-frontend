@@ -1,7 +1,6 @@
 import { FormTextInput } from "../../Inputs";
 import { ResultDisplay } from "../../ResultDisplay";
 import styles from "../../App.module.css";
-import { CompetitionEvent } from "../tournament/types";
 import {
   useFetcher,
   useLoaderData,
@@ -9,6 +8,7 @@ import {
   useParams,
 } from "react-router";
 import { useLocation } from "react-router-dom";
+import { CompetitionEvent } from "../../api/types";
 
 export type Enums = {
   eventTypes?: Option[];

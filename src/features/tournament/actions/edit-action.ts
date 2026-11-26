@@ -1,7 +1,7 @@
 import { ActionFunctionArgs } from "react-router-dom";
 import { TournamentApi } from "../../../tournament-api";
-import { TournamentForEdit } from "../types";
 import { emptyToNull } from "../../../utils";
+import {TournamentForEdit} from "../../../api/types";
 
 export async function editAction(
   this: TournamentApi,

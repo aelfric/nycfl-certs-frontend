@@ -7,11 +7,11 @@ import { Interface, NoTournamentSelected } from "./Interface";
 import { Certificates, Postings, Slides } from "./certificates";
 import { User } from "oidc-client-ts";
 import { redirect } from "react-router-dom";
-import { CutoffType } from "./features/tournament/types";
 import { TournamentApi } from "./tournament-api";
 import * as EventDisplay from "./features/event-display";
 import * as Tournament from "./features/tournament";
 import * as TournamentLinks from "./features/tournament-links";
+import { CutoffType } from "./api/types";
 
 export const router = (user: User | null | undefined) => {
   const api = new TournamentApi(user);
